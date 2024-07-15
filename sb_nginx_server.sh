@@ -1,13 +1,5 @@
 #!/bin/bash
 
-if [ ! -f /usr/bin/curl ]
-then
-    echo ""
-    echo "Идёт установка curl..."
-    apt-get install curl -y > /dev/null
-    echo "Установка curl завершена"
-fi
-
 serverip=$(curl -s ipinfo.io/ip)
 
 textcolor='\033[1;36m'
