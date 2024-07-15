@@ -10,7 +10,7 @@
  
 ### Includes:
 1) Sing-Box server setup
-2) NGINX reverse proxy setup
+2) NGINX reverse proxy and website setup
 3) Basic security setup including unattended-upgrades
 4) WARP setup
 5) Cloudflare SSL certificates
