@@ -13,7 +13,7 @@
 2) NGINX reverse proxy setup
 3) Basic security setup including unattended-upgrades
 4) WARP setup
-5) Cloudflare SSL Certificates
+5) Cloudflare SSL certificates
 6) Enable BBR
 7) Client Sing-Box configs with routing rules for Russia
 
