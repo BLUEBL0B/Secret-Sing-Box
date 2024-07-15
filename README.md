@@ -7,8 +7,7 @@
 
 > [!NOTE]
 > In Russian and with routing rules for Russia.
-
-
+ 
 ### Includes:
 1) Sing-Box server setup
 2) NGINX reverse proxy setup
@@ -17,15 +16,13 @@
 5) Cloudflare SSL certificates
 6) Enable BBR
 7) Client Sing-Box configs with routing rules for Russia
-
-
+ 
 ### Usage:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb_nginx_server.sh)
 ```
-
-
+ 
 ### Client setup (In Russian):
 [Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Sing-Box-Android-iOS.pdf)
 
