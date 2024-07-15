@@ -22,7 +22,8 @@
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb_nginx_server.sh)
 ```
- 
+If you want to set up your own website on the server then upload the folder with its contents to /root directory before running the script, and the script will set it up for you.
+
 ### Client setup guidelines (In Russian):
 [Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Sing-Box-Android-iOS.pdf)
 
