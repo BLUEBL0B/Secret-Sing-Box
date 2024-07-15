@@ -11,5 +11,5 @@
 ### Usage:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/SB-Nginx-WS/master/sb_nginx_server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb_nginx_server.sh)
 ```
