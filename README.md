@@ -9,12 +9,13 @@
 > In Russian and with routing rules for Russia.
 
 ### Includes:
-1) Sing-Box setup
-2) NGINX setup
+1) Sing-Box server setup
+2) NGINX reverse proxy setup
 3) Basic security setup including unattended-upgrades
-4) Enable BBR
-5) WARP setup
-6) Client configs with routing rules for Russia
+4) WARP setup
+5) Cloudflare SSL Certificates
+6) Enable BBR
+7) Client Sing-Box configs with routing rules for Russia
 
 ### Usage:
 
