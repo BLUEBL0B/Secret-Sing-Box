@@ -23,7 +23,7 @@
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb_nginx_server.sh)
 ```
  
-### Client setup (In Russian):
+### Client setup guidelines (In Russian):
 [Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Sing-Box-Android-iOS.pdf)
 
 [Windows 10 and 11](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Sing-Box-Windows-10-11.pdf)
