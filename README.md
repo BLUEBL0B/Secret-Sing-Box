@@ -1,6 +1,6 @@
-# Sing-Box-NGINX-Websocket
+# Sing-Box-NGINX-WebSocket
 
-### Trojan and VLESS Websocket proxy with TLS termination on NGINX
+### Trojan and VLESS WebSocket proxy with TLS termination on NGINX
 
 > [!IMPORTANT]
 > Recommended OS: Debian 12. Run as root. It's recommended to update and reboot the system before running this script.
