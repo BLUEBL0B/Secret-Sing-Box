@@ -331,7 +331,8 @@ echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}
 
 
 ### WARP ###
-warp-cli registration new
+echo "WARP"
+yes | warp-cli registration new
 warp-cli mode proxy
 warp-cli proxy port 40000
 warp-cli connect
