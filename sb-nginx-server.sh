@@ -328,6 +328,7 @@ certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.
 
 { crontab -l; echo "0 0 1 */2 * certbot -q renew"; } | crontab -
 echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+echo ""
 
 
 ### WARP ###
