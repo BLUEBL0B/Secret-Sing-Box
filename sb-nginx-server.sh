@@ -543,9 +543,9 @@ EOF
 
 systemctl restart sing-box.service
 
-touch /root/TRJ-WS.json /root/VLESS-WS.json
+touch /home/${username}/TRJ-WS.json /home/${username}/VLESS-WS.json
 
-cat > /root/TRJ-WS.json <<EOF
+cat > /home/${username}/TRJ-WS.json <<EOF
 {
   "log": {
     "level": "fatal",
@@ -1234,7 +1234,7 @@ cat > /root/TRJ-WS.json <<EOF
 }
 EOF
 
-cat > /root/VLESS-WS.json <<EOF
+cat > /home/${username}/VLESS-WS.json <<EOF
 {
   "log": {
     "level": "fatal",
@@ -2137,7 +2137,7 @@ echo ""
 echo ""
 echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
 echo ""
-echo -e "Конфиги для клиента сохранены в ${textcolor}/root/TRJ-WS.json${clear} и ${textcolor}/root/VLESS-WS.json${clear}, скопируйте их на устройство"
+echo -e "Конфиги для клиента сохранены в ${textcolor}/home/${username}/TRJ-WS.json${clear} и ${textcolor}/home/${username}/VLESS-WS.json${clear}, скопируйте их на устройство"
 echo ""
 echo -e "${textcolor}ВНИМАНИЕ!${clear}"
 echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
