@@ -9,7 +9,7 @@
 > In Russian and with routing rules for Russia.
  
 ### Includes:
-1) Sing-Box server setup
+1) Sing-Box server setup (Trojan and VLESS)
 2) NGINX reverse proxy and website setup
 3) Basic security setup including unattended-upgrades
 4) WARP setup
