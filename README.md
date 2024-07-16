@@ -20,7 +20,7 @@
 ### Usage:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb_nginx_server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server.sh)
 ```
 If you want to set up your *__own website__* on the server then upload the folder with its contents to *__/root__* directory before running the script, and the script will set it up for you.
 
