@@ -3,7 +3,7 @@
 ### Trojan and VLESS WebSocket proxy with TLS termination on NGINX
 
 > [!IMPORTANT]
-> Recommended OS: Debian 12. Run as root. It's recommended to update and reboot the system before running this script.
+> Recommended OS: Debian 12. Run as root. Run on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
 > In Russian and with routing rules for Russia.
