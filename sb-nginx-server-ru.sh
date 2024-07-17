@@ -165,12 +165,12 @@ timedatectl set-timezone ${timezone}
 
 
 ### BBR ###
-if ! sysctl net.core.default_qdisc | grep 'fq'
+if [[ ! "$(sysctl net.core.default_qdisc)" == *"= fq" ]]
 then
     echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
 fi
 
-if ! sysctl net.ipv4.tcp_congestion_control | grep 'bbr'
+if [[ ! "$(sysctl net.ipv4.tcp_congestion_control)" == *"bbr" ]]
 then
     echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
 fi
