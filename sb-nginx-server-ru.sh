@@ -2161,6 +2161,8 @@ echo -e "${textcolor}Если выше не возникло ошибок, то 
 echo ""
 echo -e "Конфиги для клиента сохранены в ${textcolor}/home/${username}/TRJ-WS.json${clear} и ${textcolor}/home/${username}/VLESS-WS.json${clear}, скопируйте их на устройство"
 echo ""
+echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
+echo ""
 echo -e "${textcolor}ВНИМАНИЕ!${clear}"
 echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
 echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
