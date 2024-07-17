@@ -15,7 +15,6 @@ echo "Перед запуском скрипта рекомендуется вы
 echo -e "1) Обновить систему командой ${textcolor}apt update && apt full-upgrade -y${clear}"
 echo -e "2) Перезагрузить сервер командой ${textcolor}reboot${clear}"
 echo -e "3) При наличии своего сайта отправить папку с его файлами в ${textcolor}/root${clear} директорию сервера"
-echo "4) Подключиться к серверу заново"
 echo ""
 echo -e "Если это сделано, то нажмите ${textcolor}Enter${clear}, чтобы продолжить"
 echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear}"
