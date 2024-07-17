@@ -2060,6 +2060,11 @@ http {
         add_header X-Frame-Options           "SAMEORIGIN";
         proxy_hide_header X-Powered-By;
 
+        # Disable direct IP access
+        if (\$host = ${serverip}) {
+            return 301 https://${domain}\$request_uri;
+        }
+
         # . files
         location ~ /\.(?!well-known) {
             deny all;
@@ -2144,9 +2149,9 @@ http {
         listen      80;
         listen      [::]:80;
 
-        server_name ${domain} www.${domain};
+        server_name _;
 
-        return 301 https://\$host\$request_uri;
+        return 301  https://${domain}\$request_uri;
     }
 }
 EOF
