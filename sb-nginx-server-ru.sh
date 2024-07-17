@@ -48,7 +48,7 @@ fi
 echo "Введите вашу почту, зарегистрированную на Cloudflare:"
 read email
 echo ""
-echo "Введите ваш Cloudflare API token, имеющий права редактирования DNS, либо Cloudflare global API key:"
+echo "Введите ваш API ключ Cloudflare (Cloudflare global API key):"
 read cfkey
 echo ""
 echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
