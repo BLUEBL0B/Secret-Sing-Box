@@ -111,6 +111,7 @@ case $option in
     then
         redirect=${redirect#"www."}
     fi
+    ;;
     3)
     comment1=" "
     comment2=" "
