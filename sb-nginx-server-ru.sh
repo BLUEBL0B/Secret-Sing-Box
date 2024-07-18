@@ -196,7 +196,7 @@ echo ""
 
 
 ### УСТАНОВКА ПАКЕТОВ ###
-apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades -y
+apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades net-tools -y
 
 curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
