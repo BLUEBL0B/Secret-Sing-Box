@@ -605,7 +605,8 @@ cat > /home/${username}/TRJ-WS.json <<EOF
           "deepmind.com",
           "deepmind.google",
           "generativeai.google",
-          "proactivebackend-pa.googleapis.com"
+          "proactivebackend-pa.googleapis.com",
+          "news.google.com"
         ],
         "domain_keyword": [
           "generativelanguage"
@@ -813,7 +814,8 @@ cat > /home/${username}/TRJ-WS.json <<EOF
           "deepmind.com",
           "deepmind.google",
           "generativeai.google",
-          "proactivebackend-pa.googleapis.com"
+          "proactivebackend-pa.googleapis.com",
+          "news.google.com"
         ],
         "domain_keyword": [
           "generativelanguage"
@@ -1294,7 +1296,8 @@ cat > /home/${username}/VLESS-WS.json <<EOF
           "deepmind.com",
           "deepmind.google",
           "generativeai.google",
-          "proactivebackend-pa.googleapis.com"
+          "proactivebackend-pa.googleapis.com",
+          "news.google.com"
         ],
         "domain_keyword": [
           "generativelanguage"
@@ -1502,7 +1505,8 @@ cat > /home/${username}/VLESS-WS.json <<EOF
           "deepmind.com",
           "deepmind.google",
           "generativeai.google",
-          "proactivebackend-pa.googleapis.com"
+          "proactivebackend-pa.googleapis.com",
+          "news.google.com"
         ],
         "domain_keyword": [
           "generativelanguage"
