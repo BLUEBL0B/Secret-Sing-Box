@@ -23,6 +23,14 @@ echo ""
 echo "Введите новый порт SSH:"
 read sshp
 echo ""
+while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+do
+    echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
+    echo ""
+    echo "Введите новый порт SSH:"
+    read sshp
+    echo ""
+done
 while [ $sshp -gt 65535 ]
 do
     echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
@@ -30,6 +38,14 @@ do
     echo "Введите новый порт SSH:"
     read sshp
     echo ""
+    while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+    do
+        echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
+        echo ""
+        echo "Введите новый порт SSH:"
+        read sshp
+        echo ""
+    done
 done
 echo "Введите имя пользователя:"
 read username
