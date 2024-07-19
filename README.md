@@ -6,7 +6,7 @@
 > Recommended OS: Debian 12. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
-> In Russian and with routing rules for Russia.
+> With routing rules for Russia.
  
 ### Includes:
 1) Sing-Box server setup (Trojan and VLESS protocols)
@@ -19,14 +19,8 @@
  
 ### Usage:
 
-Russian version:
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server-ru.sh)
-```
-
-English version:
-```
-Coming soon
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server.sh)
 ```
 
 If you also want to set up your *__own website__* on the server then upload the folder with its contents to *__/root__* directory before running the script, and the script will set it up for you.
