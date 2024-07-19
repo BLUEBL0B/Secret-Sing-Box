@@ -28,14 +28,14 @@ then
     echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear}"
     read BigRedButton
     echo ""
-    echo "Введите новый порт SSH:"
+    echo "Введите новый номер порта SSH:"
     read sshp
     echo ""
     while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
     do
         echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
         echo ""
-        echo "Введите новый порт SSH:"
+        echo "Введите новый номер порта SSH:"
         read sshp
         echo ""
     done
@@ -43,14 +43,14 @@ then
     do
         echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
         echo ""
-        echo "Введите новый порт SSH:"
+        echo "Введите новый номер порта SSH:"
         read sshp
         echo ""
         while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         do
             echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
             echo ""
-            echo "Введите новый порт SSH:"
+            echo "Введите новый номер порта SSH:"
             read sshp
             echo ""
         done
@@ -193,14 +193,14 @@ else
     echo -e "If not then press ${textcolor}Ctrl + C${clear}"
     read BigRedButton
     echo ""
-    echo "Enter new SSH port:"
+    echo "Enter new SSH port number:"
     read sshp
     echo ""
     while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
     do
         echo -e "${red}Error: ports 10443, 11443 and 40000 will be taken by Sing-Box and WARP${clear}"
         echo ""
-        echo "Enter new SSH port:"
+        echo "Enter new SSH port number:"
         read sshp
         echo ""
     done
@@ -208,14 +208,14 @@ else
     do
         echo -e "${red}Error: port number can't be greater than 65535${clear}"
         echo ""
-        echo "Enter new SSH port:"
+        echo "Enter new SSH port number:"
         read sshp
         echo ""
         while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         do
             echo -e "${red}Error: ports 10443, 11443 and 40000 will be taken by Sing-Box and WARP${clear}"
             echo ""
-            echo "Enter new SSH port:"
+            echo "Enter new SSH port number:"
             read sshp
             echo ""
         done
