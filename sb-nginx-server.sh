@@ -25,7 +25,7 @@ then
     echo -e "3) При наличии своего сайта отправить папку с его файлами в ${textcolor}/root${clear} директорию сервера"
     echo ""
     echo -e "Если это сделано, то нажмите ${textcolor}Enter${clear}, чтобы продолжить"
-    echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear}"
+    echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear} для завершения работы скрипта"
     read BigRedButton
     echo ""
     echo "Введите новый номер порта SSH:"
@@ -190,7 +190,7 @@ else
     echo -e "3) If you have your own website then send the folder with its contents to the ${textcolor}/root${clear} directory of the server"
     echo ""
     echo -e "If it's done then press ${textcolor}Enter${clear} to continue"
-    echo -e "If not then press ${textcolor}Ctrl + C${clear}"
+    echo -e "If not then press ${textcolor}Ctrl + C${clear} to exit the script"
     read BigRedButton
     echo ""
     echo "Enter new SSH port number:"
@@ -233,7 +233,7 @@ else
     then
         domain=${domain#"www."}
     fi
-    echo "Enter your email, registered on Cloudflare:"
+    echo "Enter your email registered on Cloudflare:"
     read email
     echo ""
     echo "Enter your Cloudflare global API key:"
