@@ -16,7 +16,7 @@ echo "2 - English"
 read language
 echo ""
 echo ""
-if [ $language -eq 1 ]
+if [[ "$language" == "1" ]]
 then
     echo -e "${textcolor}ВНИМАНИЕ!${clear}"
     echo "Перед запуском скрипта рекомендуется выполнить следующие действия:"
@@ -2355,7 +2355,7 @@ systemctl reload nginx
 echo ""
 echo ""
 echo ""
-if [ $language -eq 1 ]
+if [[ "$language" == "1" ]]
 then
     echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
     echo ""
