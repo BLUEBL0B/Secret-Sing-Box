@@ -10,30 +10,23 @@ clear='\033[0m'
 ### ВВОД ДАННЫХ ###
 echo ""
 echo ""
-echo -e "${textcolor}ВНИМАНИЕ!${clear}"
-echo "Перед запуском скрипта рекомендуется выполнить следующие действия:"
-echo -e "1) Обновить систему командой ${textcolor}apt update && apt full-upgrade -y${clear}"
-echo -e "2) Перезагрузить сервер командой ${textcolor}reboot${clear}"
-echo -e "3) При наличии своего сайта отправить папку с его файлами в ${textcolor}/root${clear} директорию сервера"
+echo -e "${textcolor}Select the language:${clear}"
+echo "1 - Russian"
+echo "2 - English"
+read language
 echo ""
-echo -e "Если это сделано, то нажмите ${textcolor}Enter${clear}, чтобы продолжить"
-echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear}"
-read BigRedButton
 echo ""
-echo "Введите новый порт SSH:"
-read sshp
-echo ""
-while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
-do
-    echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
+if [ $language -eq 1 ]
+then
+    echo -e "${textcolor}ВНИМАНИЕ!${clear}"
+    echo "Перед запуском скрипта рекомендуется выполнить следующие действия:"
+    echo -e "1) Обновить систему командой ${textcolor}apt update && apt full-upgrade -y${clear}"
+    echo -e "2) Перезагрузить сервер командой ${textcolor}reboot${clear}"
+    echo -e "3) При наличии своего сайта отправить папку с его файлами в ${textcolor}/root${clear} директорию сервера"
     echo ""
-    echo "Введите новый порт SSH:"
-    read sshp
-    echo ""
-done
-while [ $sshp -gt 65535 ]
-do
-    echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
+    echo -e "Если это сделано, то нажмите ${textcolor}Enter${clear}, чтобы продолжить"
+    echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear}"
+    read BigRedButton
     echo ""
     echo "Введите новый порт SSH:"
     read sshp
@@ -46,58 +39,62 @@ do
         read sshp
         echo ""
     done
-done
-echo "Введите имя пользователя:"
-read username
-echo ""
-echo "Введите пароль пользователя:"
-read password
-echo ""
-echo "Введите ваш домен:"
-read domain
-echo ""
-if [[ "$domain" == "www."* ]]
-then
-    domain=${domain#"www."}
-fi
-echo "Введите вашу почту, зарегистрированную на Cloudflare:"
-read email
-echo ""
-echo "Введите ваш API ключ Cloudflare (Cloudflare global API key):"
-read cfkey
-echo ""
-echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
-read trjpass
-echo ""
-echo "Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
-read trojanpath
-echo ""
-if [[ "$trojanpath" == "/"* ]]
-then
-    trojanpath=${trojanpath#"/"}
-fi
-echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
-read uuid
-echo ""
-while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
-do
-    echo -e "${red}Ошибка: введённое значение не является UUID${clear}"
+    while [ $sshp -gt 65535 ]
+    do
+        echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
+        echo ""
+        echo "Введите новый порт SSH:"
+        read sshp
+        echo ""
+        while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        do
+            echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
+            echo ""
+            echo "Введите новый порт SSH:"
+            read sshp
+            echo ""
+        done
+    done
+    echo "Введите имя пользователя:"
+    read username
     echo ""
+    echo "Введите пароль пользователя:"
+    read password
+    echo ""
+    echo "Введите ваш домен:"
+    read domain
+    echo ""
+    if [[ "$domain" == "www."* ]]
+    then
+        domain=${domain#"www."}
+    fi
+    echo "Введите вашу почту, зарегистрированную на Cloudflare:"
+    read email
+    echo ""
+    echo "Введите ваш API ключ Cloudflare (Cloudflare global API key):"
+    read cfkey
+    echo ""
+    echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+    read trjpass
+    echo ""
+    echo "Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
+    read trojanpath
+    echo ""
+    if [[ "$trojanpath" == "/"* ]]
+    then
+        trojanpath=${trojanpath#"/"}
+    fi
     echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
     read uuid
     echo ""
-done
-echo "Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
-read vlesspath
-echo ""
-if [[ "$vlesspath" == "/"* ]]
-then
-    vlesspath=${vlesspath#"/"}
-fi
-while [ "$trojanpath" = "$vlesspath" ] && [ ! -z "$vlesspath" ]
-do
-    echo -e "${red}Ошибка: пути для Trojan и VLESS не должны совпадать${clear}"
-    echo ""
+    while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
+    do
+        echo -e "${red}Ошибка: введённое значение не является UUID${clear}"
+        echo ""
+        echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+        read uuid
+        echo ""
+    done
     echo "Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
     read vlesspath
     echo ""
@@ -105,75 +102,252 @@ do
     then
         vlesspath=${vlesspath#"/"}
     fi
-done
-echo "Выберите вариант настройки NGINX (1 по умолчанию):"
-echo "1 - Будет спрашивать логин и пароль вместо сайта"
-echo "2 - Будет перенаправлять на другой домен"
-echo "3 - Свой сайт (при наличии)"
-read option;
-echo ""
-case $option in
-    2)
-    comment1=" "
-    comment2="#"
-    comment3=" "
-    sitedir="html"
-    index="index.html index.htm"
-    echo "Введите домен, на который будет идти перенаправление:"
-    read redirect
-    echo ""
-    if [[ "$redirect" == "www."* ]]
-    then
-        redirect=${redirect#"www."}
-    fi
-    ;;
-    3)
-    comment1=" "
-    comment2=" "
-    comment3="#"
-    redirect="${domain}"
-    echo "Введите название папки с файлами вашего сайта, загруженной в /root:"
-    read sitedir
-    echo ""
-    while [ ! -d /root/${sitedir} ] || [ -z "$sitedir" ]
+    while [ "$trojanpath" = "$vlesspath" ] && [ ! -z "$vlesspath" ]
     do
-        echo -e "${red}Ошибка: папка c введённым названием не существует в /root${clear}"
+        echo -e "${red}Ошибка: пути для Trojan и VLESS не должны совпадать${clear}"
         echo ""
+        echo "Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
+        read vlesspath
+        echo ""
+        if [[ "$vlesspath" == "/"* ]]
+        then
+            vlesspath=${vlesspath#"/"}
+        fi
+    done
+    echo "Выберите вариант настройки NGINX (1 по умолчанию):"
+    echo "1 - Будет спрашивать логин и пароль вместо сайта"
+    echo "2 - Будет перенаправлять на другой домен"
+    echo "3 - Свой сайт (при наличии)"
+    read option;
+    echo ""
+    case $option in
+        2)
+        comment1=" "
+        comment2="#"
+        comment3=" "
+        sitedir="html"
+        index="index.html index.htm"
+        echo "Введите домен, на который будет идти перенаправление:"
+        read redirect
+        echo ""
+        if [[ "$redirect" == "www."* ]]
+        then
+            redirect=${redirect#"www."}
+        fi
+        ;;
+        3)
+        comment1=" "
+        comment2=" "
+        comment3="#"
+        redirect="${domain}"
         echo "Введите название папки с файлами вашего сайта, загруженной в /root:"
         read sitedir
         echo ""
-    done
-    echo "Введите название index файла вашего сайта:"
-    read index
-    echo ""
-    while [ ! -f /root/${sitedir}/${index} ] || [ -z "$index" ]
-    do
-        echo -e "${red}Ошибка: файл c введённым названием не существует в /root/${sitedir}${clear}"
-        echo ""
+        while [ ! -d /root/${sitedir} ] || [ -z "$sitedir" ]
+        do
+            echo -e "${red}Ошибка: папка c введённым названием не существует в /root${clear}"
+            echo ""
+            echo "Введите название папки с файлами вашего сайта, загруженной в /root:"
+            read sitedir
+            echo ""
+        done
         echo "Введите название index файла вашего сайта:"
         read index
         echo ""
-    done
-    ;;
-    *)
-    comment1="#"
-    comment2=" "
-    comment3=" "
-    redirect="${domain}"
-    sitedir="html"
-    index="index.html index.htm"
-esac
-echo "Введите часовой пояс для установки времени на сервере (например, Europe/Amsterdam):"
-read timezone
-echo ""
-while [ ! -f /usr/share/zoneinfo/${timezone} ]
-do
-    echo -e "${red}Ошибка: введённого часового пояса не существует в /usr/share/zoneinfo, проверьте правильность написания${clear}"
-    echo ""
+        while [ ! -f /root/${sitedir}/${index} ] || [ -z "$index" ]
+        do
+            echo -e "${red}Ошибка: файл c введённым названием не существует в /root/${sitedir}${clear}"
+            echo ""
+            echo "Введите название index файла вашего сайта:"
+            read index
+            echo ""
+        done
+        ;;
+        *)
+        comment1="#"
+        comment2=" "
+        comment3=" "
+        redirect="${domain}"
+        sitedir="html"
+        index="index.html index.htm"
+    esac
     echo "Введите часовой пояс для установки времени на сервере (например, Europe/Amsterdam):"
     read timezone
     echo ""
-done
+    while [ ! -f /usr/share/zoneinfo/${timezone} ]
+    do
+        echo -e "${red}Ошибка: введённого часового пояса не существует в /usr/share/zoneinfo, проверьте правильность написания${clear}"
+        echo ""
+        echo "Введите часовой пояс для установки времени на сервере (например, Europe/Amsterdam):"
+        read timezone
+        echo ""
+    done
+else
+    echo -e "${textcolor}ATTENTION!${clear}"
+    echo "Before running the script, it's recommended to do the following:"
+    echo -e "1) Update the system (${textcolor}apt update && apt full-upgrade -y${clear})"
+    echo -e "2) Reboot the server (${textcolor}reboot${clear})"
+    echo -e "3) If you have your own website then send the folder with its contents to the ${textcolor}/root${clear} directory of the server"
+    echo ""
+    echo -e "If it's done then press ${textcolor}Enter${clear} to continue"
+    echo -e "If not then press ${textcolor}Ctrl + C${clear}"
+    read BigRedButton
+    echo ""
+    echo "Enter new SSH port:"
+    read sshp
+    echo ""
+    while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+    do
+        echo -e "${red}Error: ports 10443, 11443 and 40000 will be taken by Sing-Box and WARP${clear}"
+        echo ""
+        echo "Enter new SSH port:"
+        read sshp
+        echo ""
+    done
+    while [ $sshp -gt 65535 ]
+    do
+        echo -e "${red}Error: port number can't be greater than 65535${clear}"
+        echo ""
+        echo "Enter new SSH port:"
+        read sshp
+        echo ""
+        while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        do
+            echo -e "${red}Error: ports 10443, 11443 and 40000 will be taken by Sing-Box and WARP${clear}"
+            echo ""
+            echo "Enter new SSH port:"
+            read sshp
+            echo ""
+        done
+    done
+    echo "Enter your username:"
+    read username
+    echo ""
+    echo "Enter your password:"
+    read password
+    echo ""
+    echo "Enter your domain name:"
+    read domain
+    echo ""
+    if [[ "$domain" == "www."* ]]
+    then
+        domain=${domain#"www."}
+    fi
+    echo "Enter your email, registered on Cloudflare:"
+    read email
+    echo ""
+    echo "Enter your Cloudflare global API key:"
+    read cfkey
+    echo ""
+    echo "Enter your password for Trojan or leave this empty to generate a random password:"
+    read trjpass
+    echo ""
+    echo "Enter your path for Trojan or leave this empty to generate a random path:"
+    read trojanpath
+    echo ""
+    if [[ "$trojanpath" == "/"* ]]
+    then
+        trojanpath=${trojanpath#"/"}
+    fi
+    echo "Enter your UUID for VLESS or leave this empty to generate a random UUID:"
+    read uuid
+    echo ""
+    while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
+    do
+        echo -e "${red}Error: this is not an UUID${clear}"
+        echo ""
+        echo "Enter your UUID for VLESS or leave this empty to generate a random UUID:"
+        read uuid
+        echo ""
+    done
+    echo "Enter your path for VLESS or leave this empty to generate a random path:"
+    read vlesspath
+    echo ""
+    if [[ "$vlesspath" == "/"* ]]
+    then
+        vlesspath=${vlesspath#"/"}
+    fi
+    while [ "$trojanpath" = "$vlesspath" ] && [ ! -z "$vlesspath" ]
+    do
+        echo -e "${red}Error: paths for Trojan and VLESS must be different${clear}"
+        echo ""
+        echo "Enter your path for VLESS or leave this empty to generate a random path:"
+        read vlesspath
+        echo ""
+        if [[ "$vlesspath" == "/"* ]]
+        then
+            vlesspath=${vlesspath#"/"}
+        fi
+    done
+    echo "Select NGINX setup option (1 by default):"
+    echo "1 - Will show a login popup asking for username and password"
+    echo "2 - Will redirect to another domain"
+    echo "3 - Your own website (if you have one)"
+    read option;
+    echo ""
+    case $option in
+        2)
+        comment1=" "
+        comment2="#"
+        comment3=" "
+        sitedir="html"
+        index="index.html index.htm"
+        echo "Enter the domain to which requests will be redirected:"
+        read redirect
+        echo ""
+        if [[ "$redirect" == "www."* ]]
+        then
+            redirect=${redirect#"www."}
+        fi
+        ;;
+        3)
+        comment1=" "
+        comment2=" "
+        comment3="#"
+        redirect="${domain}"
+        echo "Enter the name of the folder with your website contents uploaded to /root:"
+        read sitedir
+        echo ""
+        while [ ! -d /root/${sitedir} ] || [ -z "$sitedir" ]
+        do
+            echo -e "${red}Error: this folder doesn't exist in the /root directory${clear}"
+            echo ""
+            echo "Enter the name of the folder with your website contents uploaded to /root:"
+            read sitedir
+            echo ""
+        done
+        echo "Enter the name of the index file of your website:"
+        read index
+        echo ""
+        while [ ! -f /root/${sitedir}/${index} ] || [ -z "$index" ]
+        do
+            echo -e "${red}Error: this file doesn't exist in the /root/${sitedir} directory${clear}"
+            echo ""
+            echo "Enter the name of the index file of your website:"
+            read index
+            echo ""
+        done
+        ;;
+        *)
+        comment1="#"
+        comment2=" "
+        comment3=" "
+        redirect="${domain}"
+        sitedir="html"
+        index="index.html index.htm"
+    esac
+    echo "Enter the timezone to set the time on the server (e.g. Europe/Amsterdam):"
+    read timezone
+    echo ""
+    while [ ! -f /usr/share/zoneinfo/${timezone} ]
+    do
+        echo -e "${red}Error: this timezone doesn't exist in /usr/share/zoneinfo, check your spelling${clear}"
+        echo ""
+        echo "Enter the timezone to set the time on the server (e.g. Europe/Amsterdam):"
+        read timezone
+        echo ""
+    done
+fi
 echo ""
 echo ""
 
@@ -2181,18 +2355,36 @@ systemctl reload nginx
 echo ""
 echo ""
 echo ""
-echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
-echo ""
-echo -e "Конфиги для клиента сохранены в ${textcolor}/home/${username}/TRJ-WS.json${clear} и ${textcolor}/home/${username}/VLESS-WS.json${clear}, скопируйте их на устройство"
-echo ""
-echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
-echo ""
-echo -e "${textcolor}ВНИМАНИЕ!${clear}"
-echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
-echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
-echo -e "2) Если нет ключей SSH, то сгенерировать их на своём ПК командой ${textcolor}ssh-keygen -t rsa -b 4096${clear}"
-echo -e "3) Отправить публичный ключ на сервер командой ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
-echo -e "4) Подключиться к серверу ещё раз командой ${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear}"
-echo -e "5) Открыть конфиг sshd командой ${textcolor}sudo nano /etc/ssh/sshd_config${clear} и в PasswordAuthentication заменить yes на no"
-echo -e "6) Перезапустить SSH командой ${textcolor}sudo systemctl restart ssh.service${clear}"
+if [ $language -eq 1 ]
+then
+    echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
+    echo ""
+    echo -e "Конфиги для клиента сохранены в ${textcolor}/home/${username}/TRJ-WS.json${clear} и ${textcolor}/home/${username}/VLESS-WS.json${clear}, скопируйте их на устройство"
+    echo ""
+    echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
+    echo ""
+    echo -e "${textcolor}ВНИМАНИЕ!${clear}"
+    echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
+    echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
+    echo -e "2) Если нет ключей SSH, то сгенерировать их на своём ПК командой ${textcolor}ssh-keygen -t rsa -b 4096${clear}"
+    echo -e "3) Отправить публичный ключ на сервер командой ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
+    echo -e "4) Подключиться к серверу ещё раз командой ${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear}"
+    echo -e "5) Открыть конфиг sshd командой ${textcolor}sudo nano /etc/ssh/sshd_config${clear} и в PasswordAuthentication заменить yes на no"
+    echo -e "6) Перезапустить SSH командой ${textcolor}sudo systemctl restart ssh.service${clear}"
+else
+    echo -e "${textcolor}If there are no errors above then the setup is complete${clear}"
+    echo ""
+    echo -e "Client configs are saved in ${textcolor}/home/${username}/TRJ-WS.json${clear} and ${textcolor}/home/${username}/VLESS-WS.json${clear}, copy them to your device"
+    echo ""
+    echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}reboot${clear})"
+    echo ""
+    echo -e "${textcolor}ATTENTION!${clear}"
+    echo "To increase the security of the server it's recommended to do the following:"
+    echo -e "1) Disconnect from the server by pressing ${textcolor}Ctrl + D${clear}"
+    echo -e "2) If you don't have SSH keys then generate them on your PC (${textcolor}ssh-keygen -t rsa -b 4096${clear})"
+    echo -e "3) Send the public key to the server (${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear})"
+    echo -e "4) Connect to the server again (${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear})"
+    echo -e "5) Open sshd config (${textcolor}sudo nano /etc/ssh/sshd_config${clear}) and change PasswordAuthentication value from yes to no"
+    echo -e "6) Restart SSH (${textcolor}sudo systemctl restart ssh.service${clear})"
+fi
 echo ""
