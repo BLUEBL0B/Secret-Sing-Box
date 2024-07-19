@@ -25,7 +25,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 
 If you also want to set up your *__own website__* on the server then upload the folder with its contents to *__/root__* directory before running the script, and the script will set it up for you.
 
-### Client setup guidelines (In Russian):
-[Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Sing-Box-Android-iOS.pdf)
+### Client setup guidelines:
+Android and iOS: [RU](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf), [EN](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
 
-[Windows 10 and 11](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Sing-Box-Windows-10-11.pdf)
+Windows 10 and 11: [RU](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Windows-10-11-ru.pdf), [EN](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Windows-10-11-en.pdf)
