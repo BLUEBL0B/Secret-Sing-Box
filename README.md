@@ -1,6 +1,7 @@
 # Sing-Box-NGINX-WebSocket
 
 ### Trojan and VLESS WebSocket proxy with TLS termination on NGINX
+A script for full setup of a hidden proxy server with NGINX camouflage.
 
 > [!IMPORTANT]
 > Recommended OS: Debian 12. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
