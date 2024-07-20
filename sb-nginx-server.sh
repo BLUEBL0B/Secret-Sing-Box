@@ -1449,12 +1449,12 @@ sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/
 
 
 ### NGINX ###
-if [ $option -eq 3 ]
+if [[ "$option" == "3" ]]
 then
     mv /root/${sitedir} /var/www
 fi
 
-if [ $option -ne 2 ] && [ $option -ne 3 ]
+if [[ "$option" != "2" ]] && [[ "$option" != "3" ]]
 then
     touch /etc/nginx/.htpasswd
 fi
