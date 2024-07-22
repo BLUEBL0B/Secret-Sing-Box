@@ -114,6 +114,25 @@ then
             vlesspath=${vlesspath#"/"}
         fi
     done
+    echo "Введите путь для подписки или оставьте пустым для генерации случайного пути:"
+    read subspath
+    echo ""
+    if [[ "$subspath" == "/"* ]]
+    then
+        subspath=${subspath#"/"}
+    fi
+    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ]) && [ ! -z "$subspath" ]
+    do
+        echo -e "${red}Ошибка: пути для Trojan, VLESS и подписки должны быть разными${clear}"
+        echo ""
+        echo "Введите путь для подписки или оставьте пустым для генерации случайного пути:"
+        read subspath
+        echo ""
+        if [[ "$subspath" == "/"* ]]
+        then
+            subspath=${subspath#"/"}
+        fi
+    done
     echo "Выберите вариант настройки NGINX (1 по умолчанию):"
     echo "1 - Будет спрашивать логин и пароль вместо сайта"
     echo "2 - Будет перенаправлять на другой домен"
@@ -277,6 +296,25 @@ else
         if [[ "$vlesspath" == "/"* ]]
         then
             vlesspath=${vlesspath#"/"}
+        fi
+    done
+    echo "Enter your subscription path or leave this empty to generate a random path:"
+    read subspath
+    echo ""
+    if [[ "$subspath" == "/"* ]]
+    then
+        subspath=${subspath#"/"}
+    fi
+    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ]) && [ ! -z "$subspath" ]
+    do
+        echo -e "${red}Error: paths for Trojan, VLESS and subscription must be different${clear}"
+        echo ""
+        echo "Enter your subscription path or leave this empty to generate a random path:"
+        read subspath
+        echo ""
+        if [[ "$subspath" == "/"* ]]
+        then
+            subspath=${subspath#"/"}
         fi
     done
     echo "Select NGINX setup option (1 by default):"
@@ -572,6 +610,11 @@ then
     vlesspath=$(sing-box generate uuid)
 fi
 
+if [ -z "$subspath" ]
+then
+    subspath=$(sing-box generate uuid)
+fi
+
 cat > /etc/sing-box/config.json <<EOF
 {
   "log": {
@@ -751,9 +794,10 @@ EOF
 
 systemctl restart sing-box.service
 
-touch /home/${username}/TRJ-WS.json
+mkdir /var/www/${subspath}
+touch /var/www/${subspath}/1-TRJ-WS.json
 
-cat > /home/${username}/TRJ-WS.json <<EOF
+cat > /var/www/${subspath}/1-TRJ-WS.json <<EOF
 {
   "log": {
     "level": "fatal",
@@ -1444,8 +1488,8 @@ cat > /home/${username}/TRJ-WS.json <<EOF
 }
 EOF
 
-cp /home/${username}/TRJ-WS.json /home/${username}/VLESS-WS.json
-sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /home/${username}/VLESS-WS.json
+cp /var/www/${subspath}/1-TRJ-WS.json /var/www/${subspath}/1-VLESS-WS.json
+sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/1-VLESS-WS.json
 
 
 ### NGINX ###
@@ -1584,6 +1628,12 @@ http {
           ${comment1}${comment3}return 301 https://${redirect}\$request_uri;
        ${comment3}}
 
+        # Subsciption
+        location ~ ^/${subspath} {
+            default_type application/json;
+            root /var/www;
+        }
+
         # Reverse proxy
         location = /${trojanpath} {
             if (\$http_upgrade != "websocket") {
@@ -1671,7 +1721,9 @@ if [[ "$language" == "1" ]]
 then
     echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
     echo ""
-    echo -e "Конфиги для клиента сохранены в ${textcolor}/home/${username}/TRJ-WS.json${clear} и ${textcolor}/home/${username}/VLESS-WS.json${clear}, скопируйте их на устройство"
+    echo "Конфиги для клиента доступны по ссылкам:"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-TRJ-WS.json${clear}"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-VLESS-WS.json${clear}"
     echo ""
     echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
     echo ""
@@ -1686,7 +1738,9 @@ then
 else
     echo -e "${textcolor}If there are no errors above then the setup is complete${clear}"
     echo ""
-    echo -e "Client configs are saved in ${textcolor}/home/${username}/TRJ-WS.json${clear} and ${textcolor}/home/${username}/VLESS-WS.json${clear}, copy them to your device"
+    echo "Client configs are available here:"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-TRJ-WS.json${clear}"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-VLESS-WS.json${clear}"
     echo ""
     echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}reboot${clear})"
     echo ""
