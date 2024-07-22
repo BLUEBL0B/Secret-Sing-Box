@@ -408,7 +408,7 @@ echo ""
 
 
 ### УСТАНОВКА ПАКЕТОВ ###
-apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed net-tools qrencode -y
+apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed net-tools -y
 
 curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
@@ -1732,14 +1732,9 @@ then
     echo ""
     echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
     echo ""
-    echo ""
-    echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
-    echo ""
-    echo "https://${domain}/${subspath}/1-TRJ-WS.json"
-    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-TRJ-WS.json"
-    echo ""
-    echo "https://${domain}/${subspath}/1-VLESS-WS.json"
-    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-VLESS-WS.json"
+    echo "Конфиги для клиента доступны по ссылкам:"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-TRJ-WS.json${clear}"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-VLESS-WS.json${clear}"
     echo ""
 else
     echo -e "${textcolor}If there are no errors above then the setup is complete${clear}"
@@ -1755,14 +1750,9 @@ else
     echo ""
     echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}reboot${clear})"
     echo ""
-    echo ""
-    echo -e "${textcolor}Client configs are available here:${clear}"
-    echo ""
-    echo "https://${domain}/${subspath}/1-TRJ-WS.json"
-    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-TRJ-WS.json"
-    echo ""
-    echo "https://${domain}/${subspath}/1-VLESS-WS.json"
-    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-VLESS-WS.json"
+    echo "Client configs are available here:"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-TRJ-WS.json${clear}"
+    echo -e "${textcolor}https://${domain}/${subspath}/1-VLESS-WS.json${clear}"
     echo ""
 fi
 echo ""
