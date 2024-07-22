@@ -408,7 +408,7 @@ echo ""
 
 
 ### УСТАНОВКА ПАКЕТОВ ###
-apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed net-tools -y
+apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed net-tools qrencode -y
 
 curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
@@ -1721,12 +1721,6 @@ if [[ "$language" == "1" ]]
 then
     echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
     echo ""
-    echo "Конфиги для клиента доступны по ссылкам:"
-    echo -e "${textcolor}https://${domain}/${subspath}/1-TRJ-WS.json${clear}"
-    echo -e "${textcolor}https://${domain}/${subspath}/1-VLESS-WS.json${clear}"
-    echo ""
-    echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
-    echo ""
     echo -e "${textcolor}ВНИМАНИЕ!${clear}"
     echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
     echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
@@ -1735,14 +1729,20 @@ then
     echo -e "4) Подключиться к серверу ещё раз командой ${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear}"
     echo -e "5) Открыть конфиг sshd командой ${textcolor}sudo nano /etc/ssh/sshd_config${clear} и в PasswordAuthentication заменить yes на no"
     echo -e "6) Перезапустить SSH командой ${textcolor}sudo systemctl restart ssh.service${clear}"
+    echo ""
+    echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
+    echo ""
+    echo ""
+    echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
+    echo ""
+    echo "https://${domain}/${subspath}/1-TRJ-WS.json"
+    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-TRJ-WS.json"
+    echo ""
+    echo "https://${domain}/${subspath}/1-VLESS-WS.json"
+    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-VLESS-WS.json"
+    echo ""
 else
     echo -e "${textcolor}If there are no errors above then the setup is complete${clear}"
-    echo ""
-    echo "Client configs are available here:"
-    echo -e "${textcolor}https://${domain}/${subspath}/1-TRJ-WS.json${clear}"
-    echo -e "${textcolor}https://${domain}/${subspath}/1-VLESS-WS.json${clear}"
-    echo ""
-    echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}reboot${clear})"
     echo ""
     echo -e "${textcolor}ATTENTION!${clear}"
     echo "To increase the security of the server it's recommended to do the following:"
@@ -1752,5 +1752,17 @@ else
     echo -e "4) Connect to the server again (${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear})"
     echo -e "5) Open sshd config (${textcolor}sudo nano /etc/ssh/sshd_config${clear}) and change PasswordAuthentication value from yes to no"
     echo -e "6) Restart SSH (${textcolor}sudo systemctl restart ssh.service${clear})"
+    echo ""
+    echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}reboot${clear})"
+    echo ""
+    echo ""
+    echo -e "${textcolor}Client configs are available here:${clear}"
+    echo ""
+    echo "https://${domain}/${subspath}/1-TRJ-WS.json"
+    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-TRJ-WS.json"
+    echo ""
+    echo "https://${domain}/${subspath}/1-VLESS-WS.json"
+    qrencode -m 2 -t utf8 <<< "https://${domain}/${subspath}/1-VLESS-WS.json"
+    echo ""
 fi
 echo ""
