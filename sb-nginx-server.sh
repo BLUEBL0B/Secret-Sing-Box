@@ -1,10 +1,18 @@
 #!/bin/bash
 
-serverip=$(curl -s ipinfo.io/ip)
-
 textcolor='\033[1;36m'
 red='\033[1;31m'
 clear='\033[0m'
+
+if [[ $EUID -ne 0 ]]
+then
+    echo ""
+    echo -e "${red}Error: this script should be run as root${clear}"
+    echo ""
+    exit 1
+fi
+
+serverip=$(curl -s ipinfo.io/ip)
 
 
 ### ВВОД ДАННЫХ ###
