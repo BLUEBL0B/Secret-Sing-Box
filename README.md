@@ -27,7 +27,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 ```
 Then just enter the necessary information:
 
-![image](https://github.com/user-attachments/assets/d8f9a1fa-b132-4066-9dd9-9459a490e6ce)
+![image](https://github.com/user-attachments/assets/7e46a4a0-2168-4b63-95f2-fc481e2ddf60)
 
 ### Client setup guidelines:
 Android and iOS: [Russian](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf), [English](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
