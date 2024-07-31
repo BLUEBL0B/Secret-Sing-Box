@@ -76,7 +76,7 @@ then
     then
         domain=${domain#"www."}
     fi
-    echo "Введите вашу почту, зарегистрированную на Cloudflare:"
+    echo "Введите адрес вашей электронной почты:"
     read email
     echo ""
     echo "Введите ваш API токен Cloudflare, имеющий права редактирования DNS:"
@@ -260,7 +260,7 @@ else
     then
         domain=${domain#"www."}
     fi
-    echo "Enter your email registered on Cloudflare:"
+    echo "Enter your email address:"
     read email
     echo ""
     echo "Enter your Cloudflare API token with DNS editing permissions:"
