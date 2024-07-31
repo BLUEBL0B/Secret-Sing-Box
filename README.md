@@ -20,11 +20,14 @@ A script for full setup of a hidden proxy server with NGINX camouflage.
  
 ### Usage:
 
+Run this command:
+
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server.sh)
 ```
+Then just enter the necessary information:
 
-If you also want to set up your *__own website__* on the server then upload the folder with its contents to *__/root__* directory before running the script, and the script will set it up for you.
+![image](https://github.com/user-attachments/assets/d8f9a1fa-b132-4066-9dd9-9459a490e6ce)
 
 ### Client setup guidelines:
 Android and iOS: [Russian](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf), [English](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
