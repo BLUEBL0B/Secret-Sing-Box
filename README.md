@@ -12,7 +12,7 @@
 > С правилами маршрутизации для России.
  
 ### Включает:
-1) Настройку сервера Sing-Box (Протоколы Trojan и VLESS)
+1) Настройку сервера Sing-Box (протоколы Trojan и VLESS)
 2) Настройку обратного прокси и веб-сайта на NGINX
 3) Базовую настройку безопасности, включая автоматические обновления (unattended-upgrades)
 4) Настройку WARP
@@ -29,7 +29,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 ```
 Затем просто введите необходимую информацию:
 
-![image](https://github.com/user-attachments/assets/7e46a4a0-2168-4b63-95f2-fc481e2ddf60)
+![script](https://github.com/user-attachments/assets/c62acbfc-9cbf-4ec0-8307-94dee6051065)
 
 В конце скрипт покажет ссылки на клиентские конфиги.
 
