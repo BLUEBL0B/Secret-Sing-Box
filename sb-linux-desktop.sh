@@ -51,6 +51,7 @@ then
 		sbupdate
 		echo ""
 		echo "Sing-Box установлен"
+		echo ""
 	fi
 	touch /usr/local/bin/${newcomm}
 	cat > /usr/local/bin/${newcomm} <<-EOF
@@ -79,7 +80,6 @@ then
 	systemctl stop sing-box.service
 	EOF
 	chmod +x /usr/local/bin/${newcomm}
-	echo ""
 	echo -e "Вы можете использовать команду ${textcolor}${newcomm}${clear} для запуска Sing-Box и команду ${textcolor}sbupdate${clear} для его обновления"
 	echo ""
 	echo "Если вы хотите добавить больше клиентских конфигов, то запустите этот скрипт ещё раз"
@@ -115,6 +115,7 @@ else
 		sbupdate
 		echo ""
 		echo "Sing-Box is installed"
+		echo ""
 	fi
 	touch /usr/local/bin/${newcomm}
 	cat > /usr/local/bin/${newcomm} <<-EOF
@@ -143,7 +144,6 @@ else
 	systemctl stop sing-box.service
 	EOF
 	chmod +x /usr/local/bin/${newcomm}
-	echo ""
 	echo -e "You can use ${textcolor}${newcomm}${clear} command to run Sing-Box and ${textcolor}sbupdate${clear} command to update it"
 	echo ""
 	echo "Run this script again if you want to add more client configs"
