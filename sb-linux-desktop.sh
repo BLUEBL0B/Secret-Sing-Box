@@ -65,7 +65,7 @@ then
 	    echo ""
 	    exit 1
 	fi
-	curl -s -o /etc/sing-box/config.json \${link}
+	curl -s -o /etc/sing-box/config.json ${link}
 	systemctl start sing-box.service
 	echo ""
 	echo "Sing-Box запущен"
@@ -129,7 +129,7 @@ else
 	    echo ""
 	    exit 1
 	fi
-	curl -s -o /etc/sing-box/config.json \${link}
+	curl -s -o /etc/sing-box/config.json ${link}
 	systemctl start sing-box.service
 	echo ""
 	echo "Started Sing-Box"
