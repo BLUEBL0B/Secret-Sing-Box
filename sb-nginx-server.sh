@@ -662,7 +662,7 @@ cat > /etc/sing-box/config.json <<EOF
       "sniff": true,
       "users": [
         {
-          "name": "me",
+          "name": "1-me",
           "password": "${trjpass}"
         }
       ],
@@ -683,7 +683,7 @@ cat > /etc/sing-box/config.json <<EOF
       "sniff": true,
       "users": [
         {
-          "name": "me",
+          "name": "1-me",
           "uuid": "${uuid}"
         }
       ],
@@ -802,9 +802,9 @@ EOF
 systemctl restart sing-box.service
 
 mkdir /var/www/${subspath}
-touch /var/www/${subspath}/1-TRJ-WS.json
+touch /var/www/${subspath}/1-me-TRJ-WS.json
 
-cat > /var/www/${subspath}/1-TRJ-WS.json <<EOF
+cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
 {
   "log": {
     "level": "fatal",
@@ -1503,8 +1503,8 @@ cat > /var/www/${subspath}/1-TRJ-WS.json <<EOF
 }
 EOF
 
-cp /var/www/${subspath}/1-TRJ-WS.json /var/www/${subspath}/1-VLESS-WS.json
-sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/1-VLESS-WS.json
+cp /var/www/${subspath}/1-me-TRJ-WS.json /var/www/${subspath}/1-me-VLESS-WS.json
+sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/1-me-VLESS-WS.json
 
 
 ### NGINX ###
@@ -1750,8 +1750,8 @@ then
     echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
     echo ""
     echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
-    echo "https://${domain}/${subspath}/1-TRJ-WS.json"
-    echo "https://${domain}/${subspath}/1-VLESS-WS.json"
+    echo "https://${domain}/${subspath}/1-me-TRJ-WS.json"
+    echo "https://${domain}/${subspath}/1-me-VLESS-WS.json"
 else
     echo -e "${textcolor}If there are no errors above then the setup is complete${clear}"
     echo ""
@@ -1769,7 +1769,7 @@ else
     echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}reboot${clear})"
     echo ""
     echo -e "${textcolor}Client configs are available here:${clear}"
-    echo "https://${domain}/${subspath}/1-TRJ-WS.json"
-    echo "https://${domain}/${subspath}/1-VLESS-WS.json"
+    echo "https://${domain}/${subspath}/1-me-TRJ-WS.json"
+    echo "https://${domain}/${subspath}/1-me-VLESS-WS.json"
 fi
 echo ""
