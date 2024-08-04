@@ -1,37 +1,44 @@
 # Sing-Box-NGINX-WebSocket
 
-### Trojan and VLESS WebSocket proxy with TLS termination on NGINX
-A script for full setup of a hidden proxy server with NGINX camouflage.
+[**English version**](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README-ENG.md)
+
+### Прокси с использованием протоколов Trojan и VLESS (WebSocket) и терминированием TLS на NGINX
+Скрипт для полной настройки скрытого прокси-сервера с маскировкой при помощи NGINX.
 
 > [!IMPORTANT]
-> Recommended OS: Debian 12. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
+> Рекомендуемая ОС: Debian 12. Запускайте от имени root на свежеустановленной системе. Рекомендуется обновить систему и перезагрузить сервер перед запуском скрипта.
 
 > [!NOTE]
-> With routing rules for Russia.
+> С правилами маршрутизации для России.
  
-### Includes:
-1) Sing-Box server setup (Trojan and VLESS protocols)
-2) NGINX reverse proxy and website setup
-3) Basic security setup including unattended-upgrades
-4) WARP setup
-5) Cloudflare SSL certificates with auto renewal
-6) Enable BBR
-7) Client Sing-Box configs with routing rules for Russia
+### Включает:
+1) Настройку сервера Sing-Box (протоколы Trojan и VLESS)
+2) Настройку обратного прокси и веб-сайта на NGINX
+3) Базовую настройку безопасности, включая автоматические обновления (unattended-upgrades)
+4) Настройку WARP
+5) SSL сертификаты Cloudflare с автоматическим обновлением
+6) Включение BBR
+7) Клиентские конфиги Sing-Box с правилами маршрутизации для России
  
-### Usage:
+### Использование:
 
-Run this command:
+Запустите эту команду:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server.sh)
 ```
-Then just enter the necessary information:
+Затем просто введите необходимую информацию:
 
-![image](https://github.com/user-attachments/assets/7e46a4a0-2168-4b63-95f2-fc481e2ddf60)
+![script](https://github.com/user-attachments/assets/c62acbfc-9cbf-4ec0-8307-94dee6051065)
 
-The script will show your client links in the end.
+В конце скрипт покажет ссылки на клиентские конфиги.
 
-### Client setup guidelines:
-Android and iOS: [Russian](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf), [English](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
+### Настройка клиентов:
+[Android и iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf)
 
-Windows 10 and 11: [Russian](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-ru.pdf), [English](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-en.pdf)
+[Windows 10 и 11](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-ru.pdf)
+
+[Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2)
+```
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-linux-desktop.sh)
+```
