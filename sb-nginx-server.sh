@@ -76,7 +76,7 @@ then
     then
         domain=${domain#"www."}
     fi
-    echo "Введите адрес вашей электронной почты:"
+    echo "Введите вашу почту, зарегистрированную на Cloudflare:"
     read email
     echo ""
     echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
@@ -260,7 +260,7 @@ else
     then
         domain=${domain#"www."}
     fi
-    echo "Enter your email address:"
+    echo "Enter your email registered on Cloudflare:"
     read email
     echo ""
     echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
