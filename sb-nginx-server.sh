@@ -79,7 +79,7 @@ then
     echo "Введите адрес вашей электронной почты:"
     read email
     echo ""
-    echo "Введите ваш API токен Cloudflare, имеющий права редактирования DNS:"
+    echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
     read cftoken
     echo ""
     echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
@@ -263,7 +263,7 @@ else
     echo "Enter your email address:"
     read email
     echo ""
-    echo "Enter your Cloudflare API token with DNS editing permissions:"
+    echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
     read cftoken
     echo ""
     echo "Enter your password for Trojan or leave this empty to generate a random password:"
@@ -579,7 +579,13 @@ touch cloudflare.credentials
 chown root:root cloudflare.credentials
 chmod 600 cloudflare.credentials
 
-echo "dns_cloudflare_api_token = ${cftoken}" >> /root/cloudflare.credentials
+if [[ "$cftoken" =~ [A-Z] ]]
+then
+    echo "dns_cloudflare_api_token = ${cftoken}" >> /root/cloudflare.credentials
+else
+    echo "dns_cloudflare_email = ${email}" >> /root/cloudflare.credentials
+    echo "dns_cloudflare_api_key = ${cftoken}" >> /root/cloudflare.credentials
+fi
 
 certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.credentials --dns-cloudflare-propagation-seconds 30 --rsa-key-size 4096 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
