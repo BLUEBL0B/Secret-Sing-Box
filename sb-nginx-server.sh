@@ -754,7 +754,8 @@ cat > /etc/sing-box/config.json <<EOF
       {
         "rule_set": [
           "geoip-ru",
-          "gov-ru"
+          "gov-ru",
+          "openai"
         ],
         "domain_suffix": [
           ".ru",
@@ -791,6 +792,12 @@ cat > /etc/sing-box/config.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
+      },
+      {
+        "tag": "openai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
       },
       {
         "tag": "category-ads-all",
