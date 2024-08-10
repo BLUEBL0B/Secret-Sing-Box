@@ -766,10 +766,25 @@ cat > /etc/sing-box/config.json <<EOF
           "habr.com",
           "ntc.party",
           "meduza.io",
-          "svoboda.org"
+          "svoboda.org",
+          "gemini.google.com",
+          "bard.google.com",
+          "generativelanguage.googleapis.com",
+          "ai.google.dev",
+          "aida.googleapis.com",
+          "aistudio.google.com",
+          "alkalimakersuite-pa.clients6.google.com",
+          "makersuite.google.com",
+          "deepmind.com",
+          "deepmind.google",
+          "generativeai.google",
+          "proactivebackend-pa.googleapis.com",
+          "canva.com"
         ],
         "domain_keyword": [
-          "xn--"
+          "xn--",
+          "generativelanguage",
+          "generativeai"
         ],
         "outbound": "warp"
       }
@@ -867,7 +882,8 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
           "news.google.com"
         ],
         "domain_keyword": [
-          "generativelanguage"
+          "generativelanguage",
+          "generativeai"
         ],
         "rule_set": [
           "openai",
@@ -978,7 +994,7 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
     {
       "type": "tun",
       "tag": "tun-in",
-      "interface_name": "singbox_tun",
+      "interface_name": "tun0",
       "stack": "system",
       "mtu": 9000,
       "inet4_address": "172.19.0.1/28",
@@ -1077,7 +1093,8 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
           "news.google.com"
         ],
         "domain_keyword": [
-          "generativelanguage"
+          "generativelanguage",
+          "generativeai"
         ],
         "rule_set": [
           "openai",
