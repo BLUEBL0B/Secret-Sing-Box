@@ -29,7 +29,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 ```
 Затем просто введите необходимую информацию:
 
-![script](https://github.com/user-attachments/assets/c62acbfc-9cbf-4ec0-8307-94dee6051065)
+![bitmap56897](https://github.com/user-attachments/assets/aad0730f-c032-46fd-9479-167f97b48b79)
 
 В конце скрипт покажет ссылки на клиентские конфиги.
 
