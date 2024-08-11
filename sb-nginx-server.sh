@@ -604,32 +604,29 @@ echo ""
 
 
 ### SING-BOX ###
-systemctl enable sing-box.service
-systemctl start sing-box.service
-
 if [ -z "$trjpass" ]
 then
-    trjpass=$(sing-box generate uuid)
+    trjpass=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
 fi
 
 if [ -z "$trojanpath" ]
 then
-    trojanpath=$(sing-box generate uuid)
+    trojanpath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
 fi
 
 if [ -z "$uuid" ]
 then
-    uuid=$(sing-box generate uuid)
+    uuid=$(cat /proc/sys/kernel/random/uuid)
 fi
 
 if [ -z "$vlesspath" ]
 then
-    vlesspath=$(sing-box generate uuid)
+    vlesspath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
 fi
 
 if [ -z "$subspath" ]
 then
-    subspath=$(sing-box generate uuid)
+    subspath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
 fi
 
 cat > /etc/sing-box/config.json <<EOF
@@ -831,7 +828,8 @@ cat > /etc/sing-box/config.json <<EOF
 }
 EOF
 
-systemctl restart sing-box.service
+systemctl enable sing-box.service
+systemctl start sing-box.service
 
 mkdir /var/www/${subspath}
 touch /var/www/${subspath}/1-me-TRJ-WS.json
@@ -879,15 +877,15 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
           "deepmind.google",
           "generativeai.google",
           "proactivebackend-pa.googleapis.com",
-          "news.google.com"
+          "news.google.com",
+          "googlevideo.com"
         ],
         "domain_keyword": [
           "generativelanguage",
           "generativeai"
         ],
         "rule_set": [
-          "openai",
-          "youtube"
+          "openai"
         ],
         "server": "dns-remote"
       },
@@ -1090,15 +1088,15 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
           "deepmind.google",
           "generativeai.google",
           "proactivebackend-pa.googleapis.com",
-          "news.google.com"
+          "news.google.com",
+          "googlevideo.com"
         ],
         "domain_keyword": [
           "generativelanguage",
           "generativeai"
         ],
         "rule_set": [
-          "openai",
-          "youtube"
+          "openai"
         ],
         "outbound": "proxy"
       },
@@ -1301,12 +1299,6 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
-      },
-      {
-        "tag": "youtube",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-youtube.srs"
       },
       {
         "tag": "duckduckgo",
