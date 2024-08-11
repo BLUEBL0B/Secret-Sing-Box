@@ -29,7 +29,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 ```
 Then just enter the necessary information:
 
-![bitmap5095209](https://github.com/user-attachments/assets/2bcb57f8-f87d-4efa-ad03-24223b7c16f4)
+![pic-en](https://github.com/user-attachments/assets/cbe29aa6-53db-483e-9529-d524d5141bb4)
 
 The script will show your client links in the end.
 
