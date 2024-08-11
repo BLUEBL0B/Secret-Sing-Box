@@ -877,15 +877,15 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
           "deepmind.google",
           "generativeai.google",
           "proactivebackend-pa.googleapis.com",
-          "news.google.com",
-          "googlevideo.com"
+          "news.google.com"
         ],
         "domain_keyword": [
           "generativelanguage",
           "generativeai"
         ],
         "rule_set": [
-          "openai"
+          "openai",
+          "youtube"
         ],
         "server": "dns-remote"
       },
@@ -1088,15 +1088,15 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
           "deepmind.google",
           "generativeai.google",
           "proactivebackend-pa.googleapis.com",
-          "news.google.com",
-          "googlevideo.com"
+          "news.google.com"
         ],
         "domain_keyword": [
           "generativelanguage",
           "generativeai"
         ],
         "rule_set": [
-          "openai"
+          "openai",
+          "youtube"
         ],
         "outbound": "proxy"
       },
@@ -1299,6 +1299,12 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
+      },
+      {
+        "tag": "youtube",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-youtube.srs"
       },
       {
         "tag": "duckduckgo",
