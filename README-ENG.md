@@ -6,7 +6,7 @@
 A script for full setup of a hidden proxy server with NGINX camouflage.
 
 > [!IMPORTANT]
-> Recommended OS: Debian 11/12 or Ubuntu 20.04/22.04. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
+> Recommended OS: Debian 12 or Ubuntu 22.04. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
 > With routing rules for Russia.
