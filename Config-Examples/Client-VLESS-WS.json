@@ -1,0 +1,698 @@
+{
+  "log": {
+    "level": "fatal",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-remote",
+        "address": "tls://1.1.1.1",
+        "client_subnet": "YOUR-SERVER-IP"
+      },
+      {
+        "tag": "dns-local",
+        "address": "tls://1.1.1.1"
+      },
+      {
+        "tag": "dns-block",
+        "address": "rcode://success"
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "category-ads-all"
+        ],
+        "server": "dns-block"
+      },
+      {
+        "domain_suffix": [
+          "gemini.google.com",
+          "bard.google.com",
+          "generativelanguage.googleapis.com",
+          "ai.google.dev",
+          "aida.googleapis.com",
+          "aistudio.google.com",
+          "alkalimakersuite-pa.clients6.google.com",
+          "makersuite.google.com",
+          "deepmind.com",
+          "deepmind.google",
+          "generativeai.google",
+          "proactivebackend-pa.googleapis.com",
+          "news.google.com"
+        ],
+        "domain_keyword": [
+          "generativelanguage",
+          "generativeai"
+        ],
+        "rule_set": [
+          "openai",
+          "youtube"
+        ],
+        "server": "dns-remote"
+      },
+      {
+        "domain_suffix": [
+          ".ru",
+          ".su",
+          ".ru.com",
+          ".ru.net",
+          "YOUR-DOMAIN",
+          "wikipedia.org",
+          "independent.co.uk"
+        ],
+        "domain_keyword": [
+          "xn--",
+          "researchgate",
+          "springer",
+          "nextcloud",
+          "skype",
+          "wiki",
+          "kaspersky",
+          "stepik",
+          "likee",
+          "snapchat",
+          "yappy",
+          "pikabu",
+          "okko",
+          "wink",
+          "kion",
+          "viber",
+          "roblox",
+          "ozon",
+          "wildberries",
+          "aliexpress",
+          "theguardian",
+          "politico",
+          "washingtonpost"
+        ],
+        "rule_set": [
+          "geoip-ru",
+          "gov-ru",
+          "whatsapp",
+          "yandex",
+          "telegram",
+          "vk",
+          "mailru",
+          "discord",
+          "zoom",
+          "reddit",
+          "twitch",
+          "tumblr",
+          "4chan",
+          "tiktok",
+          "pinterest",
+          "deviantart",
+          "google",
+          "duckduckgo",
+          "yahoo",
+          "mozilla",
+          "category-android-app-download",
+          "aptoide",
+          "samsung",
+          "huawei",
+          "apple",
+          "microsoft",
+          "nvidia",
+          "xiaomi",
+          "hp",
+          "asus",
+          "lenovo",
+          "lg",
+          "oracle",
+          "adobe",
+          "blender",
+          "drweb",
+          "gitlab",
+          "debian",
+          "canonical",
+          "python",
+          "doi",
+          "elsevier",
+          "sciencedirect",
+          "clarivate",
+          "sci-hub",
+          "duolingo",
+          "aljazeera",
+          "cnn",
+          "reuters",
+          "bloomberg",
+          "nytimes"
+        ],
+        "server": "dns-local"
+      },
+      {
+        "inbound": [
+          "tun-in"
+        ],
+        "server": "dns-remote"
+      }
+    ],
+    "final": "dns-local"
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "tun0",
+      "stack": "system",
+      "mtu": 9000,
+      "inet4_address": "172.19.0.1/28",
+      "auto_route": true,
+      "strict_route": true,
+      "inet4_route_exclude_address": [
+        "10.0.0.0/8",
+        "100.64.0.0/10",
+        "169.254.0.0/16",
+        "172.16.0.0/12",
+        "192.0.0.0/24",
+        "192.0.2.0/24",
+        "192.88.99.0/24",
+        "192.168.0.0/16",
+        "198.51.100.0/24",
+        "203.0.113.0/24",
+        "224.0.0.0/4",
+        "255.255.255.255/32",
+        "239.255.255.250/32"
+      ],
+      "sniff": true,
+      "sniff_override_destination": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    },
+    {
+      "type": "vless",
+      "tag": "proxy",
+      "server": "YOUR-DOMAIN",
+      "server_port": 443,
+      "uuid": "YOUR-VLESS-UUID",
+      "tls": {
+        "enabled": true,
+        "server_name": "YOUR-DOMAIN",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "randomized"
+        }
+      },
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/YOUR-VLESS-PATH"
+      }
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "protocol": "quic",
+        "outbound": "block"
+      },
+      {
+        "rule_set": [
+          "category-ads-all"
+        ],
+        "outbound": "block"
+      },
+      {
+        "domain_suffix": [
+          "gemini.google.com",
+          "bard.google.com",
+          "generativelanguage.googleapis.com",
+          "ai.google.dev",
+          "aida.googleapis.com",
+          "aistudio.google.com",
+          "alkalimakersuite-pa.clients6.google.com",
+          "makersuite.google.com",
+          "deepmind.com",
+          "deepmind.google",
+          "generativeai.google",
+          "proactivebackend-pa.googleapis.com",
+          "news.google.com"
+        ],
+        "domain_keyword": [
+          "generativelanguage",
+          "generativeai"
+        ],
+        "rule_set": [
+          "openai",
+          "youtube"
+        ],
+        "outbound": "proxy"
+      },
+      {
+        "domain_suffix": [
+          ".ru",
+          ".su",
+          ".ru.com",
+          ".ru.net",
+          "YOUR-DOMAIN",
+          "wikipedia.org",
+          "independent.co.uk"
+        ],
+        "domain_keyword": [
+          "xn--",
+          "researchgate",
+          "springer",
+          "nextcloud",
+          "skype",
+          "wiki",
+          "kaspersky",
+          "stepik",
+          "likee",
+          "snapchat",
+          "yappy",
+          "pikabu",
+          "okko",
+          "wink",
+          "kion",
+          "viber",
+          "roblox",
+          "ozon",
+          "wildberries",
+          "aliexpress",
+          "theguardian",
+          "politico",
+          "washingtonpost"
+        ],
+        "rule_set": [
+          "geoip-ru",
+          "gov-ru",
+          "whatsapp",
+          "yandex",
+          "telegram",
+          "vk",
+          "mailru",
+          "discord",
+          "zoom",
+          "reddit",
+          "twitch",
+          "tumblr",
+          "4chan",
+          "tiktok",
+          "pinterest",
+          "deviantart",
+          "google",
+          "duckduckgo",
+          "yahoo",
+          "mozilla",
+          "category-android-app-download",
+          "aptoide",
+          "samsung",
+          "huawei",
+          "apple",
+          "microsoft",
+          "nvidia",
+          "xiaomi",
+          "hp",
+          "asus",
+          "lenovo",
+          "lg",
+          "oracle",
+          "adobe",
+          "blender",
+          "drweb",
+          "gitlab",
+          "debian",
+          "canonical",
+          "python",
+          "doi",
+          "elsevier",
+          "sciencedirect",
+          "clarivate",
+          "sci-hub",
+          "duolingo",
+          "aljazeera",
+          "cnn",
+          "reuters",
+          "bloomberg",
+          "nytimes"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "inbound": [
+          "tun-in"
+        ],
+        "outbound": "proxy"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geoip-ru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geoip/raw/rule-set/geoip-ru.srs"
+      },
+      {
+        "tag": "gov-ru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-gov-ru.srs"
+      },
+      {
+        "tag": "whatsapp",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-whatsapp.srs"
+      },
+      {
+        "tag": "yandex",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-yandex.srs"
+      },
+      {
+        "tag": "telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-telegram.srs"
+      },
+      {
+        "tag": "vk",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-vk.srs"
+      },
+      {
+        "tag": "mailru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-mailru.srs"
+      },
+      {
+        "tag": "discord",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-discord.srs"
+      },
+      {
+        "tag": "zoom",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-zoom.srs"
+      },
+      {
+        "tag": "reddit",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-reddit.srs"
+      },
+      {
+        "tag": "twitch",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-twitch.srs"
+      },
+      {
+        "tag": "tumblr",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-tumblr.srs"
+      },
+      {
+        "tag": "4chan",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-4chan.srs"
+      },
+      {
+        "tag": "tiktok",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-tiktok.srs"
+      },
+      {
+        "tag": "pinterest",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-pinterest.srs"
+      },
+      {
+        "tag": "deviantart",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-deviantart.srs"
+      },
+      {
+        "tag": "google",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
+      },
+      {
+        "tag": "youtube",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-youtube.srs"
+      },
+      {
+        "tag": "duckduckgo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-duckduckgo.srs"
+      },
+      {
+        "tag": "yahoo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-yahoo.srs"
+      },
+      {
+        "tag": "mozilla",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-mozilla.srs"
+      },
+      {
+        "tag": "category-android-app-download",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-android-app-download.srs"
+      },
+      {
+        "tag": "aptoide",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-aptoide.srs"
+      },
+      {
+        "tag": "samsung",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-samsung.srs"
+      },
+      {
+        "tag": "huawei",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-huawei.srs"
+      },
+      {
+        "tag": "apple",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-apple.srs"
+      },
+      {
+        "tag": "microsoft",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-microsoft.srs"
+      },
+      {
+        "tag": "nvidia",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-nvidia.srs"
+      },
+      {
+        "tag": "xiaomi",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-xiaomi.srs"
+      },
+      {
+        "tag": "hp",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-hp.srs"
+      },
+      {
+        "tag": "asus",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-asus.srs"
+      },
+      {
+        "tag": "lenovo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-lenovo.srs"
+      },
+      {
+        "tag": "lg",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-lg.srs"
+      },
+      {
+        "tag": "oracle",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-oracle.srs"
+      },
+      {
+        "tag": "adobe",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-adobe.srs"
+      },
+      {
+        "tag": "blender",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-blender.srs"
+      },
+      {
+        "tag": "drweb",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-drweb.srs"
+      },
+      {
+        "tag": "gitlab",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-gitlab.srs"
+      },
+      {
+        "tag": "debian",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-debian.srs"
+      },
+      {
+        "tag": "canonical",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-canonical.srs"
+      },
+      {
+        "tag": "python",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-python.srs"
+      },
+      {
+        "tag": "doi",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-doi.srs"
+      },
+      {
+        "tag": "elsevier",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-elsevier.srs"
+      },
+      {
+        "tag": "sciencedirect",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-sciencedirect.srs"
+      },
+      {
+        "tag": "clarivate",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-clarivate.srs"
+      },
+      {
+        "tag": "sci-hub",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-sci-hub.srs"
+      },
+      {
+        "tag": "duolingo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-duolingo.srs"
+      },
+      {
+        "tag": "aljazeera",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-aljazeera.srs"
+      },
+      {
+        "tag": "cnn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-cnn.srs"
+      },
+      {
+        "tag": "reuters",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-reuters.srs"
+      },
+      {
+        "tag": "bloomberg",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-bloomberg.srs"
+      },
+      {
+        "tag": "nytimes",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-nytimes.srs"
+      },
+      {
+        "tag": "openai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
+      },
+      {
+        "tag": "category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-ads-all.srs"
+      }
+    ],
+    "auto_detect_interface": true,
+    "override_android_vpn": true
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db"
+    }
+  }
+}
