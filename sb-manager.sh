@@ -289,7 +289,7 @@ do
         echo "2 - Add a new user"
         echo "3 - Delete a user"
         echo "4 - Sync client routing rules with Github"
-        echo "5 - Sync client routing rules with local template"
+        echo "5 - Sync client routing rules with local template (custom rules)"
         echo "6 - Exit"
         read option
         echo ""
