@@ -51,6 +51,8 @@ Then follow the instructions:
 
 ![Screenshot 2024-08-16 223928](https://github.com/user-attachments/assets/a15c10d2-8032-4005-aa99-b5514bb7baaa)
 
+Options 4 and 5 synchronize the routing rules in client configs of all users, which eliminates the need to edit the config of each user separately.
+
 ### Client setup:
 [Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
 
