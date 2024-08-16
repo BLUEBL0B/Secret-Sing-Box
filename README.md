@@ -33,18 +33,23 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 
 В конце скрипт покажет ссылки на клиентские конфиги.
 
-Чтобы добавить/удалить пользователей или синхронизировать правила маршрутизации, введите команду:
+-----
+
+Чтобы добавить/удалить пользователей или синхронизировать клиентские правила маршрутизации, введите команду:
 
 ```
 sbmanager
 ```
 
-Если сервер был настроен старой версией скрипта, то введите команду:
+Или если сервер был настроен старой версией скрипта, то введите команду:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh)
 ```
 
+Далее следуйте инструкциям:
+
+![Screenshot 2024-08-16 224518](https://github.com/user-attachments/assets/73232050-354e-4be8-9472-5f0fa705996e)
 
 ### Настройка клиентов:
 [Android и iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf)
