@@ -216,7 +216,7 @@ do
 
             echo -e "${textcolor}ВНИМАНИЕ!${clear}"
             echo -e "Вы можете вручную отредактировать правила маршрутизации в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
-            echo "Правила в этом файле будут применены ко всем клиентским конфигам"
+            echo "Правила в этом файле будут применены к клиентским конфигам всех пользователей"
             echo ""
             echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать правила, или введите ${textcolor}stop${clear}, чтобы выйти:"
             read sync
@@ -459,7 +459,7 @@ do
 
             echo -e "${textcolor}ATTENTION!${clear}"
             echo -e "You can manually edit the routing rules in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
-            echo "The rules in this file will be applied to all client configs"
+            echo "The rules in this file will be applied to client configs of all users"
             echo ""
             echo -e "Press ${textcolor}Enter${clear} to synchronize the rules or enter ${textcolor}stop${clear} to exit:"
             read sync
