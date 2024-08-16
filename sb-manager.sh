@@ -239,7 +239,7 @@ do
 
             if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
             then
-                echo -e "${red}Ошибка: структура /var/www/${subspath}/template-loc.json нарушена, требуются исправления${clear}"
+                echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
                 echo ""
                 echo -e "Нажмите ${textcolor}Enter${clear}, чтобы выйти, или введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии"
                 read resettemp
@@ -482,7 +482,7 @@ do
 
             if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
             then
-                echo -e "${red}Error: /var/www/${subspath}/template-loc.json contains mistakes, corrections needed${clear}"
+                echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
                 echo ""
                 echo -e "Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
                 read resettemp
