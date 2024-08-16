@@ -51,6 +51,8 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 
 ![Screenshot 2024-08-16 224518](https://github.com/user-attachments/assets/73232050-354e-4be8-9472-5f0fa705996e)
 
+Пункты 4 и 5 синхронизируют правила в клиентских конфигах всех пользователей, что позволяет не редактировать конфиг каждого пользователя отдельно.
+
 ### Настройка клиентов:
 [Android и iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf)
 
