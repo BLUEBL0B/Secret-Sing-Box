@@ -162,7 +162,7 @@ do
             ;;
             4)
             echo -e "${textcolor}ВНИМАНИЕ!${clear}"
-            echo "Правила маршрутизации во всех клиентских конфигах будут синхронизированы с последней версией на Github"
+            echo "Правила маршрутизации в клиентских конфигах всех пользователей будут синхронизированы с последней версией на Github"
             echo ""
             echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать правила, или введите ${textcolor}stop${clear}, чтобы выйти:"
             read sync
@@ -405,7 +405,7 @@ do
             ;;
             4)
             echo -e "${textcolor}ATTENTION!${clear}"
-            echo "The routing rules in all client configs will be synchronized with the latest version on Github (for Russia)"
+            echo "The routing rules in client configs of all users will be synchronized with the latest version on Github (for Russia)"
             echo ""
             echo -e "Press ${textcolor}Enter${clear} to synchronize the rules or enter ${textcolor}stop${clear} to exit:"
             read sync
