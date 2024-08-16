@@ -35,7 +35,7 @@ The script will show your client links in the end.
 
 -----
 
-Run this command to add/delete users or to synchronize client routing rules:
+Run this command to add/delete users or to synchronize routing rules in client configs:
 
 ```
 sbmanager
