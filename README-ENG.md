@@ -33,6 +33,24 @@ Then just enter the necessary information:
 
 The script will show your client links in the end.
 
+-----
+
+Run this command to add/delete users or to synchronize client routing rules:
+
+```
+sbmanager
+```
+
+Or run this command if the server was set up with an old version of the script:
+
+```
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh)
+```
+
+Then follow the instructions:
+
+![Screenshot 2024-08-16 223928](https://github.com/user-attachments/assets/a15c10d2-8032-4005-aa99-b5514bb7baaa)
+
 ### Client setup:
 [Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
 
