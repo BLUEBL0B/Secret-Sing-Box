@@ -416,7 +416,7 @@ echo ""
 
 
 ### УСТАНОВКА ПАКЕТОВ ###
-apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed net-tools -y
+apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed jq net-tools -y
 
 curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
@@ -1759,6 +1759,13 @@ http {
 EOF
 
 systemctl reload nginx
+
+
+### СКРИПТ ДЛЯ ДОБАВЛЕНИЯ И УДАЛЕНИЯ ПОЛЬЗОВАТЕЛЕЙ ###
+touch /usr/local/bin/sbmanager
+echo '#!/bin/bash' >> /usr/local/bin/sbmanager
+echo 'bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh)' >> /usr/local/bin/sbmanager
+chmod +x /usr/local/bin/sbmanager
 
 
 echo ""
