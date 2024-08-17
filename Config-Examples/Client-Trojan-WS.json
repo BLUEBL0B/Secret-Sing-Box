@@ -229,7 +229,7 @@
       },
       {
         "protocol": "quic",
-        "outbound": "block"
+        "outbound": "direct"
       },
       {
         "rule_set": [
