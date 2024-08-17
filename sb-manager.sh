@@ -110,7 +110,7 @@ do
                 systemctl restart sing-box.service
 
                 cp /var/www/${subspath}/template.json /var/www/${subspath}/${username}-TRJ-WS.json
-                sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$trjpass/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" /var/www/${subspath}/${username}-TRJ-WS.json
+                sed -i -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$trjpass/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" -e "s/YOUR-SERVER-IP/$serverip/g" /var/www/${subspath}/${username}-TRJ-WS.json
                 cp /var/www/${subspath}/${username}-TRJ-WS.json /var/www/${subspath}/${username}-VLESS-WS.json
                 sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/${username}-VLESS-WS.json
 
@@ -197,9 +197,9 @@ do
                 cp /var/www/${subspath}/template.json ${file}
                 if [[ "$protocol" == "trojan" ]]
                 then
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" ${file}
+                    sed -i -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" -e "s/YOUR-SERVER-IP/$serverip/g" ${file}
                 else
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
+                    sed -i -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' -e "s/YOUR-SERVER-IP/$serverip/g" ${file}
                 fi
                 cred=""
             done
@@ -275,9 +275,9 @@ do
                 cp /var/www/${subspath}/template-loc.json ${file}
                 if [[ "$protocol" == "trojan" ]]
                 then
-                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$trojanpath/g" ${file}
+                    sed -i -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$trojanpath/g" -e "s/$tempip/$serverip/g" ${file}
                 else
-                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
+                    sed -i -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' -e "s/$tempip/$serverip/g" ${file}
                 fi
                 cred=""
             done
@@ -359,7 +359,7 @@ do
                 systemctl restart sing-box.service
 
                 cp /var/www/${subspath}/template.json /var/www/${subspath}/${username}-TRJ-WS.json
-                sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$trjpass/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" /var/www/${subspath}/${username}-TRJ-WS.json
+                sed -i -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$trjpass/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" -e "s/YOUR-SERVER-IP/$serverip/g" /var/www/${subspath}/${username}-TRJ-WS.json
                 cp /var/www/${subspath}/${username}-TRJ-WS.json /var/www/${subspath}/${username}-VLESS-WS.json
                 sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/${username}-VLESS-WS.json
 
@@ -446,9 +446,9 @@ do
                 cp /var/www/${subspath}/template.json ${file}
                 if [[ "$protocol" == "trojan" ]]
                 then
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" ${file}
+                    sed -i -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" -e "s/YOUR-SERVER-IP/$serverip/g" ${file}
                 else
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
+                    sed -i -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' -e "s/YOUR-SERVER-IP/$serverip/g" ${file}
                 fi
                 cred=""
             done
@@ -524,9 +524,9 @@ do
                 cp /var/www/${subspath}/template-loc.json ${file}
                 if [[ "$protocol" == "trojan" ]]
                 then
-                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$trojanpath/g" ${file}
+                    sed -i -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$trojanpath/g" -e "s/$tempip/$serverip/g" ${file}
                 else
-                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
+                    sed -i -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' -e "s/$tempip/$serverip/g" ${file}
                 fi
                 cred=""
             done
