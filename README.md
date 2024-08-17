@@ -35,7 +35,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 
 -----
 
-Чтобы добавить/удалить пользователей или синхронизировать правила маршрутизации в клиентских конфигах, введите команду:
+Чтобы добавить/удалить пользователей или синхронизировать настройки в клиентских конфигах, введите команду:
 
 ```
 sbmanager
@@ -49,9 +49,9 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 
 Далее следуйте инструкциям:
 
-![Screenshot 2024-08-16 224518](https://github.com/user-attachments/assets/73232050-354e-4be8-9472-5f0fa705996e)
+![Screenshot 2024-08-17 194127](https://github.com/user-attachments/assets/4869aa7c-13de-47e0-8abc-3d2745d4f716)
 
-Пункты 4 и 5 синхронизируют правила в клиентских конфигах всех пользователей, что позволяет не редактировать конфиг каждого пользователя отдельно.
+Пункты 4 и 5 синхронизируют настройки в клиентских конфигах всех пользователей, что позволяет не редактировать конфиг каждого пользователя отдельно.
 
 ### Настройка клиентов:
 [Android и iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf)
