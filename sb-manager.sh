@@ -188,10 +188,10 @@ do
                 if grep -q "trojan" "$file"
                 then
                     protocol="trojan"
-                    cred=$(jq -r '.outbounds[3].password' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("password")) | .password' ${file})
                 else
                     protocol="vless"
-                    cred=$(jq -r '.outbounds[3].uuid' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("uuid")) | .uuid' ${file})
                 fi
                 rm ${file}
                 cp /var/www/${subspath}/template.json ${file}
@@ -255,23 +255,29 @@ do
                 continue
             fi
 
+            tempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
+            tempdomain=$(jq -r '.outbounds[] | select(has("server")) | .server' /var/www/${subspath}/template-loc.json)
+            temppass=$(jq -r '.outbounds[] | select(has("password")) | .password' /var/www/${subspath}/template-loc.json)
+            temppath=$(jq -r '.outbounds[] | select(has("transport")) | .transport.path' /var/www/${subspath}/template-loc.json)
+            temppath=${temppath#"/"}
+
             for file in /var/www/${subspath}/*-WS.json
             do
                 if grep -q "trojan" "$file"
                 then
                     protocol="trojan"
-                    cred=$(jq -r '.outbounds[3].password' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("password")) | .password' ${file})
                 else
                     protocol="vless"
-                    cred=$(jq -r '.outbounds[3].uuid' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("uuid")) | .uuid' ${file})
                 fi
                 rm ${file}
                 cp /var/www/${subspath}/template-loc.json ${file}
                 if [[ "$protocol" == "trojan" ]]
                 then
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" ${file}
+                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$trojanpath/g" ${file}
                 else
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
+                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
                 fi
                 cred=""
             done
@@ -431,10 +437,10 @@ do
                 if grep -q "trojan" "$file"
                 then
                     protocol="trojan"
-                    cred=$(jq -r '.outbounds[3].password' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("password")) | .password' ${file})
                 else
                     protocol="vless"
-                    cred=$(jq -r '.outbounds[3].uuid' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("uuid")) | .uuid' ${file})
                 fi
                 rm ${file}
                 cp /var/www/${subspath}/template.json ${file}
@@ -498,23 +504,29 @@ do
                 continue
             fi
 
+            tempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
+            tempdomain=$(jq -r '.outbounds[] | select(has("server")) | .server' /var/www/${subspath}/template-loc.json)
+            temppass=$(jq -r '.outbounds[] | select(has("password")) | .password' /var/www/${subspath}/template-loc.json)
+            temppath=$(jq -r '.outbounds[] | select(has("transport")) | .transport.path' /var/www/${subspath}/template-loc.json)
+            temppath=${temppath#"/"}
+
             for file in /var/www/${subspath}/*-WS.json
             do
                 if grep -q "trojan" "$file"
                 then
                     protocol="trojan"
-                    cred=$(jq -r '.outbounds[3].password' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("password")) | .password' ${file})
                 else
                     protocol="vless"
-                    cred=$(jq -r '.outbounds[3].uuid' ${file})
+                    cred=$(jq -r '.outbounds[] | select(has("uuid")) | .uuid' ${file})
                 fi
                 rm ${file}
                 cp /var/www/${subspath}/template-loc.json ${file}
                 if [[ "$protocol" == "trojan" ]]
                 then
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$trojanpath/g" ${file}
+                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$trojanpath/g" ${file}
                 else
-                    sed -i -e "s/YOUR-SERVER-IP/$serverip/g" -e "s/YOUR-DOMAIN/$domain/g" -e "s/YOUR-TROJAN-PASSWORD/$cred/g" -e "s/YOUR-TROJAN-PATH/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
+                    sed -i -e "s/$tempip/$serverip/g" -e "s/$tempdomain/$domain/g" -e "s/$temppass/$cred/g" -e "s/$temppath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' ${file}
                 fi
                 cred=""
             done
