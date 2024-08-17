@@ -35,7 +35,7 @@ The script will show your client links in the end.
 
 -----
 
-Run this command to add/delete users or to synchronize routing rules in client configs:
+Run this command to add/delete users or to synchronize the settings in client configs:
 
 ```
 sbmanager
@@ -49,9 +49,9 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 
 Then follow the instructions:
 
-![Screenshot 2024-08-16 223928](https://github.com/user-attachments/assets/a15c10d2-8032-4005-aa99-b5514bb7baaa)
+![Screenshot 2024-08-17 194156](https://github.com/user-attachments/assets/e7e7b3b8-67a4-46e2-b7f4-9470e42815d1)
 
-Options 4 and 5 synchronize the routing rules in client configs of all users, which eliminates the need to edit the config of each user separately.
+Options 4 and 5 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
 ### Client setup:
 [Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
