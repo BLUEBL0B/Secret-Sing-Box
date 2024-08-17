@@ -45,8 +45,8 @@ do
         echo "1 - Вывести список пользователей"
         echo "2 - Добавить нового пользователя"
         echo "3 - Удалить пользователя"
-        echo "4 - Синхронизировать клиентские правила маршрутизации с Github"
-        echo "5 - Синхронизировать клиентские правила маршрутизации с локальным шаблоном (свои правила)"
+        echo "4 - Синхронизировать настройки во всех клиентских конфигах с Github"
+        echo "5 - Синхронизировать настройки во всех клиентских конфигах с локальным шаблоном (свои настройки)"
         echo "6 - Выйти"
         read option
         echo ""
@@ -162,9 +162,9 @@ do
             ;;
             4)
             echo -e "${textcolor}ВНИМАНИЕ!${clear}"
-            echo "Правила маршрутизации в клиентских конфигах всех пользователей будут синхронизированы с последней версией на Github"
+            echo "Настройки в клиентских конфигах всех пользователей будут синхронизированы с последней версией на Github"
             echo ""
-            echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать правила, или введите ${textcolor}stop${clear}, чтобы выйти:"
+            echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}stop${clear}, чтобы выйти:"
             read sync
 
             if [[ "$sync" == "stop" ]]
@@ -204,7 +204,7 @@ do
                 cred=""
             done
 
-            echo "Синхронизация правил завершена"
+            echo "Синхронизация настроек завершена"
             echo ""
             echo ""
             ;;
@@ -215,10 +215,10 @@ do
             fi
 
             echo -e "${textcolor}ВНИМАНИЕ!${clear}"
-            echo -e "Вы можете вручную отредактировать правила маршрутизации в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
-            echo "Правила в этом файле будут применены к клиентским конфигам всех пользователей"
+            echo -e "Вы можете вручную отредактировать настройки в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
+            echo "Настройки в этом файле будут применены к клиентским конфигам всех пользователей"
             echo ""
-            echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать правила, или введите ${textcolor}stop${clear}, чтобы выйти:"
+            echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}stop${clear}, чтобы выйти:"
             read sync
 
             if [[ "$sync" == "stop" ]]
@@ -282,7 +282,7 @@ do
                 cred=""
             done
 
-            echo "Синхронизация правил завершена"
+            echo "Синхронизация настроек завершена"
             echo ""
             echo ""
             ;;
@@ -294,8 +294,8 @@ do
         echo "1 - Show the list of users"
         echo "2 - Add a new user"
         echo "3 - Delete a user"
-        echo "4 - Sync client routing rules with Github"
-        echo "5 - Sync client routing rules with local template (custom rules)"
+        echo "4 - Sync settings in all client configs with Github"
+        echo "5 - Sync settings in all client configs with local template (custom settings)"
         echo "6 - Exit"
         read option
         echo ""
@@ -411,9 +411,9 @@ do
             ;;
             4)
             echo -e "${textcolor}ATTENTION!${clear}"
-            echo "The routing rules in client configs of all users will be synchronized with the latest version on Github (for Russia)"
+            echo "The settings in client configs of all users will be synchronized with the latest version on Github (for Russia)"
             echo ""
-            echo -e "Press ${textcolor}Enter${clear} to synchronize the rules or enter ${textcolor}stop${clear} to exit:"
+            echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}stop${clear} to exit:"
             read sync
 
             if [[ "$sync" == "stop" ]]
@@ -453,7 +453,7 @@ do
                 cred=""
             done
 
-            echo "Synchronization of the rules is completed"
+            echo "Synchronization of the settings is completed"
             echo ""
             echo ""
             ;;
@@ -464,10 +464,10 @@ do
             fi
 
             echo -e "${textcolor}ATTENTION!${clear}"
-            echo -e "You can manually edit the routing rules in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
-            echo "The rules in this file will be applied to client configs of all users"
+            echo -e "You can manually edit the settings in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
+            echo "The settings in this file will be applied to client configs of all users"
             echo ""
-            echo -e "Press ${textcolor}Enter${clear} to synchronize the rules or enter ${textcolor}stop${clear} to exit:"
+            echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}stop${clear} to exit:"
             read sync
 
             if [[ "$sync" == "stop" ]]
@@ -531,7 +531,7 @@ do
                 cred=""
             done
 
-            echo "Synchronization of the rules is completed"
+            echo "Synchronization of the settings is completed"
             echo ""
             echo ""
             ;;
