@@ -1066,7 +1066,7 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
       },
       {
         "protocol": "quic",
-        "outbound": "block"
+        "outbound": "direct"
       },
       {
         "rule_set": [
