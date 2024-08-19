@@ -6,7 +6,7 @@
 A script for full setup of a hidden proxy server with NGINX camouflage.
 
 > [!IMPORTANT]
-> Recommended OS: Debian 12 or Ubuntu 22.04. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
+> Recommended OS: Debian 12 or Ubuntu 22.04. You will also need your own domain linked to your Cloudflare account. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
 > With routing rules for Russia.
@@ -44,7 +44,7 @@ sbmanager
 Or run this command if the server was set up with an old version of the script:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager-en.sh)
 ```
 
 Then follow the instructions:
