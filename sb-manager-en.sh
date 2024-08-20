@@ -12,53 +12,6 @@ then
     exit 1
 fi
 
-validate_json() {
-    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
-    then
-        echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
-        echo ""
-        echo -e "Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
-        read resettemp
-        if [[ "$resettemp" == "reset" ]]
-        then
-            rm /var/www/${subspath}/template-loc.json
-            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-            echo ""
-            echo "The template was reset to its default version"
-            echo ""
-        fi
-        echo ""
-        continue
-    fi
-}
-
-copy_template() {
-    if [ ! -f /var/www/${subspath}/template-loc.json ]
-    then
-        cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-    fi
-}
-
-confirm_sync() {
-    if [[ "$sync" == "stop" ]]
-    then
-        echo ""
-        echo ""
-        sync=""
-        continue
-    fi
-}
-
-check_users() {
-    if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
-    then
-        echo -e "${red}Error: no users found${clear}"
-        echo ""
-        echo ""
-        continue
-    fi
-}
-
 serverip=$(curl -s ipinfo.io/ip)
 
 domain=$(ls /etc/letsencrypt/renewal)
@@ -102,9 +55,28 @@ do
         echo ""
         ;;
         2)
-        copy_template
+        if [ ! -f /var/www/${subspath}/template-loc.json ]
+        then
+            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+        fi
 
-        validate_json
+        if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
+        then
+            echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
+            echo ""
+            echo -e "Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
+            read resettemp
+            if [[ "$resettemp" == "reset" ]]
+            then
+                rm /var/www/${subspath}/template-loc.json
+                cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+                echo ""
+                echo "The template was reset to its default version"
+                echo ""
+            fi
+            echo ""
+            continue
+        fi
 
         while [[ $username != "stop" ]]
         do
@@ -226,9 +198,21 @@ do
         echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}stop${clear} to exit:"
         read sync
 
-        confirm_sync
+        if [[ "$sync" == "stop" ]]
+        then
+            echo ""
+            echo ""
+            sync=""
+            continue
+        fi
 
-        check_users
+        if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
+        then
+            echo -e "${red}Error: no users found${clear}"
+            echo ""
+            echo ""
+            continue
+        fi
 
         for file in /var/www/${subspath}/*-WS.json
         do
@@ -261,7 +245,10 @@ do
         echo ""
         ;;
         5)
-        copy_template
+        if [ ! -f /var/www/${subspath}/template-loc.json ]
+        then
+            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+        fi
 
         echo -e "${textcolor}ATTENTION!${clear}"
         echo -e "You can manually edit the settings in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
@@ -270,11 +257,39 @@ do
         echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}stop${clear} to exit:"
         read sync
 
-        confirm_sync
+        if [[ "$sync" == "stop" ]]
+        then
+            echo ""
+            echo ""
+            sync=""
+            continue
+        fi
 
-        check_users
+        if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
+        then
+            echo -e "${red}Error: no users found${clear}"
+            echo ""
+            echo ""
+            continue
+        fi
 
-        validate_json
+        if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
+        then
+            echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
+            echo ""
+            echo -e "Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
+            read resettemp
+            if [[ "$resettemp" == "reset" ]]
+            then
+                rm /var/www/${subspath}/template-loc.json
+                cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+                echo ""
+                echo "The template was reset to its default version"
+                echo ""
+            fi
+            echo ""
+            continue
+        fi
 
         loctempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
         loctempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template-loc.json)
