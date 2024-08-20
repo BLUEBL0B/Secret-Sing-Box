@@ -12,6 +12,53 @@ then
     exit 1
 fi
 
+validate_json() {
+    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
+    then
+        echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
+        echo ""
+        echo -e "Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
+        read resettemp
+        if [[ "$resettemp" == "reset" ]]
+        then
+            rm /var/www/${subspath}/template-loc.json
+            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+            echo ""
+            echo "The template was reset to its default version"
+            echo ""
+        fi
+        echo ""
+        continue
+    fi
+}
+
+copy_template() {
+    if [ ! -f /var/www/${subspath}/template-loc.json ]
+    then
+        cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+    fi
+}
+
+confirm_sync() {
+    if [[ "$sync" == "stop" ]]
+    then
+        echo ""
+        echo ""
+        sync=""
+        continue
+    fi
+}
+
+check_users() {
+    if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
+    then
+        echo -e "${red}Error: no users found${clear}"
+        echo ""
+        echo ""
+        continue
+    fi
+}
+
 serverip=$(curl -s ipinfo.io/ip)
 
 domain=$(ls /etc/letsencrypt/renewal)
@@ -55,18 +102,25 @@ do
         echo ""
         ;;
         2)
+        copy_template
+
+        validate_json
+
         while [[ $username != "stop" ]]
         do
-            echo -e "Enter the name of the new user or enter ${textcolor}stop${clear} to exit:"
-            read username
-            echo ""
-            while [[ -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
+            while [ -z "$username" ]
             do
-                echo -e "${red}Error: this user already exists${clear}"
-                echo ""
                 echo -e "Enter the name of the new user or enter ${textcolor}stop${clear} to exit:"
                 read username
                 echo ""
+                while [[ -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
+                do
+                    echo -e "${red}Error: this user already exists${clear}"
+                    echo ""
+                    echo -e "Enter the name of the new user or enter ${textcolor}stop${clear} to exit:"
+                    read username
+                    echo ""
+                done
             done
             if [[ $username == "stop" ]]
             then
@@ -106,12 +160,12 @@ do
 
             systemctl restart sing-box.service
 
-            cp /var/www/${subspath}/template.json /var/www/${subspath}/${username}-TRJ-WS.json
+            cp /var/www/${subspath}/template-loc.json /var/www/${subspath}/${username}-TRJ-WS.json
             outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-WS.json)
             echo "$(jq ".outbounds[${outboundnum}].password = \"${trjpass}\" | .outbounds[${outboundnum}].transport.path = \"/${trojanpath}\"" /var/www/${subspath}/${username}-TRJ-WS.json)" > /var/www/${subspath}/${username}-TRJ-WS.json
             sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" /var/www/${subspath}/${username}-TRJ-WS.json
 
-            cp /var/www/${subspath}/template.json /var/www/${subspath}/${username}-VLESS-WS.json
+            cp /var/www/${subspath}/template-loc.json /var/www/${subspath}/${username}-VLESS-WS.json
             outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-VLESS-WS.json)
             echo "$(jq ".outbounds[${outboundnum}].password = \"${uuid}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" /var/www/${subspath}/${username}-VLESS-WS.json)" > /var/www/${subspath}/${username}-VLESS-WS.json
             sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" /var/www/${subspath}/${username}-VLESS-WS.json
@@ -120,6 +174,7 @@ do
             echo "https://${domain}/${subspath}/${username}-TRJ-WS.json"
             echo "https://${domain}/${subspath}/${username}-VLESS-WS.json"
             echo ""
+            username=""
         done
         echo ""
         ;;
@@ -171,21 +226,9 @@ do
         echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}stop${clear} to exit:"
         read sync
 
-        if [[ "$sync" == "stop" ]]
-        then
-            echo ""
-            echo ""
-            sync=""
-            continue
-        fi
+        confirm_sync
 
-        if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
-        then
-            echo -e "${red}Error: no users found${clear}"
-            echo ""
-            echo ""
-            continue
-        fi
+        check_users
 
         for file in /var/www/${subspath}/*-WS.json
         do
@@ -218,10 +261,7 @@ do
         echo ""
         ;;
         5)
-        if [ ! -f /var/www/${subspath}/template-loc.json ]
-        then
-            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-        fi
+        copy_template
 
         echo -e "${textcolor}ATTENTION!${clear}"
         echo -e "You can manually edit the settings in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
@@ -230,39 +270,11 @@ do
         echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}stop${clear} to exit:"
         read sync
 
-        if [[ "$sync" == "stop" ]]
-        then
-            echo ""
-            echo ""
-            sync=""
-            continue
-        fi
+        confirm_sync
 
-        if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
-        then
-            echo -e "${red}Error: no users found${clear}"
-            echo ""
-            echo ""
-            continue
-        fi
+        check_users
 
-        if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
-        then
-            echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
-            echo ""
-            echo -e "Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
-            read resettemp
-            if [[ "$resettemp" == "reset" ]]
-            then
-                rm /var/www/${subspath}/template-loc.json
-                cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-                echo ""
-                echo "The template was reset to its default version"
-                echo ""
-            fi
-            echo ""
-            continue
-        fi
+        validate_json
 
         loctempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
         loctempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template-loc.json)
