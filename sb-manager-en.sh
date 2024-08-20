@@ -49,7 +49,7 @@ do
         1)
         usernum=$(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l)
         usernum=$(expr ${usernum} / 2)
-        echo -e "Number of users: ${textcolor}${usernum}${clear}"
+        echo -e "${textcolor}Number of users:${clear} ${usernum}"
         ls -A1 /var/www/${subspath} | grep "WS.json" | sed "s/-TRJ-WS\.json//g" | sed "s/-VLESS-WS\.json//g" | uniq
         echo ""
         echo ""
