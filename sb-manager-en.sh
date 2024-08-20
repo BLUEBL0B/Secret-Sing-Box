@@ -32,6 +32,8 @@ curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/
 tempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template.json)
 tempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template.json)
 
+username=""
+
 echo ""
 echo ""
 while [[ "$option" != "6" ]]
