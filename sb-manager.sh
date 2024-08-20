@@ -80,23 +80,23 @@ do
             continue
         fi
 
-        while [[ $username != "stop" ]]
+        while [[ $username != "x" ]]
         do
             while [ -z "$username" ]
             do
-                echo -e "Введите имя нового пользователя или введите ${textcolor}stop${clear}, чтобы закончить:"
+                echo -e "Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
                 read username
                 echo ""
                 while [[ -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
                 do
                     echo -e "${red}Ошибка: пользователь с таким именем уже существует${clear}"
                     echo ""
-                    echo -e "Введите имя нового пользователя или введите ${textcolor}stop${clear}, чтобы закончить:"
+                    echo -e "Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
                     read username
                     echo ""
                 done
             done
-            if [[ $username == "stop" ]]
+            if [[ $username == "x" ]]
             then
                 echo ""
                 username=""
@@ -153,12 +153,12 @@ do
         echo ""
         ;;
         3)
-        while [[ $username != "stop" ]]
+        while [[ $username != "x" ]]
         do
-            echo -e "Введите имя пользователя или введите ${textcolor}stop${clear}, чтобы закончить:"
+            echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
             read username
             echo ""
-            if [[ $username == "stop" ]]
+            if [[ $username == "x" ]]
             then
                 echo ""
                 username=""
@@ -168,10 +168,10 @@ do
             do
                 echo -e "${red}Ошибка: пользователь с таким именем не существует${clear}"
                 echo ""
-                echo -e "Введите имя пользователя или введите ${textcolor}stop${clear}, чтобы закончить:"
+                echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
                 read username
                 echo ""
-                if [[ $username == "stop" ]]
+                if [[ $username == "x" ]]
                 then
                     echo ""
                     username=""
@@ -197,10 +197,10 @@ do
         echo -e "${textcolor}ВНИМАНИЕ!${clear}"
         echo "Настройки в клиентских конфигах Trojan и VLESS всех пользователей будут синхронизированы с последней версией на Github"
         echo ""
-        echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}stop${clear}, чтобы выйти:"
+        echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
         read sync
 
-        if [[ "$sync" == "stop" ]]
+        if [[ "$sync" == "x" ]]
         then
             echo ""
             echo ""
@@ -256,10 +256,10 @@ do
         echo -e "Вы можете вручную отредактировать настройки в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
         echo "Настройки в этом файле будут применены к клиентским конфигам Trojan и VLESS всех пользователей"
         echo ""
-        echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}stop${clear}, чтобы выйти:"
+        echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
         read sync
 
-        if [[ "$sync" == "stop" ]]
+        if [[ "$sync" == "x" ]]
         then
             echo ""
             echo ""
