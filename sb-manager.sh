@@ -12,53 +12,6 @@ then
     exit 1
 fi
 
-validate_json() {
-    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
-    then
-        echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
-        echo ""
-        echo -e "Нажмите ${textcolor}Enter${clear}, чтобы выйти, или введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии"
-        read resettemp
-        if [[ "$resettemp" == "reset" ]]
-        then
-            rm /var/www/${subspath}/template-loc.json
-            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-            echo ""
-            echo "Шаблон сброшен до исходной версии"
-            echo ""
-        fi
-        echo ""
-        continue
-    fi
-}
-
-copy_template() {
-    if [ ! -f /var/www/${subspath}/template-loc.json ]
-    then
-        cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-    fi
-}
-
-confirm_sync() {
-    if [[ "$sync" == "stop" ]]
-    then
-        echo ""
-        echo ""
-        sync=""
-        continue
-    fi
-}
-
-check_users() {
-    if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
-    then
-        echo -e "${red}Ошибка: пользователи отсутствуют${clear}"
-        echo ""
-        echo ""
-        continue
-    fi
-}
-
 serverip=$(curl -s ipinfo.io/ip)
 
 domain=$(ls /etc/letsencrypt/renewal)
@@ -102,9 +55,28 @@ do
         echo ""
         ;;
         2)
-        copy_template
+        if [ ! -f /var/www/${subspath}/template-loc.json ]
+        then
+            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+        fi
 
-        validate_json
+        if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
+        then
+            echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
+            echo ""
+            echo -e "Нажмите ${textcolor}Enter${clear}, чтобы выйти, или введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии"
+            read resettemp
+            if [[ "$resettemp" == "reset" ]]
+            then
+                rm /var/www/${subspath}/template-loc.json
+                cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+                echo ""
+                echo "Шаблон сброшен до исходной версии"
+                echo ""
+            fi
+            echo ""
+            continue
+        fi
 
         while [[ $username != "stop" ]]
         do
@@ -226,9 +198,21 @@ do
         echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}stop${clear}, чтобы выйти:"
         read sync
 
-        confirm_sync
+        if [[ "$sync" == "stop" ]]
+        then
+            echo ""
+            echo ""
+            sync=""
+            continue
+        fi
 
-        check_users
+        if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
+        then
+            echo -e "${red}Ошибка: пользователи отсутствуют${clear}"
+            echo ""
+            echo ""
+            continue
+        fi
 
         for file in /var/www/${subspath}/*-WS.json
         do
@@ -261,7 +245,10 @@ do
         echo ""
         ;;
         5)
-        copy_template
+        if [ ! -f /var/www/${subspath}/template-loc.json ]
+        then
+            cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+        fi
 
         echo -e "${textcolor}ВНИМАНИЕ!${clear}"
         echo -e "Вы можете вручную отредактировать настройки в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
@@ -270,11 +257,39 @@ do
         echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}stop${clear}, чтобы выйти:"
         read sync
 
-        confirm_sync
+        if [[ "$sync" == "stop" ]]
+        then
+            echo ""
+            echo ""
+            sync=""
+            continue
+        fi
 
-        check_users
+        if [ $(ls -A1 /var/www/${subspath} | grep "WS.json" | wc -l) -eq 0 ]
+        then
+            echo -e "${red}Ошибка: пользователи отсутствуют${clear}"
+            echo ""
+            echo ""
+            continue
+        fi
 
-        validate_json
+        if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
+        then
+            echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
+            echo ""
+            echo -e "Нажмите ${textcolor}Enter${clear}, чтобы выйти, или введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии"
+            read resettemp
+            if [[ "$resettemp" == "reset" ]]
+            then
+                rm /var/www/${subspath}/template-loc.json
+                cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+                echo ""
+                echo "Шаблон сброшен до исходной версии"
+                echo ""
+            fi
+            echo ""
+            continue
+        fi
 
         loctempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
         loctempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template-loc.json)
