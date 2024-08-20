@@ -19,14 +19,16 @@
 5) SSL сертификаты Cloudflare с автоматическим обновлением
 6) Включение BBR
 7) Клиентские конфиги Sing-Box с правилами маршрутизации для России
+8) Автоматизированное управление конфигами пользователей
  
 ### Использование:
 
-Запустите эту команду:
+Для настройки сервера запустите эту команду:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server.sh)
 ```
+
 Затем просто введите необходимую информацию:
 
 ![pic-ru](https://github.com/user-attachments/assets/0ead575d-2b63-4761-921d-2791b666bf67)
@@ -58,7 +60,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/mas
 
 [Windows 10 и 11](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-ru.pdf)
 
-[Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2)
+[Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2) запустите команду ниже.
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-linux-desktop.sh)
 ```
