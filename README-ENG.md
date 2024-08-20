@@ -19,14 +19,16 @@ A script for full setup of a hidden proxy server with NGINX camouflage.
 5) Cloudflare SSL certificates with auto renewal
 6) Enable BBR
 7) Client Sing-Box configs with routing rules for Russia
+8) Automated management of user config files
  
 ### Usage:
 
-Run this command:
+To configure the server, run this command:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server.sh)
 ```
+
 Then just enter the necessary information:
 
 ![pic-en](https://github.com/user-attachments/assets/cbe29aa6-53db-483e-9529-d524d5141bb4)
@@ -58,7 +60,7 @@ Options 4 and 5 synchronize the settings in client configs of all users, which e
 
 [Windows 10 and 11](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-en.pdf)
 
-[Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README-ENG.md#client-setup)
+[Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README-ENG.md#client-setup) run the command below.
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-linux-desktop.sh)
 ```
