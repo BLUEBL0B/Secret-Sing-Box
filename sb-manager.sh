@@ -105,7 +105,7 @@ do
             echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
             read trjpass
             echo ""
-            while [ ! -z $(jq -r '.inbounds[].users[].password' /etc/sing-box/config.json | grep "$trjpass")] && [ ! -z "$trjpass" ]
+            while [ ! -z $(jq -r '.inbounds[].users[].password' /etc/sing-box/config.json | grep "$trjpass") ] && [ ! -z "$trjpass" ]
             do
                 echo -e "${red}Ошибка: этот пароль уже закреплён за другим пользователем${clear}"
                 echo ""
