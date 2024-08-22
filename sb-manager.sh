@@ -105,6 +105,14 @@ do
             echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
             read trjpass
             echo ""
+            while [[ $(jq "any(.inbounds[].users[]; .password == \"$trjpass\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$trjpass" ]
+            do
+                echo -e "${red}Ошибка: этот пароль уже закреплён за другим пользователем${clear}"
+                echo ""
+                echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+                read trjpass
+                echo ""
+            done
             echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
             read uuid
             echo ""
@@ -115,6 +123,22 @@ do
                 echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
                 read uuid
                 echo ""
+            done
+            while [[ $(jq "any(.inbounds[].users[]; .password == \"$uuid\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$uuid" ]
+            do
+                echo -e "${red}Ошибка: этот UUID уже закреплён за другим пользователем${clear}"
+                echo ""
+                echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+                read uuid
+                echo ""
+                while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
+                do
+                    echo -e "${red}Ошибка: введённое значение не является UUID${clear}"
+                    echo ""
+                    echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+                    read uuid
+                    echo ""
+                done
             done
 
             if [ -z "$trjpass" ]

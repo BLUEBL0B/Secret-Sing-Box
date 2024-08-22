@@ -105,6 +105,14 @@ do
             echo "Enter the password for Trojan or leave this empty to generate a random password:"
             read trjpass
             echo ""
+            while [[ $(jq "any(.inbounds[].users[]; .password == \"$trjpass\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$trjpass" ]
+            do
+                echo -e "${red}Error: this password is already assigned to another user${clear}"
+                echo ""
+                echo "Enter the password for Trojan or leave this empty to generate a random password:"
+                read trjpass
+                echo ""
+            done
             echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
             read uuid
             echo ""
@@ -115,6 +123,22 @@ do
                 echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
                 read uuid
                 echo ""
+            done
+            while [[ $(jq "any(.inbounds[].users[]; .password == \"$uuid\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$uuid" ]
+            do
+                echo -e "${red}Error: this UUID is already assigned to another user${clear}"
+                echo ""
+                echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
+                read uuid
+                echo ""
+                while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
+                do
+                    echo -e "${red}Error: this is not an UUID${clear}"
+                    echo ""
+                    echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
+                    read uuid
+                    echo ""
+                done
             done
 
             if [ -z "$trjpass" ]
