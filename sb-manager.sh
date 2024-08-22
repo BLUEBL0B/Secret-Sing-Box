@@ -80,7 +80,7 @@ do
             continue
         fi
 
-        while [[ $username != "x" ]]
+        while [[ $username != "x" ]] && [[ $username != "х" ]]
         do
             while [ -z "$username" ]
             do
@@ -96,7 +96,7 @@ do
                     echo ""
                 done
             done
-            if [[ $username == "x" ]]
+            if [[ $username == "x" ]] || [[ $username == "х" ]]
             then
                 echo ""
                 username=""
@@ -153,12 +153,12 @@ do
         echo ""
         ;;
         3)
-        while [[ $username != "x" ]]
+        while [[ $username != "x" ]] && [[ $username != "х" ]]
         do
             echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
             read username
             echo ""
-            if [[ $username == "x" ]]
+            if [[ $username == "x" ]] || [[ $username == "х" ]]
             then
                 echo ""
                 username=""
@@ -171,7 +171,7 @@ do
                 echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
                 read username
                 echo ""
-                if [[ $username == "x" ]]
+                if [[ $username == "x" ]] || [[ $username == "х" ]]
                 then
                     echo ""
                     username=""
@@ -200,7 +200,7 @@ do
         echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
         read sync
 
-        if [[ "$sync" == "x" ]]
+        if [[ "$sync" == "x" ]] || [[ "$sync" == "х" ]]
         then
             echo ""
             echo ""
@@ -259,7 +259,7 @@ do
         echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
         read sync
 
-        if [[ "$sync" == "x" ]]
+        if [[ "$sync" == "x" ]] || [[ "$sync" == "х" ]]
         then
             echo ""
             echo ""
