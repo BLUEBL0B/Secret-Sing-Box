@@ -124,7 +124,7 @@ do
                 read uuid
                 echo ""
             done
-            while [[ $(jq "any(.inbounds[].users[]; .password == \"$uuid\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$uuid" ]
+            while [[ $(jq "any(.inbounds[].users[]; .uuid == \"$uuid\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$uuid" ]
             do
                 echo -e "${red}Error: this UUID is already assigned to another user${clear}"
                 echo ""
