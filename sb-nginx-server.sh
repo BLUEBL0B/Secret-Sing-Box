@@ -746,7 +746,8 @@ cat > /etc/sing-box/config.json <<EOF
         "rule_set": [
           "geoip-ru",
           "gov-ru",
-          "openai"
+          "openai",
+          "telegram"
         ],
         "domain_suffix": [
           ".ru",
@@ -804,6 +805,12 @@ cat > /etc/sing-box/config.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
+      },
+      {
+        "tag": "telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-telegram.srs"
       },
       {
         "tag": "category-ads-all",
@@ -879,7 +886,8 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         ],
         "rule_set": [
           "openai",
-          "youtube"
+          "youtube",
+          "telegram"
         ],
         "server": "dns-remote"
       },
@@ -921,9 +929,7 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         "rule_set": [
           "geoip-ru",
           "gov-ru",
-          "whatsapp",
           "yandex",
-          "telegram",
           "vk",
           "mailru",
           "discord",
@@ -1014,31 +1020,7 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         "198.183.17.0/24",
         "205.180.175.0/24",
         "63.92.224.0/19",
-        "65.199.22.0/23",
-        "109.239.140.0/24",
-        "149.154.160.0/20",
-        "5.28.192.0/18",
-        "91.108.0.0/16",
-        "91.105.192.0/23",
-        "185.76.151.0/24",
-        "95.161.64.0/20",
-        "158.85.224.160/27",
-        "158.85.46.128/27",
-        "158.85.5.192/27",
-        "173.192.222.160/27",
-        "173.192.231.32/27",
-        "18.194.0.0/15",
-        "184.173.128.0/17",
-        "208.43.122.128/27",
-        "34.224.0.0/12",
-        "50.22.198.204/30",
-        "54.242.0.0/15"
-      ],
-      "inet6_route_exclude_address": [
-        "2001:67c:4e8::/48",
-        "2001:b28:f23c::/47",
-        "2a0a:f280::/29",
-        "2001:b28:f23f::/48"
+        "65.199.22.0/23"
       ],
       "sniff": true,
       "sniff_override_destination": true
@@ -1123,7 +1105,8 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         ],
         "rule_set": [
           "openai",
-          "youtube"
+          "youtube",
+          "telegram"
         ],
         "outbound": "proxy"
       },
@@ -1165,9 +1148,7 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         "rule_set": [
           "geoip-ru",
           "gov-ru",
-          "whatsapp",
           "yandex",
-          "telegram",
           "vk",
           "mailru",
           "discord",
@@ -1236,12 +1217,6 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-gov-ru.srs"
-      },
-      {
-        "tag": "whatsapp",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-whatsapp.srs"
       },
       {
         "tag": "yandex",

@@ -120,7 +120,8 @@
         "rule_set": [
           "geoip-ru",
           "gov-ru",
-          "openai"
+          "openai",
+          "telegram"
         ],
         "domain_suffix": [
           ".ru",
@@ -178,6 +179,12 @@
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
+      },
+      {
+        "tag": "telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-telegram.srs"
       },
       {
         "tag": "category-ads-all",
