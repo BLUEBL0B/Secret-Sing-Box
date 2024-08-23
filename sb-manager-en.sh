@@ -116,29 +116,19 @@ do
             echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
             read uuid
             echo ""
-            while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
+            while ([[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] || [[ $(jq "any(.inbounds[].users[]; .uuid == \"$uuid\")" /etc/sing-box/config.json) == "true" ]]) && [ ! -z "$uuid" ]
             do
-                echo -e "${red}Error: this is not an UUID${clear}"
-                echo ""
-                echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
-                read uuid
-                echo ""
-            done
-            while [[ $(jq "any(.inbounds[].users[]; .uuid == \"$uuid\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$uuid" ]
-            do
-                echo -e "${red}Error: this UUID is already assigned to another user${clear}"
-                echo ""
-                echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
-                read uuid
-                echo ""
-                while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
-                do
+                if [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]]
+                then
                     echo -e "${red}Error: this is not an UUID${clear}"
-                    echo ""
-                    echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
-                    read uuid
-                    echo ""
-                done
+                elif [[ $(jq "any(.inbounds[].users[]; .uuid == \"$uuid\")" /etc/sing-box/config.json) == "true" ]]
+                then
+                    echo -e "${red}Error: this UUID is already assigned to another user${clear}"
+                fi
+                echo ""
+                echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
+                read uuid
+                echo ""
             done
 
             if [ -z "$trjpass" ]

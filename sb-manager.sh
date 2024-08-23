@@ -116,29 +116,19 @@ do
             echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
             read uuid
             echo ""
-            while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
+            while ([[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] || [[ $(jq "any(.inbounds[].users[]; .uuid == \"$uuid\")" /etc/sing-box/config.json) == "true" ]]) && [ ! -z "$uuid" ]
             do
-                echo -e "${red}Ошибка: введённое значение не является UUID${clear}"
-                echo ""
-                echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
-                read uuid
-                echo ""
-            done
-            while [[ $(jq "any(.inbounds[].users[]; .uuid == \"$uuid\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$uuid" ]
-            do
-                echo -e "${red}Ошибка: этот UUID уже закреплён за другим пользователем${clear}"
-                echo ""
-                echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
-                read uuid
-                echo ""
-                while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
-                do
+                if [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]]
+                then
                     echo -e "${red}Ошибка: введённое значение не является UUID${clear}"
-                    echo ""
-                    echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
-                    read uuid
-                    echo ""
-                done
+                elif [[ $(jq "any(.inbounds[].users[]; .uuid == \"$uuid\")" /etc/sing-box/config.json) == "true" ]]
+                then
+                    echo -e "${red}Ошибка: этот UUID уже закреплён за другим пользователем${clear}"
+                fi
+                echo ""
+                echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+                read uuid
+                echo ""
             done
 
             if [ -z "$trjpass" ]

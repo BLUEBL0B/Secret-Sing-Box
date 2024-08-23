@@ -47,29 +47,22 @@ then
     echo "Введите новый номер порта SSH:"
     read sshp
     echo ""
-    while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
     do
-        echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
-        echo ""
-        echo "Введите новый номер порта SSH:"
-        read sshp
-        echo ""
-    done
-    while [ $sshp -gt 65535 ]
-    do
-        echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
-        echo ""
-        echo "Введите новый номер порта SSH:"
-        read sshp
-        echo ""
-        while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
-        do
+        if [[ ! $sshp =~ ^[0-9]+$ ]]
+        then
+            echo -e "${red}Ошибка: введённое значение не является числом${clear}"
+        elif [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        then
             echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
-            echo ""
-            echo "Введите новый номер порта SSH:"
-            read sshp
-            echo ""
-        done
+        elif [ $sshp -gt 65535 ]
+        then
+            echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
+        fi
+        echo ""
+        echo "Введите новый номер порта SSH:"
+        read sshp
+        echo ""
     done
     echo "Введите имя пользователя:"
     read username
@@ -231,29 +224,22 @@ else
     echo "Enter new SSH port number:"
     read sshp
     echo ""
-    while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
     do
-        echo -e "${red}Error: ports 10443, 11443 and 40000 will be taken by Sing-Box and WARP${clear}"
-        echo ""
-        echo "Enter new SSH port number:"
-        read sshp
-        echo ""
-    done
-    while [ $sshp -gt 65535 ]
-    do
-        echo -e "${red}Error: port number can't be greater than 65535${clear}"
-        echo ""
-        echo "Enter new SSH port number:"
-        read sshp
-        echo ""
-        while [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
-        do
+        if [[ ! $sshp =~ ^[0-9]+$ ]]
+        then
+            echo -e "${red}Error: this is not a number${clear}"
+        elif [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        then
             echo -e "${red}Error: ports 10443, 11443 and 40000 will be taken by Sing-Box and WARP${clear}"
-            echo ""
-            echo "Enter new SSH port number:"
-            read sshp
-            echo ""
-        done
+        elif [ $sshp -gt 65535 ]
+        then
+            echo -e "${red}Error: port number can't be greater than 65535${clear}"
+        fi
+        echo ""
+        echo "Enter new SSH port number:"
+        read sshp
+        echo ""
     done
     echo "Enter your username:"
     read username
