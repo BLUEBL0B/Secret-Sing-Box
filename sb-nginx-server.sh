@@ -4,6 +4,14 @@ textcolor='\033[1;36m'
 red='\033[1;31m'
 clear='\033[0m'
 
+if [[ "$(systemd-detect-virt)" != "kvm" ]]
+then
+    echo ""
+    echo -e "${red}Error: only KVM virtualization is supported${clear}"
+    echo ""
+    exit 1
+fi
+
 if [[ $EUID -ne 0 ]]
 then
     echo ""
@@ -555,7 +563,7 @@ mkdir /home/${username}/.ssh
 chown ${username}: /home/${username}/.ssh
 chmod 700 /home/${username}/.ssh
 
-if [[ $(lsb_release -cs) == "noble" ]]
+if [[ $(lsb_release -cs) =~ "noble" ]]
 then
     sed -i "s/22/${sshp}/g" /lib/systemd/system/ssh.socket
     systemctl daemon-reload

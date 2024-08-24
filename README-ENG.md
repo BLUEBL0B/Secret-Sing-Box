@@ -6,7 +6,7 @@
 A script for full setup of a hidden proxy server with NGINX camouflage.
 
 > [!IMPORTANT]
-> Recommended OS: Debian 12 or Ubuntu 22.04. You will also need your own domain linked to your Cloudflare account. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
+> Recommended OS: Debian 12 or Ubuntu 22.04/24.04 with KVM virtualization. You will also need your own domain linked to your Cloudflare account. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
 > With routing rules for Russia.
@@ -14,7 +14,7 @@ A script for full setup of a hidden proxy server with NGINX camouflage.
 ### Includes:
 1) Sing-Box server setup (Trojan and VLESS protocols)
 2) NGINX reverse proxy and website setup
-3) Basic security setup including unattended-upgrades
+3) Security setup including unattended-upgrades
 4) WARP setup
 5) Cloudflare SSL certificates with auto renewal
 6) Enable BBR
