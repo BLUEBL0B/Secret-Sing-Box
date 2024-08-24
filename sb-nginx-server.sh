@@ -551,6 +551,10 @@ Subsystem       sftp    /usr/lib/openssh/sftp-server
 #       ForceCommand cvs server
 EOF
 
+mkdir /home/${username}/.ssh
+chown ${username}: /home/${username}/.ssh
+chmod 700 /home/${username}/.ssh
+
 systemctl restart ssh.service
 
 ufw allow ${sshp}/tcp
@@ -562,10 +566,6 @@ echo 'Unattended-Upgrade::Mail "root";' >> /etc/apt/apt.conf.d/50unattended-upgr
 echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | debconf-set-selections
 dpkg-reconfigure -f noninteractive unattended-upgrades
 systemctl restart unattended-upgrades
-
-mkdir /home/${username}/.ssh
-chown ${username}: /home/${username}/.ssh
-chmod 700 /home/${username}/.ssh
 
 
 ### СЕРТИФИКАТЫ ###
