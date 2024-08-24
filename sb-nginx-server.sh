@@ -555,6 +555,12 @@ mkdir /home/${username}/.ssh
 chown ${username}: /home/${username}/.ssh
 chmod 700 /home/${username}/.ssh
 
+if [[ $(lsb_release -cs) == "noble" ]]
+then
+    sed -i "s/22/${sshp}/g" /lib/systemd/system/ssh.socket
+    systemctl daemon-reload
+fi
+
 systemctl restart ssh.service
 
 ufw allow ${sshp}/tcp
