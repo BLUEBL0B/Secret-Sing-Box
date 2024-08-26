@@ -50,8 +50,8 @@ then
     echo ""
     echo -e "Если это сделано, то нажмите ${textcolor}Enter${clear}, чтобы продолжить"
     echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear} для завершения работы скрипта"
-    read BigRedButton
     echo ""
+    read BigRedButton
     echo "Введите новый номер порта SSH:"
     read sshp
     echo ""
@@ -560,7 +560,7 @@ Subsystem       sftp    /usr/lib/openssh/sftp-server
 EOF
 
 mkdir /home/${username}/.ssh
-chown ${username}: /home/${username}/.ssh
+chown ${username}:sudo /home/${username}/.ssh
 chmod 700 /home/${username}/.ssh
 
 if [[ $(lsb_release -cs) =~ "noble" ]]
@@ -1566,7 +1566,7 @@ then
     touch /etc/nginx/.htpasswd
 fi
 
-append='~^(,[ \\t]*)*([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*([ \\t]*,([ \\t]*([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*)?)*$" "$http_forwarded, $proxy_forwarded_elem'
+append='"~^(,[ \\t]*)*([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*([ \\t]*,([ \\t]*([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*)?)*$" "$http_forwarded, $proxy_forwarded_elem"'
 
 cat > /etc/nginx/nginx.conf <<EOF
 user                 www-data;
@@ -1640,7 +1640,7 @@ http {
     map \$http_forwarded \$proxy_add_forwarded {
 
         # If the incoming Forwarded header is syntactically valid, append to it
-        "${append}";
+        ${append};
 
         # Otherwise, replace it
         default "\$proxy_forwarded_elem";
