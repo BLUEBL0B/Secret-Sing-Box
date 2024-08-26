@@ -12,8 +12,8 @@ A script for full setup of a hidden proxy server with NGINX camouflage.
 > With routing rules for Russia.
  
 ### Includes:
-1) Sing-Box server setup (Trojan and VLESS protocols)
-2) NGINX reverse proxy and website setup
+1) Sing-Box server setup (Trojan and VLESS protocols, WebSocket transport)
+2) NGINX reverse proxy and website setup on port 443
 3) Security setup including unattended-upgrades
 4) WARP setup
 5) Cloudflare SSL certificates with auto renewal
