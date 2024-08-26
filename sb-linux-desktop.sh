@@ -28,11 +28,11 @@ then
 	echo ""
 	while [ -f  /usr/local/bin/${newcomm} ]
 	do
-	    echo -e "${red}Ошибка: эта команда уже существует${clear}"
-        echo ""
-        echo "Введите новую команду для этого прокси (и запомните её):"
-        read newcomm
-        echo ""
+		echo -e "${red}Ошибка: эта команда уже существует${clear}"
+		echo ""
+		echo "Введите новую команду для этого прокси (и запомните её):"
+		read newcomm
+		echo ""
 	done
 	if [ ! -d /etc/sing-box ]
 	then
@@ -100,11 +100,11 @@ else
 	echo ""
 	while [ -f  /usr/local/bin/${newcomm} ]
 	do
-	    echo -e "${red}Error: this command already exists${clear}"
-        echo ""
-        echo "Enter the new command for this proxy (and write it down):"
-        read newcomm
-        echo ""
+		echo -e "${red}Error: this command already exists${clear}"
+		echo ""
+		echo "Enter the new command for this proxy (and write it down):"
+		read newcomm
+		echo ""
 	done
 	if [ ! -d /etc/sing-box ]
 	then

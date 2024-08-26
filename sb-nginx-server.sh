@@ -418,7 +418,7 @@ echo ""
 
 
 ### УСТАНОВКА ПАКЕТОВ ###
-apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed jq net-tools -y
+apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed jq net-tools htop -y
 
 curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
@@ -567,6 +567,7 @@ if [[ $(lsb_release -cs) =~ "noble" ]]
 then
     sed -i "s/22/${sshp}/g" /lib/systemd/system/ssh.socket
     systemctl daemon-reload
+    systemctl restart ssh.socket
 fi
 
 systemctl restart ssh.service
