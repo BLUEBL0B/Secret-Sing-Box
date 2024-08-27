@@ -101,6 +101,7 @@ do
             if [[ $username == "x" ]] || [[ $username == "х" ]]
             then
                 echo ""
+                username=""
                 continue 2
             fi
             echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
@@ -175,6 +176,7 @@ do
             if [[ $username == "x" ]] || [[ $username == "х" ]]
             then
                 echo ""
+                username=""
                 continue 2
             fi
             while [[ ! -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
@@ -187,6 +189,7 @@ do
                 if [[ $username == "x" ]] || [[ $username == "х" ]]
                 then
                     echo ""
+                    username=""
                     continue 3
                 fi
             done

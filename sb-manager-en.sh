@@ -101,6 +101,7 @@ do
             if [[ $username == "x" ]]
             then
                 echo ""
+                username=""
                 continue 2
             fi
             echo "Enter the password for Trojan or leave this empty to generate a random password:"
@@ -175,6 +176,7 @@ do
             if [[ $username == "x" ]]
             then
                 echo ""
+                username=""
                 continue 2
             fi
             while [[ ! -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
@@ -187,6 +189,7 @@ do
                 if [[ $username == "x" ]]
                 then
                     echo ""
+                    username=""
                     continue 3
                 fi
             done
