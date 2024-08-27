@@ -33,8 +33,6 @@ curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/
 tempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template.json)
 tempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template.json)
 
-username=""
-
 echo ""
 echo ""
 while [[ "$option" != "6" ]]
@@ -83,24 +81,26 @@ do
 
         while [[ $username != "x" ]]
         do
-            while [ -z "$username" ]
+            echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
+            read username
+            echo ""
+            while [[ -f /var/www/${subspath}/${username}-TRJ-WS.json ]] || [ -z "$username" ]
             do
+                if [[ -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
+                then
+                    echo -e "${red}Error: this user already exists${clear}"
+                    echo ""
+                elif [ -z "$username" ]
+                then
+                    :
+                fi
                 echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
                 read username
                 echo ""
-                while [[ -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
-                do
-                    echo -e "${red}Error: this user already exists${clear}"
-                    echo ""
-                    echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
-                    read username
-                    echo ""
-                done
             done
             if [[ $username == "x" ]]
             then
                 echo ""
-                username=""
                 continue 2
             fi
             echo "Enter the password for Trojan or leave this empty to generate a random password:"
@@ -163,7 +163,6 @@ do
             echo "https://${domain}/${subspath}/${username}-TRJ-WS.json"
             echo "https://${domain}/${subspath}/${username}-VLESS-WS.json"
             echo ""
-            username=""
         done
         echo ""
         ;;
@@ -176,7 +175,6 @@ do
             if [[ $username == "x" ]]
             then
                 echo ""
-                username=""
                 continue 2
             fi
             while [[ ! -f /var/www/${subspath}/${username}-TRJ-WS.json ]]
@@ -189,7 +187,6 @@ do
                 if [[ $username == "x" ]]
                 then
                     echo ""
-                    username=""
                     continue 3
                 fi
             done
