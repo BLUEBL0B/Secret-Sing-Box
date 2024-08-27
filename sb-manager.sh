@@ -14,8 +14,9 @@ fi
 
 serverip=$(curl -s ipinfo.io/ip)
 
-domain=$(ls /etc/letsencrypt/renewal)
-domain=${domain%".conf"}
+domain=$(grep "ssl_certificate" /etc/nginx/nginx.conf | head -n 1)
+domain=${domain#*"/live/"}
+domain=${domain%"/"*}
 
 trojanpath=$(jq -r '.inbounds[] | select(.tag=="trojan-ws-in") | .transport.path' /etc/sing-box/config.json)
 trojanpath=${trojanpath#"/"}
@@ -23,9 +24,9 @@ trojanpath=${trojanpath#"/"}
 vlesspath=$(jq -r '.inbounds[] | select(.tag=="vless-ws-in") | .transport.path' /etc/sing-box/config.json)
 vlesspath=${vlesspath#"/"}
 
-subspath=$(grep "location ~ ^/" /etc/nginx/nginx.conf)
-subspath=${subspath#"        location ~ ^/"}
-subspath=${subspath%" {"}
+subspath=$(grep "location ~ ^/" /etc/nginx/nginx.conf | head -n 1)
+subspath=${subspath#*"location ~ ^/"}
+subspath=${subspath%" {"*}
 
 curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/Config-Examples/Client-Trojan-WS.json
 
