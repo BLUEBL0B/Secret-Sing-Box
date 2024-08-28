@@ -3,7 +3,7 @@
 [**Russian version**](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README.md)
 
 ### Trojan and VLESS WebSocket proxy with TLS termination on NGINX
-A script for full setup of a hidden proxy server with NGINX camouflage.
+This script is designed to fully configure a hidden proxy server with NGINX camouflage. With this setup method, all requests to the proxy are processed by NGINX, and the server works as a proxy only if the request contains the correct path.
 
 > [!IMPORTANT]
 > Recommended OS: Debian 12 or Ubuntu 22.04/24.04 with KVM virtualization. You will also need your own domain linked to your Cloudflare account. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
@@ -15,8 +15,8 @@ A script for full setup of a hidden proxy server with NGINX camouflage.
 1) Sing-Box server setup (Trojan and VLESS protocols, WebSocket transport)
 2) NGINX reverse proxy and website setup on port 443
 3) Security setup including unattended-upgrades
-4) WARP setup
-5) Cloudflare SSL certificates with auto renewal
+4) Cloudflare SSL certificates with auto renewal
+5) WARP setup
 6) Enable BBR
 7) Client Sing-Box configs with routing rules for Russia
 8) Automated management of user config files
@@ -41,12 +41,6 @@ Run this command to add/delete users or to synchronize the settings in client co
 
 ```
 sbmanager
-```
-
-Or run this command if the server was set up with an old version of the script:
-
-```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager-en.sh)
 ```
 
 Then follow the instructions:
