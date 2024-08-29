@@ -4,22 +4,26 @@ textcolor='\033[1;36m'
 red='\033[1;31m'
 clear='\033[0m'
 
-if [[ $EUID -ne 0 ]]
-then
-	echo ""
-	echo -e "${red}Error: this script should be run as root${clear}"
-	echo ""
-	exit 1
-fi
+check_root() {
+	if [[ $EUID -ne 0 ]]
+	then
+		echo ""
+		echo -e "${red}Error: this script should be run as root${clear}"
+		echo ""
+		exit 1
+	fi
+}
 
-echo ""
-echo -e "${textcolor}Select the language:${clear}"
-echo "1 - Russian"
-echo "2 - English"
-read language
-echo ""
-if [[ "$language" == "1" ]]
-then
+enter_language() {
+	echo ""
+	echo -e "${textcolor}Select the language:${clear}"
+	echo "1 - Russian"
+	echo "2 - English"
+	read language
+	echo ""
+}
+
+enter_data_ru() {
 	echo "Введите ссылку на ваш клиентский конфиг:"
 	read link
 	echo ""
@@ -34,8 +38,13 @@ then
 		read newcomm
 		echo ""
 	done
+}
+
+create_sbupdate_ru() {
 	if [ ! -d /etc/sing-box ]
 	then
+		echo "Установка Sing-Box..."
+		echo ""
 		touch /usr/local/bin/sbupdate
 		cat > /usr/local/bin/sbupdate <<-EOF
 		#!/bin/bash
@@ -61,6 +70,9 @@ then
 		echo "Sing-Box установлен"
 		echo ""
 	fi
+}
+
+create_proxy_command_ru() {
 	touch /usr/local/bin/${newcomm}
 	cat > /usr/local/bin/${newcomm} <<-EOF
 	#!/bin/bash
@@ -88,10 +100,16 @@ then
 	systemctl stop sing-box.service
 	EOF
 	chmod +x /usr/local/bin/${newcomm}
-	echo -e "Вы можете использовать команду ${textcolor}${newcomm}${clear} для запуска Sing-Box и команду ${textcolor}sbupdate${clear} для его обновления"
+}
+
+message_ru() {
+	echo -e "Вы можете использовать команду ${textcolor}${newcomm}${clear} для подключения к прокси и команду ${textcolor}sbupdate${clear} для обновления Sing-Box"
 	echo ""
 	echo "Если вы хотите добавить больше клиентских конфигов, то запустите этот скрипт ещё раз"
-else
+	echo ""
+}
+
+enter_data_en() {
 	echo "Enter your client config link:"
 	read link
 	echo ""
@@ -106,8 +124,13 @@ else
 		read newcomm
 		echo ""
 	done
+}
+
+create_sbupdate_en() {
 	if [ ! -d /etc/sing-box ]
 	then
+		echo "Installing Sing-Box..."
+		echo ""
 		touch /usr/local/bin/sbupdate
 		cat > /usr/local/bin/sbupdate <<-EOF
 		#!/bin/bash
@@ -133,6 +156,9 @@ else
 		echo "Sing-Box is installed"
 		echo ""
 	fi
+}
+
+create_proxy_command_en() {
 	touch /usr/local/bin/${newcomm}
 	cat > /usr/local/bin/${newcomm} <<-EOF
 	#!/bin/bash
@@ -160,8 +186,26 @@ else
 	systemctl stop sing-box.service
 	EOF
 	chmod +x /usr/local/bin/${newcomm}
-	echo -e "You can use ${textcolor}${newcomm}${clear} command to run Sing-Box and ${textcolor}sbupdate${clear} command to update it"
+}
+
+message_en() {
+	echo -e "You can use ${textcolor}${newcomm}${clear} command to connect to the proxy and ${textcolor}sbupdate${clear} command to update Sing-Box"
 	echo ""
 	echo "Run this script again if you want to add more client configs"
+	echo ""
+}
+
+check_root
+enter_language
+if [[ "$language" == "1" ]]
+then
+	enter_data_ru
+	create_sbupdate_ru
+	create_proxy_command_ru
+	message_ru
+else
+	enter_data_en
+	create_sbupdate_en
+	create_proxy_command_en
+	message_en
 fi
-echo ""
