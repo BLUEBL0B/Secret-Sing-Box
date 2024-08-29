@@ -96,6 +96,7 @@ create_proxy_command_ru() {
 	do
 	    read run
 	done
+	run=""
 	echo ""
 	systemctl stop sing-box.service
 	EOF
@@ -182,6 +183,7 @@ create_proxy_command_en() {
 	do
 	    read run
 	done
+	run=""
 	echo ""
 	systemctl stop sing-box.service
 	EOF
