@@ -26,7 +26,7 @@ This script is designed to fully configure a hidden proxy server with NGINX camo
 To configure the server, run this command:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-nginx-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/install-server.sh)
 ```
 
 Then just enter the necessary information:
@@ -56,5 +56,5 @@ Options 4 and 5 synchronize the settings in client configs of all users, which e
 
 [Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README-ENG.md#client-setup) run the command below.
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-linux-desktop.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-pc-linux.sh)
 ```
