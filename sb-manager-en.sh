@@ -87,7 +87,7 @@ check_username_add() {
         fi
         echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
         read username
-        echo ""
+        [[ ! -z $username ]] && echo ""
     done
 }
 
@@ -98,7 +98,7 @@ check_trjpass() {
         echo ""
         echo "Enter the password for Trojan or leave this empty to generate a random password:"
         read trjpass
-        echo ""
+        [[ ! -z $trjpass ]] && echo ""
     done
 }
 
@@ -115,23 +115,23 @@ check_uuid() {
         echo ""
         echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
         read uuid
-        echo ""
+        [[ ! -z $uuid ]] && echo ""
     done
 }
 
 enter_user_data_add() {
     echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
     read username
-    echo ""
+    [[ ! -z $username ]] && echo ""
     check_username_add
     exit_username
     echo "Enter the password for Trojan or leave this empty to generate a random password:"
     read trjpass
-    echo ""
+    [[ ! -z $trjpass ]] && echo ""
     check_trjpass
     echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
     read uuid
-    echo ""
+    [[ ! -z $uuid ]] && echo ""
     check_uuid
 }
 

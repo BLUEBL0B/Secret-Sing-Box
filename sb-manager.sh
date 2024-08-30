@@ -87,7 +87,7 @@ check_username_add() {
         fi
         echo -e "Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
         read username
-        echo ""
+        [[ ! -z $username ]] && echo ""
     done
 }
 
@@ -98,7 +98,7 @@ check_trjpass() {
         echo ""
         echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
         read trjpass
-        echo ""
+        [[ ! -z $trjpass ]] && echo ""
     done
 }
 
@@ -115,23 +115,23 @@ check_uuid() {
         echo ""
         echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
         read uuid
-        echo ""
+        [[ ! -z $uuid ]] && echo ""
     done
 }
 
 enter_user_data_add() {
     echo -e "Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
     read username
-    echo ""
+    [[ ! -z $username ]] && echo ""
     check_username_add
     exit_username
     echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
-    echo ""
+    [[ ! -z $trjpass ]] && echo ""
     check_trjpass
     echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
     read uuid
-    echo ""
+    [[ ! -z $uuid ]] && echo ""
     check_uuid
 }
 
