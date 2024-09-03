@@ -585,9 +585,9 @@ setup_ssh() {
 
     if [[ "$username" == "root" ]]
     then
-        sed -i -e "s/#Port/Port/g" -e "s/Port 22/Port ${sshp}/g" /etc/ssh/sshd_config
+        sed -i -e "s/#Port/Port/g" -e "s/Port 22/Port ${sshp}/g" -e "s/#PasswordAuthentication/PasswordAuthentication/g" /etc/ssh/sshd_config
     else
-        sed -i -e "s/#Port/Port/g" -e "s/Port 22/Port ${sshp}/g" -e "s/#PermitRootLogin/PermitRootLogin/g" -e "s/PermitRootLogin yes/PermitRootLogin no/g" /etc/ssh/sshd_config
+        sed -i -e "s/#Port/Port/g" -e "s/Port 22/Port ${sshp}/g" -e "s/#PermitRootLogin/PermitRootLogin/g" -e "s/PermitRootLogin yes/PermitRootLogin no/g" -e "s/#PasswordAuthentication/PasswordAuthentication/g" /etc/ssh/sshd_config
         mkdir /home/${username}/.ssh
         chown ${username}:sudo /home/${username}/.ssh
         chmod 700 /home/${username}/.ssh
