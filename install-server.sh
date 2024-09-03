@@ -15,6 +15,16 @@ check_virt() {
     fi
 }
 
+check_os() {
+    if [[ ! $(lsb_release -cs) =~ "bookworm" ]] && [[ ! $(lsb_release -cs) =~ "jammy" ]] && [[ ! $(lsb_release -cs) =~ "noble" ]]
+    then
+        echo ""
+        echo -e "${red}Error: only Debian 12 or Ubuntu 22.04/24.04 are supported${clear}"
+        echo ""
+        exit 1
+    fi
+}
+
 check_root() {
     if [[ $EUID -ne 0 ]]
     then
@@ -1908,6 +1918,7 @@ final_message() {
 }
 
 check_virt
+check_os
 check_root
 check_sbmanager
 get_ip
