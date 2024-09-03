@@ -581,7 +581,10 @@ create_user() {
 }
 
 setup_ssh() {
-    echo -e "${textcolor_light}Changing SSH settings...${clear}"
+    if [[ "$username" != "root" ]] || [ $sshp -ne 22 ]
+    then
+        echo -e "${textcolor_light}Changing SSH settings...${clear}"
+    fi
 
     if [[ "$username" == "root" ]]
     then
@@ -1914,6 +1917,7 @@ final_message() {
     else
         final_message_en
     fi
+    echo ""
     echo ""
 }
 
