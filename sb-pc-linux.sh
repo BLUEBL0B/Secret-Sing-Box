@@ -24,16 +24,25 @@ enter_language() {
 }
 
 enter_data_ru() {
-	echo "Введите ссылку на ваш клиентский конфиг:"
-	read link
-	echo ""
+	while [[ -z $link ]]
+	do
+		echo "Введите ссылку на ваш клиентский конфиг:"
+		read link
+		echo ""
+	done
 	echo "Введите новую команду для этого прокси (и запомните её):"
 	read newcomm
 	echo ""
-	while [ -f  /usr/local/bin/${newcomm} ]
+	while [ -f /usr/local/bin/${newcomm} ] || [[ -z $newcomm ]]
 	do
-		echo -e "${red}Ошибка: эта команда уже существует${clear}"
-		echo ""
+		if [ -f /usr/local/bin/${newcomm} ]
+		then
+			echo -e "${red}Ошибка: эта команда уже существует${clear}"
+			echo ""
+		elif [[ -z $newcomm ]]
+		then
+			:
+		fi
 		echo "Введите новую команду для этого прокси (и запомните её):"
 		read newcomm
 		echo ""
@@ -111,16 +120,25 @@ message_ru() {
 }
 
 enter_data_en() {
-	echo "Enter your client config link:"
-	read link
-	echo ""
+	while [[ -z $link ]]
+	do
+		echo "Enter your client config link:"
+		read link
+		echo ""
+	done
 	echo "Enter the new command for this proxy (and write it down):"
 	read newcomm
 	echo ""
-	while [ -f  /usr/local/bin/${newcomm} ]
+	while [ -f /usr/local/bin/${newcomm} ] || [[ -z $newcomm ]]
 	do
-		echo -e "${red}Error: this command already exists${clear}"
-		echo ""
+		if [ -f /usr/local/bin/${newcomm} ]
+		then
+			echo -e "${red}Error: this command already exists${clear}"
+			echo ""
+		elif [[ -z $newcomm ]]
+		then
+			:
+		fi
 		echo "Enter the new command for this proxy (and write it down):"
 		read newcomm
 		echo ""
