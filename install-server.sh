@@ -378,7 +378,7 @@ enter_data_ru() {
     echo "Введите имя нового пользователя:"
     read username
     echo ""
-    echo "Введите пароль пользователя:"
+    echo "Введите пароль SSH для пользователя:"
     read password
     echo ""
     echo "Введите ваш домен:"
@@ -434,7 +434,7 @@ enter_data_en() {
     echo "Enter your username:"
     read username
     echo ""
-    echo "Enter your password:"
+    echo "Enter new SSH password:"
     read password
     echo ""
     echo "Enter your domain name:"
