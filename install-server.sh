@@ -114,14 +114,14 @@ crop_subscription_path() {
 }
 
 check_ssh_port_ru() {
-    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
+    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
     do
         if [[ ! $sshp =~ ^[0-9]+$ ]]
         then
             echo -e "${red}Ошибка: введённое значение не является числом${clear}"
-        elif [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        elif [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         then
-            echo -e "${red}Ошибка: порты 10443, 11443 и 40000 будут заняты Sing-Box и WARP${clear}"
+            echo -e "${red}Ошибка: порты 80, 443, 10443, 11443 и 40000 будут заняты NGINX, Sing-Box и WARP${clear}"
         elif [ $sshp -gt 65535 ]
         then
             echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
@@ -134,14 +134,14 @@ check_ssh_port_ru() {
 }
 
 check_ssh_port_en() {
-    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
+    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
     do
         if [[ ! $sshp =~ ^[0-9]+$ ]]
         then
             echo -e "${red}Error: this is not a number${clear}"
-        elif [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        elif [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         then
-            echo -e "${red}Error: ports 10443, 11443 and 40000 will be taken by Sing-Box and WARP${clear}"
+            echo -e "${red}Error: ports 80, 443, 10443, 11443 and 40000 will be taken by NGINX, Sing-Box and WARP${clear}"
         elif [ $sshp -gt 65535 ]
         then
             echo -e "${red}Error: port number can't be greater than 65535${clear}"
