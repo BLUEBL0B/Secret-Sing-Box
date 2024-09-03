@@ -375,22 +375,37 @@ enter_data_ru() {
     read sshp
     echo ""
     check_ssh_port_ru
-    echo "Введите имя нового пользователя:"
-    read username
-    echo ""
-    echo "Введите пароль SSH для пользователя:"
-    read password
-    echo ""
-    echo "Введите ваш домен:"
-    read domain
-    echo ""
+    while [[ -z $username ]]
+    do
+        echo "Введите имя нового пользователя:"
+        read username
+        echo ""
+    done
+    while [[ -z $password ]]
+    do
+        echo "Введите пароль SSH для пользователя:"
+        read password
+        echo ""
+    done
+    while [[ -z $domain ]]
+    do
+        echo "Введите ваш домен:"
+        read domain
+        echo ""
+    done
     crop_domain
-    echo "Введите вашу почту, зарегистрированную на Cloudflare:"
-    read email
-    echo ""
-    echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
-    read cftoken
-    echo ""
+    while [[ -z $email ]]
+    do
+        echo "Введите вашу почту, зарегистрированную на Cloudflare:"
+        read email
+        echo ""
+    done
+    while [[ -z $cftoken ]]
+    do
+        echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+        read cftoken
+        echo ""
+    done
     echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
@@ -431,22 +446,37 @@ enter_data_en() {
     read sshp
     echo ""
     check_ssh_port_en
-    echo "Enter your username:"
-    read username
-    echo ""
-    echo "Enter new SSH password:"
-    read password
-    echo ""
-    echo "Enter your domain name:"
-    read domain
-    echo ""
+    while [[ -z $username ]]
+    do
+        echo "Enter your username:"
+        read username
+        echo ""
+    done
+    while [[ -z $password ]]
+    do
+        echo "Enter new SSH password:"
+        read password
+        echo ""
+    done
+    while [[ -z $domain ]]
+    do
+        echo "Enter your domain name:"
+        read domain
+        echo ""
+    done
     crop_domain
-    echo "Enter your email registered on Cloudflare:"
-    read email
-    echo ""
-    echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
-    read cftoken
-    echo ""
+    while [[ -z $email ]]
+    do
+        echo "Enter your email registered on Cloudflare:"
+        read email
+        echo ""
+    done
+    while [[ -z $cftoken ]]
+    do
+        echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+        read cftoken
+        echo ""
+    done
     echo "Enter your password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
