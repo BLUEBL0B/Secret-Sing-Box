@@ -163,6 +163,74 @@ check_ssh_port_en() {
     done
 }
 
+check_username_ru() {
+    while [[ $username =~ " " ]] || [[ -z $username ]]
+    do
+        if [[ $username =~ " " ]]
+        then
+            echo -e "${red}Ошибка: имя пользователя не должно содержать пробелы${clear}"
+            echo ""
+        elif [[ -z $username ]]
+        then
+            :
+        fi
+        echo "Введите имя нового пользователя:"
+        read username
+        echo ""
+    done
+}
+
+check_username_en() {
+    while [[ $username =~ " " ]] || [[ -z $username ]]
+    do
+        if [[ $username =~ " " ]]
+        then
+            echo -e "${red}Error: username should not contain spaces${clear}"
+            echo ""
+        elif [[ -z $username ]]
+        then
+            :
+        fi
+        echo "Enter your username:"
+        read username
+        echo ""
+    done
+}
+
+check_password_ru() {
+    while [[ $password =~ " " ]] || [[ -z $password ]]
+    do
+        if [[ $password =~ " " ]]
+        then
+            echo -e "${red}Ошибка: пароль не должен содержать пробелы${clear}"
+            echo ""
+        elif [[ -z $password ]]
+        then
+            :
+        fi
+        echo "Введите пароль SSH для пользователя:"
+        read password
+        echo ""
+    done
+}
+
+check_password_en() {
+    while [[ $password =~ " " ]] || [[ -z $password ]]
+    do
+        if [[ $password =~ " " ]]
+        then
+            echo -e "${red}Error: password should not contain spaces${clear}"
+            echo ""
+        elif [[ -z $password ]]
+        then
+            :
+        fi
+        echo "Enter new SSH password:"
+        read password
+        echo ""
+    done
+}
+
 check_uuid_ru() {
     while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
     do
@@ -385,18 +453,14 @@ enter_data_ru() {
     read sshp
     echo ""
     check_ssh_port_ru
-    while [[ -z $username ]]
-    do
-        echo "Введите имя нового пользователя:"
-        read username
-        echo ""
-    done
-    while [[ -z $password ]]
-    do
-        echo "Введите пароль SSH для пользователя:"
-        read password
-        echo ""
-    done
+    echo "Введите имя нового пользователя:"
+    read username
+    echo ""
+    check_username_ru
+    echo "Введите пароль SSH для пользователя:"
+    read password
+    echo ""
+    check_password_ru
     while [[ -z $domain ]]
     do
         echo "Введите ваш домен:"
@@ -456,18 +520,14 @@ enter_data_en() {
     read sshp
     echo ""
     check_ssh_port_en
-    while [[ -z $username ]]
-    do
-        echo "Enter your username:"
-        read username
-        echo ""
-    done
-    while [[ -z $password ]]
-    do
-        echo "Enter new SSH password:"
-        read password
-        echo ""
-    done
+    echo "Enter your username:"
+    read username
+    echo ""
+    check_username_en
+    echo "Enter new SSH password:"
+    read password
+    echo ""
+    check_password_en
     while [[ -z $domain ]]
     do
         echo "Enter your domain name:"
