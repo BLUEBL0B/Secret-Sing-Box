@@ -164,11 +164,11 @@ check_ssh_port_en() {
 }
 
 check_username_ru() {
-    while [[ $username =~ " " ]] || [[ -z $username ]]
+    while [[ $username =~ " " ]] || [[ $username =~ '$' ]] || [[ -z $username ]]
     do
-        if [[ $username =~ " " ]]
+        if [[ $username =~ " " ]] || [[ $username =~ '$' ]]
         then
-            echo -e "${red}Ошибка: имя пользователя не должно содержать пробелы${clear}"
+            echo -e "${red}Ошибка: имя пользователя не должно содержать пробелы и \$${clear}"
             echo ""
         elif [[ -z $username ]]
         then
@@ -181,11 +181,11 @@ check_username_ru() {
 }
 
 check_username_en() {
-    while [[ $username =~ " " ]] || [[ -z $username ]]
+    while [[ $username =~ " " ]] || [[ $username =~ '$' ]] || [[ -z $username ]]
     do
-        if [[ $username =~ " " ]]
+        if [[ $username =~ " " ]] || [[ $username =~ '$' ]]
         then
-            echo -e "${red}Error: username should not contain spaces${clear}"
+            echo -e "${red}Error: username should not contain spaces and \$${clear}"
             echo ""
         elif [[ -z $username ]]
         then
