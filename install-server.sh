@@ -382,16 +382,17 @@ nginx_redirect() {
     comment3=" "
     sitedir="html"
     index="index.html index.htm"
-
-    if [[ "$language" == "1" ]]
-    then
-        echo "Введите домен, на который будет идти перенаправление:"
-    else
-        echo "Enter the domain to which requests will be redirected:"
-    fi
-
-    read redirect
-    echo ""
+    while [[ -z $redirect ]]
+    do
+        if [[ "$language" == "1" ]]
+        then
+            echo "Введите домен, на который будет идти перенаправление:"
+        else
+            echo "Enter the domain to which requests will be redirected:"
+        fi
+        read redirect
+        echo ""
+    done
     crop_redirect_domain
 }
 
