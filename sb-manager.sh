@@ -15,7 +15,7 @@ check_root() {
 }
 
 templates() {
-    curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/Config-Examples/Client-Trojan-WS.json
+    curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/Config-Examples-WS/Client-Trojan-WS.json
 
     if [ ! -f /var/www/${subspath}/template-loc.json ]
     then
