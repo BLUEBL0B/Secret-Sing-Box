@@ -1,0 +1,179 @@
+{
+  "log": {
+    "level": "fatal",
+    "output": "box.log",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-remote",
+        "address": "tls://1.1.1.1"
+      },
+      {
+        "tag": "dns-block",
+        "address": "rcode://success"
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "category-ads-all"
+        ],
+        "server": "dns-block"
+      },
+      {
+        "outbound": "any",
+        "server": "dns-remote"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "type": "trojan",
+      "tag": "trojan-in",
+      "listen": "127.0.0.1",
+      "listen_port": 10443,
+      "sniff": true,
+      "users": [
+        {
+          "name": "1-me",
+          "password": "YOUR-TROJAN-PASSWORD"
+        }
+      ],
+      "transport": {},
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "direct",
+      "tag": "IPv4",
+      "domain_strategy": "ipv4_only"
+    },
+    {
+      "type": "socks",
+      "tag": "warp",
+      "server": "127.0.0.1",
+      "server_port": 40000
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      },
+      {
+        "rule_set": [
+          "category-ads-all"
+        ],
+        "protocol": "quic",
+        "outbound": "block"
+      },
+      {
+        "rule_set": [
+          "google"
+        ],
+        "outbound": "IPv4"
+      },
+      {
+        "rule_set": [
+          "geoip-ru",
+          "gov-ru",
+          "openai",
+          "telegram"
+        ],
+        "domain_suffix": [
+          ".ru",
+          ".su",
+          ".ru.com",
+          ".ru.net",
+          "rutracker.org",
+          "habr.com",
+          "ntc.party",
+          "meduza.io",
+          "svoboda.org",
+          "gemini.google.com",
+          "bard.google.com",
+          "generativelanguage.googleapis.com",
+          "ai.google.dev",
+          "aida.googleapis.com",
+          "aistudio.google.com",
+          "alkalimakersuite-pa.clients6.google.com",
+          "makersuite.google.com",
+          "deepmind.com",
+          "deepmind.google",
+          "generativeai.google",
+          "proactivebackend-pa.googleapis.com",
+          "canva.com"
+        ],
+        "domain_keyword": [
+          "xn--",
+          "generativelanguage",
+          "generativeai"
+        ],
+        "outbound": "warp"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geoip-ru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-ru.srs"
+      },
+      {
+        "tag": "gov-ru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-gov-ru.srs"
+      },
+      {
+        "tag": "google",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
+      },
+      {
+        "tag": "openai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
+      },
+      {
+        "tag": "telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-telegram.srs"
+      },
+      {
+        "tag": "category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-ads-all.srs"
+      }
+    ]
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db"
+    }
+  }
+}
