@@ -5,21 +5,11 @@ textcolor_light='\033[1;36m'
 red='\033[1;31m'
 clear='\033[0m'
 
-check_virt() {
-    if [[ "$(systemd-detect-virt)" != "kvm" ]]
-    then
-        echo ""
-        echo -e "${red}Error: only KVM virtualization is supported${clear}"
-        echo ""
-        exit 1
-    fi
-}
-
 check_os() {
     if [[ ! $(lsb_release -cs) =~ "bookworm" ]] && [[ ! $(lsb_release -cs) =~ "jammy" ]] && [[ ! $(lsb_release -cs) =~ "noble" ]]
     then
         echo ""
-        echo -e "${red}Error: only Debian 12 or Ubuntu 22.04/24.04 are supported${clear}"
+        echo -e "${red}Error: only Debian 12 and Ubuntu 22.04/24.04 are supported${clear}"
         echo ""
         exit 1
     fi
@@ -88,6 +78,40 @@ start_message_en() {
     read BigRedButton
 }
 
+start_message() {
+    if [[ "${language}" == "1" ]]
+    then
+        start_message_ru
+    else
+        start_message_en
+    fi
+}
+
+select_variant_ru() {
+    echo "Выберите вариант настройки прокси:"
+    echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket"
+    echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX на основе пароля Trojan"
+    read variant
+    echo ""
+}
+
+select_variant_en() {
+    echo "Select a proxy setup option:"
+    echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket transport"
+    echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
+    read variant
+    echo ""
+}
+
+select_variant() {
+    if [[ "${language}" == "1" ]]
+    then
+        select_variant_ru
+    else
+        select_variant_en
+    fi
+}
+
 crop_domain() {
     if [[ "$domain" == "www."* ]]
     then
@@ -131,13 +155,13 @@ check_ssh_port_ru() {
             echo -e "${red}Ошибка: введённое значение не является числом${clear}"
         elif [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         then
-            echo -e "${red}Ошибка: порты 80, 443, 10443, 11443 и 40000 будут заняты NGINX, Sing-Box и WARP${clear}"
+            echo -e "${red}Ошибка: порты 80, 443, 10443, 11443 и 40000 будут заняты${clear}"
         elif [ $sshp -gt 65535 ]
         then
             echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
         fi
         echo ""
-        echo "Введите новый номер порта SSH:"
+        echo "Введите новый номер порта SSH или 22 (не рекомендуется):"
         read sshp
         echo ""
     done
@@ -151,13 +175,13 @@ check_ssh_port_en() {
             echo -e "${red}Error: this is not a number${clear}"
         elif [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         then
-            echo -e "${red}Error: ports 80, 443, 10443, 11443 and 40000 will be taken by NGINX, Sing-Box and WARP${clear}"
+            echo -e "${red}Error: ports 80, 443, 10443, 11443 and 40000 will be taken${clear}"
         elif [ $sshp -gt 65535 ]
         then
             echo -e "${red}Error: port number can't be greater than 65535${clear}"
         fi
         echo ""
-        echo "Enter new SSH port number:"
+        echo "Enter new SSH port number or 22 (not recommended):"
         read sshp
         echo ""
     done
@@ -174,7 +198,7 @@ check_username_ru() {
         then
             :
         fi
-        echo "Введите имя нового пользователя:"
+        echo "Введите имя нового пользователя или root (не рекомендуется):"
         read username
         echo ""
     done
@@ -191,7 +215,7 @@ check_username_en() {
         then
             :
         fi
-        echo "Enter your username:"
+        echo "Enter your username or root (not recommended):"
         read username
         echo ""
     done
@@ -384,7 +408,7 @@ nginx_redirect() {
     index="index.html index.htm"
     while [[ -z $redirect ]]
     do
-        if [[ "$language" == "1" ]]
+        if [[ "${language}" == "1" ]]
         then
             echo "Введите домен, на который будет идти перенаправление:"
         else
@@ -427,7 +451,7 @@ nginx_site_en() {
 }
 
 nginx_site() {
-    if [[ "$language" == "1" ]]
+    if [[ "${language}" == "1" ]]
     then
         nginx_site_ru
     else
@@ -448,13 +472,12 @@ nginx_options() {
     esac
 }
 
-enter_data_ru() {
-    start_message_ru
-    echo "Введите новый номер порта SSH:"
+enter_data_ru_ws() {
+    echo "Введите новый номер порта SSH или 22 (не рекомендуется):"
     read sshp
     echo ""
     check_ssh_port_ru
-    echo "Введите имя нового пользователя:"
+    echo "Введите имя нового пользователя или root (не рекомендуется):"
     read username
     echo ""
     check_username_ru
@@ -515,13 +538,12 @@ enter_data_ru() {
     check_timezone_ru
 }
 
-enter_data_en() {
-    start_message_en
-    echo "Enter new SSH port number:"
+enter_data_en_ws() {
+    echo "Enter new SSH port number or 22 (not recommended):"
     read sshp
     echo ""
     check_ssh_port_en
-    echo "Enter your username:"
+    echo "Enter your username or root (not recommended):"
     read username
     echo ""
     check_username_en
@@ -582,12 +604,123 @@ enter_data_en() {
     check_timezone_en
 }
 
+enter_data_ru_haproxy() {
+    echo "Введите новый номер порта SSH или 22 (не рекомендуется):"
+    read sshp
+    echo ""
+    check_ssh_port_ru
+    echo "Введите имя нового пользователя или root (не рекомендуется):"
+    read username
+    echo ""
+    check_username_ru
+    echo "Введите пароль SSH для пользователя:"
+    read password
+    echo ""
+    check_password_ru
+    while [[ -z $domain ]]
+    do
+        echo "Введите ваш домен:"
+        read domain
+        echo ""
+    done
+    crop_domain
+    while [[ -z $email ]]
+    do
+        echo "Введите вашу почту, зарегистрированную на Cloudflare:"
+        read email
+        echo ""
+    done
+    while [[ -z $cftoken ]]
+    do
+        echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+        read cftoken
+        echo ""
+    done
+    echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+    read trjpass
+    [[ ! -z $trjpass ]] && echo ""
+    echo "Введите путь для подписки или оставьте пустым для генерации случайного пути:"
+    read subspath
+    [[ ! -z $subspath ]] && echo ""
+    crop_subscription_path
+    echo "Выберите вариант настройки NGINX (1 по умолчанию):"
+    echo "1 - Будет спрашивать логин и пароль вместо сайта"
+    echo "2 - Будет перенаправлять на другой домен"
+    echo "3 - Свой сайт (при наличии)"
+    read option;
+    echo ""
+    nginx_options
+    echo "Введите часовой пояс для установки времени на сервере (например, Europe/Amsterdam):"
+    read timezone
+    echo ""
+    check_timezone_ru
+}
+
+enter_data_en_haproxy() {
+    echo "Enter new SSH port number or 22 (not recommended):"
+    read sshp
+    echo ""
+    check_ssh_port_en
+    echo "Enter your username or root (not recommended):"
+    read username
+    echo ""
+    check_username_en
+    echo "Enter new SSH password:"
+    read password
+    echo ""
+    check_password_en
+    while [[ -z $domain ]]
+    do
+        echo "Enter your domain name:"
+        read domain
+        echo ""
+    done
+    crop_domain
+    while [[ -z $email ]]
+    do
+        echo "Enter your email registered on Cloudflare:"
+        read email
+        echo ""
+    done
+    while [[ -z $cftoken ]]
+    do
+        echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+        read cftoken
+        echo ""
+    done
+    echo "Enter your password for Trojan or leave this empty to generate a random password:"
+    read trjpass
+    [[ ! -z $trjpass ]] && echo ""
+    echo "Enter your subscription path or leave this empty to generate a random path:"
+    read subspath
+    [[ ! -z $subspath ]] && echo ""
+    crop_subscription_path
+    echo "Select NGINX setup option (1 by default):"
+    echo "1 - Will show a login popup asking for username and password"
+    echo "2 - Will redirect to another domain"
+    echo "3 - Your own website (if you have one)"
+    read option;
+    echo ""
+    nginx_options
+    echo "Enter the timezone to set the time on the server (e.g. Europe/Amsterdam):"
+    read timezone
+    echo ""
+    check_timezone_en
+}
+
 enter_data() {
-    if [[ "$language" == "1" ]]
+    if [[ "${language}" == "1" ]] && [[ "${variant}" == "1" ]]
     then
-        enter_data_ru
-    else
-        enter_data_en
+        enter_data_ru_ws
+    elif [[ "${language}" == "1" ]] && [[ "${variant}" != "1" ]]
+    then
+        enter_data_ru_haproxy
+    elif [[ "${language}" != "1" ]] && [[ "${variant}" == "1" ]]
+    then
+        enter_data_en_ws
+    elif [[ "${language}" != "1" ]] && [[ "${variant}" != "1" ]]
+    then
+        enter_data_en_haproxy
     fi
     echo ""
     echo ""
@@ -628,6 +761,12 @@ install_packages() {
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/sagernet.asc] https://deb.sagernet.org/ * *" | tee /etc/apt/sources.list.d/sagernet.list > /dev/null
     apt-get update
     apt-get install sing-box -y
+
+    if [[ "${variant}" != "1" ]]
+    then
+        apt install haproxy openssl -y
+    fi
+
     echo ""
 }
 
@@ -713,8 +852,18 @@ certificates() {
 
     certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.credentials --dns-cloudflare-propagation-seconds 30 --rsa-key-size 4096 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
-    { crontab -l; echo "0 0 1 */2 * certbot -q renew"; } | crontab -
-    echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+    { crontab -l; echo "0 5 1 */2 * certbot -q renew"; } | crontab -
+
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "renew_hook = sleep 90 && systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+    else
+        { crontab -l; echo "1 5 1 */2 * cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem"; } | crontab -
+        echo "renew_hook = sleep 90 && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo ""
+        openssl dhparam -out /etc/haproxy/dhparam.pem 2048
+    fi
+
     echo ""
 }
 
@@ -733,17 +882,17 @@ generate_pass() {
         trjpass=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
     fi
 
-    if [ -z "$trojanpath" ]
+    if [ -z "$trojanpath" ] && [[ "${variant}" == "1" ]]
     then
         trojanpath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
     fi
 
-    if [ -z "$uuid" ]
+    if [ -z "$uuid" ] && [[ "${variant}" == "1" ]]
     then
         uuid=$(cat /proc/sys/kernel/random/uuid)
     fi
 
-    if [ -z "$vlesspath" ]
+    if [ -z "$vlesspath" ] && [[ "${variant}" == "1" ]]
     then
         vlesspath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
     fi
@@ -789,7 +938,7 @@ cat > /etc/sing-box/config.json <<EOF
   "inbounds": [
     {
       "type": "trojan",
-      "tag": "trojan-ws-in",
+      "tag": "trojan-in",
       "listen": "127.0.0.1",
       "listen_port": 10443,
       "sniff": true,
@@ -810,7 +959,7 @@ cat > /etc/sing-box/config.json <<EOF
     },
     {
       "type": "vless",
-      "tag": "vless-ws-in",
+      "tag": "vless-in",
       "listen": "127.0.0.1",
       "listen_port": 11443,
       "sniff": true,
@@ -961,15 +1110,22 @@ cat > /etc/sing-box/config.json <<EOF
 }
 EOF
 
+if [[ "${variant}" != "1" ]]
+then
+    inboundnumbervl=$(jq '[.inbounds[].tag] | index("vless-in")' /etc/sing-box/config.json)
+    inboundnumbertr=$(jq '[.inbounds[].tag] | index("trojan-in")' /etc/sing-box/config.json)
+    echo "$(jq "del(.inbounds[${inboundnumbertr}].transport.type) | del(.inbounds[${inboundnumbertr}].transport.path) | del(.inbounds[${inboundnumbervl}])" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+fi
+
 systemctl enable sing-box.service
 systemctl start sing-box.service
 }
 
 client_config() {
 mkdir /var/www/${subspath}
-touch /var/www/${subspath}/1-me-TRJ-WS.json
+touch /var/www/${subspath}/1-me-TRJ-CLIENT.json
 
-cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
+cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
 {
   "log": {
     "level": "fatal",
@@ -1671,8 +1827,14 @@ cat > /var/www/${subspath}/1-me-TRJ-WS.json <<EOF
 }
 EOF
 
-cp /var/www/${subspath}/1-me-TRJ-WS.json /var/www/${subspath}/1-me-VLESS-WS.json
-sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/1-me-VLESS-WS.json
+if [[ "${variant}" == "1" ]]
+then
+    cp /var/www/${subspath}/1-me-TRJ-CLIENT.json /var/www/${subspath}/1-me-VLESS-CLIENT.json
+    sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/1-me-VLESS-CLIENT.json
+else
+    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/1-me-TRJ-CLIENT.json)
+    echo "$(jq "del(.outbounds[${outboundnumber}].transport.type) | del(.outbounds[${outboundnumber}].transport.path)" /var/www/${subspath}/1-me-TRJ-CLIENT.json)" > /var/www/${subspath}/1-me-TRJ-CLIENT.json
+fi
 }
 
 setup_sing_box() {
@@ -1695,7 +1857,7 @@ for_nginx_options() {
     fi
 }
 
-nginx_config() {
+nginx_config_1() {
 append='"~^(,[ \\t]*)*([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*([ \\t]*,([ \\t]*([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'\''*+.^_`|~0-9A-Za-z-]+=([!#$%&'\''*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*)?)*$" "$http_forwarded, $proxy_forwarded_elem"'
 
 cat > /etc/nginx/nginx.conf <<EOF
@@ -1909,19 +2071,244 @@ http {
 }
 EOF
 
+systemctl enable nginx
+nginx -t
+systemctl reload nginx
+}
+
+nginx_config_2() {
+cat > /etc/nginx/nginx.conf <<EOF
+user                 www-data;
+pid                  /run/nginx.pid;
+worker_processes     auto;
+worker_rlimit_nofile 65535;
+
+# Load modules
+include              /etc/nginx/modules-enabled/*.conf;
+
+events {
+    multi_accept       on;
+    worker_connections 65535;
+}
+
+http {
+    sendfile                  on;
+    tcp_nopush                on;
+    tcp_nodelay               on;
+    server_tokens             off;
+    types_hash_max_size       2048;
+    types_hash_bucket_size    64;
+    client_max_body_size      16M;
+
+    # Timeout
+    keepalive_timeout         60s;
+    keepalive_requests        1000;
+    reset_timedout_connection on;
+
+    # MIME
+    include                   mime.types;
+    default_type              application/octet-stream;
+
+    # Logging
+    access_log                off;
+    error_log                 off;
+
+    # Load configs
+    include /etc/nginx/conf.d/*.conf;
+
+    # Site
+    server {
+        listen                               127.0.0.1:11443 default_server;
+        server_name                          _;
+      ${comment1}${comment2}root                                 /var/www/${sitedir};
+      ${comment1}${comment2}index                                ${index};
+
+        # Security headers
+        add_header X-XSS-Protection          "1; mode=block" always;
+        add_header X-Content-Type-Options    "nosniff" always;
+        add_header Referrer-Policy           "no-referrer-when-downgrade" always;
+        add_header Content-Security-Policy   "default-src 'self' http: https: ws: wss: data: blob: 'unsafe-inline'; frame-ancestors 'self';" always;
+        add_header Permissions-Policy        "interest-cohort=()" always;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+        add_header X-Frame-Options           "SAMEORIGIN";
+        proxy_hide_header X-Powered-By;
+
+        # . files
+        location ~ /\.(?!well-known) {
+            deny all;
+        }
+
+        # Main location
+       ${comment3}location / {
+          ${comment2}${comment3}root /var/www/html;
+          ${comment2}${comment3}index index.html index.htm;
+          ${comment2}${comment3}auth_basic "Login Required";
+          ${comment2}${comment3}auth_basic_user_file /etc/nginx/.htpasswd;
+          ${comment1}${comment3}return 301 https://${redirect}\$request_uri;
+       ${comment3}}
+
+        # Subsciption
+        location ~ ^/${subspath} {
+            default_type application/json;
+            root /var/www;
+        }
+
+        # gzip
+        gzip            on;
+        gzip_vary       on;
+        gzip_proxied    any;
+        gzip_comp_level 6;
+        gzip_types      text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
+    }
+}
+EOF
+
+systemctl enable nginx
+nginx -t
 systemctl reload nginx
 }
 
 setup_nginx() {
     echo -e "${textcolor_light}Setting up NGINX...${clear}"
     for_nginx_options
-    nginx_config
+    if [[ "${variant}" == "1" ]]
+    then
+        nginx_config_1
+    else
+        nginx_config_2
+    fi
+    echo ""
+}
+
+auth_lua() {
+passhash=$(echo -n "${trjpass}" | openssl dgst -sha224 | sed 's/.* //')
+placeholder=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
+placeholderhash=$(echo -n "${placeholder}" | openssl dgst -sha224 | sed 's/.* //')
+
+cat > /etc/haproxy/auth.lua <<EOF
+local passwords = {
+    ["${passhash}"] = true,
+    ["${placeholderhash}"] = true		-- Placeholder
+}
+
+function trojan_auth(txn)
+    local status, data = pcall(function() return txn.req:dup() end)
+    if status and data then
+        -- Uncomment to enable logging of all received data
+        -- core.Info("Received data from client: " .. data)
+        local sniffed_password = string.sub(data, 1, 56)
+        -- Uncomment to enable logging of sniffed password hashes
+        -- core.Info("Sniffed password: " .. sniffed_password)
+        if passwords[sniffed_password] then
+            return "trojan"
+        end
+    end
+    return "http"
+end
+
+core.register_fetches("trojan_auth", trojan_auth)
+EOF
+}
+
+config_haproxy() {
+mkdir /etc/haproxy/certs
+cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
+
+cat > /etc/haproxy/haproxy.cfg <<EOF
+global
+        # Uncomment to enable system logging
+        # log /dev/log local0
+        # log /dev/log local1 notice
+        log /dev/log local2 warning
+        lua-load /etc/haproxy/auth.lua
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
+
+        # Mozilla Intermediate
+        # ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305
+        # ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+        # ssl-default-bind-options prefer-client-ciphers no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+        # ssl-default-server-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305
+        # ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+        # ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+
+        # Mozilla Modern
+        ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+        ssl-default-bind-options prefer-client-ciphers no-sslv3 no-tlsv10 no-tlsv11 no-tlsv12 no-tls-tickets
+        ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+        ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tlsv12 no-tls-tickets
+
+        # You must first generate DH parameters - [ openssl dhparam -out /etc/haproxy/dhparam.pem 2048 ]
+        ssl-dh-param-file /etc/haproxy/dhparam.pem
+
+defaults
+        mode http
+        log global
+        option tcplog
+        option  dontlognull
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
+
+frontend haproxy-tls
+        mode tcp
+        timeout client 1h
+        bind :443 ssl crt /etc/haproxy/certs/${domain}.pem alpn h2,http/1.1
+        acl host_ip hdr(host) -i ${serverip}
+        tcp-request content reject if host_ip
+        tcp-request inspect-delay 5s
+        tcp-request content accept if { req_ssl_hello_type 1 }
+        use_backend %[lua.trojan_auth]
+        default_backend http
+
+backend trojan
+        mode tcp
+        timeout server 1h
+        server sing-box 127.0.0.1:10443
+
+backend http
+        mode http
+        # Web server
+        server nginx 127.0.0.1:11443
+
+frontend haproxy-http
+        bind :80
+        mode http
+        acl host_ip hdr(host) -i ${serverip}
+        http-request reject if host_ip
+        # For HTTPS Redirect
+        default_backend https-redirect
+        # For HTTP Web Server
+        # default_backend http
+
+backend https-redirect
+        mode http
+        http-request redirect scheme https
+EOF
+
+systemctl enable haproxy.service
+haproxy -f /etc/haproxy/haproxy.cfg -c
+systemctl restart haproxy.service
+}
+
+setup_haproxy() {
+    if [[ "${variant}" != "1" ]]
+    then
+        echo -e "${textcolor_light}Setting up HAProxy...${clear}"
+        auth_lua
+        config_haproxy
+        echo ""
+    fi
 }
 
 add_sbmanager() {
     touch /usr/local/bin/sbmanager
     echo '#!/bin/bash' >> /usr/local/bin/sbmanager
-    if [[ "$language" == "1" ]]
+    if [[ "${language}" == "1" ]]
     then
         echo 'bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh)' >> /usr/local/bin/sbmanager
     else
@@ -1938,17 +2325,25 @@ final_message_ru() {
     echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
     echo -e "2) Если нет ключей SSH, то сгенерировать их на своём ПК командой ${textcolor}ssh-keygen -t rsa -b 4096${clear}"
     echo "3) Отправить публичный ключ на сервер"
-    echo -e "Команда для Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
-    echo -e "Команда для Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
+    echo -e "   Команда для Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
+    echo -e "   Команда для Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
     echo -e "4) Подключиться к серверу ещё раз командой ${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear}"
     echo -e "5) Открыть конфиг sshd командой ${textcolor}sudo nano /etc/ssh/sshd_config${clear} и в PasswordAuthentication заменить yes на no"
     echo -e "6) Перезапустить SSH командой ${textcolor}sudo systemctl restart ssh.service${clear}"
     echo ""
-    echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}reboot${clear}"
+    echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}sudo reboot${clear}"
     echo ""
-    echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
-    echo "https://${domain}/${subspath}/1-me-TRJ-WS.json"
-    echo "https://${domain}/${subspath}/1-me-VLESS-WS.json"
+    if [[ "${variant}" == "1" ]]
+    then
+        echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
+        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
+    else
+        echo -e "${textcolor}Важно:${clear} при этом варианте настройки в DNS записях в Cloudflare должно стоять \"DNS only\""
+        echo ""
+        echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
+        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+    fi
 }
 
 final_message_en() {
@@ -1959,24 +2354,31 @@ final_message_en() {
     echo -e "1) Disconnect from the server by pressing ${textcolor}Ctrl + D${clear}"
     echo -e "2) If you don't have SSH keys then generate them on your PC (${textcolor}ssh-keygen -t rsa -b 4096${clear})"
     echo "3) Send the public key to the server"
-    echo -e "Command for Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
-    echo -e "Command for Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
+    echo -e "   Command for Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
+    echo -e "   Command for Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
     echo -e "4) Connect to the server again (${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear})"
     echo -e "5) Open sshd config (${textcolor}sudo nano /etc/ssh/sshd_config${clear}) and change PasswordAuthentication value from yes to no"
     echo -e "6) Restart SSH (${textcolor}sudo systemctl restart ssh.service${clear})"
     echo ""
-    echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}reboot${clear})"
+    echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}sudo reboot${clear})"
     echo ""
-    echo -e "${textcolor}Client configs are available here:${clear}"
-    echo "https://${domain}/${subspath}/1-me-TRJ-WS.json"
-    echo "https://${domain}/${subspath}/1-me-VLESS-WS.json"
+    if [[ "${variant}" == "1" ]]
+    then
+        echo -e "${textcolor}Client configs are available here:${clear}"
+        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
+    else
+        echo -e "${textcolor}Important:${clear} with this setup variant, DNS records in Cloudflare should have \"DNS only\" option"
+        echo ""
+        echo -e "${textcolor}Client config is available here:${clear}"
+        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+    fi
 }
 
 final_message() {
     echo ""
     echo ""
-    echo ""
-    if [[ "$language" == "1" ]]
+    if [[ "${language}" == "1" ]]
     then
         final_message_ru
     else
@@ -1986,12 +2388,13 @@ final_message() {
     echo ""
 }
 
-check_virt
 check_os
 check_root
 check_sbmanager
 get_ip
 enter_language
+start_message
+select_variant
 enter_data
 set_timezone
 enable_bbr
@@ -2001,5 +2404,6 @@ certificates
 setup_warp
 setup_sing_box
 setup_nginx
+setup_haproxy
 add_sbmanager
 final_message
