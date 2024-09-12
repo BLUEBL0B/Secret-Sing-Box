@@ -190,7 +190,7 @@ add_to_server_conf() {
         echo "$(jq ".inbounds[${inboundnum}].users[.inbounds[${inboundnum}].users | length] |= . + {\"name\":\"${username}\",\"uuid\":\"${uuid}\"}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
     fi
 
-    systemctl restart sing-box.service
+    systemctl reload sing-box.service
 }
 
 add_to_client_conf() {
@@ -226,7 +226,7 @@ add_to_auth_lua() {
     then
         passhash=$(echo -n "${trjpass}" | openssl dgst -sha224 | sed 's/.* //')
         sed -i "2i \ \ \ \ [\"${passhash}\"] = true," /etc/haproxy/auth.lua
-        systemctl restart haproxy.service
+        systemctl reload haproxy.service
     fi
 }
 
@@ -260,7 +260,7 @@ del_from_server_conf() {
         echo "$(jq </etc/sing-box/config.json "del(.inbounds[${inboundnum}].users[] | select(.name==\"${username}\"))")" > /etc/sing-box/config.json
     fi
 
-    systemctl restart sing-box.service
+    systemctl reload sing-box.service
 }
 
 del_client_conf() {
@@ -281,7 +281,7 @@ del_from_auth_lua() {
         trjpass=$(jq -r ".inbounds[${inboundnum}].users[] | select(.name==\"${username}\") | .password" /etc/sing-box/config.json)
         passhash=$(echo -n "${trjpass}" | openssl dgst -sha224 | sed 's/.* //')
         sed -i "/$passhash/d" /etc/haproxy/auth.lua
-        systemctl restart haproxy.service
+        systemctl reload haproxy.service
     fi
 }
 
@@ -494,7 +494,7 @@ add_warp_domains() {
         check_warp_domain_add
         exit_add_warp
         echo "$(jq ".route.rules[${warpnum}].domain_suffix[.route.rules[${warpnum}].domain_suffix | length]? += \"${newwarp}\"" /etc/sing-box/config.json)" > /etc/sing-box/config.json
-        systemctl restart sing-box.service
+        systemctl reload sing-box.service
         echo -e "Домен/суффикс ${textcolor}${newwarp}${clear} добавлен в WARP"
         echo ""
     done
@@ -510,7 +510,7 @@ delete_warp_domains() {
         exit_del_warp
         check_warp_domain_del
         echo "$(jq "del(.route.rules[${warpnum}].domain_suffix[] | select(. == \"${delwarp}\"))" /etc/sing-box/config.json)" > /etc/sing-box/config.json
-        systemctl restart sing-box.service
+        systemctl reload sing-box.service
         echo -e "Домен/суффикс ${textcolor}${delwarp}${clear} удалён из WARP"
         echo ""
     done
