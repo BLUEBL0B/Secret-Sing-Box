@@ -39,6 +39,28 @@ get_ip() {
     serverip=$(curl -s ipinfo.io/ip)
 }
 
+banner() {
+    echo ""
+    echo ""
+    echo "╔══╗ ╦ ╦╗  ╦ ╔══╗    ╔══╗ ╔══╗ ═╗  ╔"
+    echo "║    ║ ║╚╗ ║ ║       ║  ║ ║  ║  ╚╗╔╝"
+    echo "╚══╗ ║ ║ ║ ║ ║ ═╗ ══ ╠══╣ ║  ║  ╔╬╝ "
+    echo "   ║ ║ ║ ╚╗║ ║  ║    ║  ║ ║  ║ ╔╝╚╗ "
+    echo "╚══╝ ╩ ╩  ╚╩ ╚══╝    ╚══╝ ╚══╝ ╝  ╚═"
+    echo ""
+    echo "╔══╗ ╔══ ╦  ╦ ╔══ ╔══╗ ╔══╗ ╔══"
+    echo "║  ║ ║   ║  ║ ║   ║  ║ ║    ║  "
+    echo "╠╦═╝ ╠══ ║  ║ ╠══ ╠╦═╝ ╚══╗ ╠══"
+    echo "║╚╗  ║   ╚╗╔╝ ║   ║╚╗     ║ ║  "
+    echo "╩ ╚═ ╚══  ╚╝  ╚══ ╩ ╚═ ╚══╝ ╚══"
+    echo ""
+    echo "╔══╗ ╔══╗ ╔══╗ ═╗  ╔ ╦   ╦"
+    echo "║  ║ ║  ║ ║  ║  ╚╗╔╝ ╚╗ ╔╝"
+    echo "╠══╝ ╠╦═╝ ║  ║  ╔╬╝   ╚╦╝ "
+    echo "║    ║╚╗  ║  ║ ╔╝╚╗    ║  "
+    echo "╩    ╩ ╚═ ╚══╝ ╝  ╚═   ╩  "
+}
+
 enter_language() {
     echo ""
     echo ""
@@ -2392,6 +2414,7 @@ check_os
 check_root
 check_sbmanager
 get_ip
+banner
 enter_language
 start_message
 select_variant
