@@ -1,11 +1,11 @@
-# Sing-Box-Reverse-Proxy
+# Sing-Box Reverse Proxy
 
 [**Russian version**](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README.md)
 
 ### Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
 This script is designed to fully configure a hidden proxy server with NGINX or HAProxy camouflage. Two setup methods:
 - All requests to the proxy are processed by NGINX, and the server works as a proxy only if the request contains the correct path (WebSocket transport)
-- All requests to the proxy are processed by HAProxy, and the server works as a proxy only if the request contains the correct Trojan password (TCP transport)
+- All requests to the proxy are processed by HAProxy, and the server works as a proxy only if the request contains the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
 <br/>
 
 > [!IMPORTANT]
@@ -40,7 +40,7 @@ The script will show your client links in the end.
 
 -----
 
-Run this command to add/delete users, to synchronize the settings in client configs or to manage WARP domains:
+Run this command to add/delete users, to synchronize the settings in client configs or to manage WARP-routed domains:
 
 ```
 sbmanager
