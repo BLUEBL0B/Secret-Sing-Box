@@ -277,6 +277,93 @@ check_password_en() {
     done
 }
 
+get_test_response() {
+    if [[ "$cftoken" =~ [A-Z] ]]
+    then
+        test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${cftoken}" --header "Content-Type: application/json")
+    else
+        test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "X-Auth-Key: ${cftoken}" --header "X-Auth-Email: ${email}" --header "Content-Type: application/json")
+    fi
+}
+
+check_cf_token_ru() {
+    echo "Проверка домена, API токена/ключа и почты..."
+    get_test_response
+
+    while [[ ! $(echo $test_response | jq '.success') == "true" ]] || [[ -z $(echo $test_response | grep "\"${domain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
+    do
+        domain=""
+        email=""
+        cftoken=""
+        echo ""
+        echo -e "${red}Ошибка: неправильно введён домен, API токен/ключ или почта${clear}"
+        echo ""
+        while [[ -z $domain ]]
+        do
+            echo "Введите ваш домен:"
+            read domain
+            echo ""
+        done
+        crop_domain
+        while [[ -z $email ]]
+        do
+            echo "Введите вашу почту, зарегистрированную на Cloudflare:"
+            read email
+            echo ""
+        done
+        while [[ -z $cftoken ]]
+        do
+            echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+            read cftoken
+            echo ""
+        done
+        echo "Проверка домена, API токена/ключа и почты..."
+        get_test_response
+    done
+
+    echo "Успешно!"
+    echo ""
+}
+
+check_cf_token_en() {
+    echo "Checking domain name, API token/key and email..."
+    get_test_response
+
+    while [[ ! $(echo $test_response | jq '.success') == "true" ]] || [[ -z $(echo $test_response | grep "\"${domain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
+    do
+        domain=""
+        email=""
+        cftoken=""
+        echo ""
+        echo -e "${red}Error: invalid domain name, API token/key or email${clear}"
+        echo ""
+        while [[ -z $domain ]]
+        do
+            echo "Enter your domain name:"
+            read domain
+            echo ""
+        done
+        crop_domain
+        while [[ -z $email ]]
+        do
+            echo "Enter your email registered on Cloudflare:"
+            read email
+            echo ""
+        done
+        while [[ -z $cftoken ]]
+        do
+            echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+            read cftoken
+            echo ""
+        done
+        echo "Checking domain name, API token/key and email..."
+        get_test_response
+    done
+
+    echo "Success!"
+    echo ""
+}
+
 check_uuid_ru() {
     while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
     do
@@ -526,6 +613,7 @@ enter_data_ru_ws() {
         read cftoken
         echo ""
     done
+    check_cf_token_ru
     echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
@@ -592,6 +680,7 @@ enter_data_en_ws() {
         read cftoken
         echo ""
     done
+    check_cf_token_en
     echo "Enter your password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
@@ -658,6 +747,7 @@ enter_data_ru_haproxy() {
         read cftoken
         echo ""
     done
+    check_cf_token_ru
     echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
@@ -710,6 +800,7 @@ enter_data_en_haproxy() {
         read cftoken
         echo ""
     done
+    check_cf_token_en
     echo "Enter your password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
