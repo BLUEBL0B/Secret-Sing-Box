@@ -42,19 +42,19 @@ get_ip() {
 banner() {
     echo ""
     echo ""
-    echo "╔══╗ ╦ ╦╗  ╦ ╔══╗    ╔══╗ ╔══╗ ═╗  ╔"
+    echo "╔══╗ ╦ ╦╗  ╦ ╔══╗    ╦══╗ ╔══╗ ═╗  ╔"
     echo "║    ║ ║╚╗ ║ ║       ║  ║ ║  ║  ╚╗╔╝"
     echo "╚══╗ ║ ║ ║ ║ ║ ═╗ ══ ╠══╣ ║  ║  ╔╬╝ "
     echo "   ║ ║ ║ ╚╗║ ║  ║    ║  ║ ║  ║ ╔╝╚╗ "
-    echo "╚══╝ ╩ ╩  ╚╩ ╚══╝    ╚══╝ ╚══╝ ╝  ╚═"
+    echo "╚══╝ ╩ ╩  ╚╩ ╚══╝    ╩══╝ ╚══╝ ╝  ╚═"
     echo ""
-    echo "╔══╗ ╔══ ╦  ╦ ╔══ ╔══╗ ╔══╗ ╔══"
+    echo "╦══╗ ╔══ ╦  ╦ ╔══ ╦══╗ ╔══╗ ╔══"
     echo "║  ║ ║   ║  ║ ║   ║  ║ ║    ║  "
     echo "╠╦═╝ ╠══ ║  ║ ╠══ ╠╦═╝ ╚══╗ ╠══"
     echo "║╚╗  ║   ╚╗╔╝ ║   ║╚╗     ║ ║  "
     echo "╩ ╚═ ╚══  ╚╝  ╚══ ╩ ╚═ ╚══╝ ╚══"
     echo ""
-    echo "╔══╗ ╔══╗ ╔══╗ ═╗  ╔ ╦   ╦"
+    echo "╦══╗ ╦══╗ ╔══╗ ═╗  ╔ ╦   ╦"
     echo "║  ║ ║  ║ ║  ║  ╚╗╔╝ ╚╗ ╔╝"
     echo "╠══╝ ╠╦═╝ ║  ║  ╔╬╝   ╚╦╝ "
     echo "║    ║╚╗  ║  ║ ╔╝╚╗    ║  "
@@ -772,7 +772,7 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades lsb-release sed jq net-tools htop -y
+    apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades openssl lsb-release sed jq net-tools htop -y
 
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
@@ -786,7 +786,7 @@ install_packages() {
 
     if [[ "${variant}" != "1" ]]
     then
-        apt install haproxy openssl -y
+        apt install haproxy -y
     fi
 
     echo ""
@@ -879,6 +879,8 @@ certificates() {
     if [[ "${variant}" == "1" ]]
     then
         echo "renew_hook = sleep 90 && systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo ""
+        openssl dhparam -out /etc/nginx/dhparam.pem 2048
     else
         { crontab -l; echo "1 5 1 */2 * cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem"; } | crontab -
         echo "renew_hook = sleep 90 && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
@@ -1975,6 +1977,9 @@ http {
         ssl_certificate                      /etc/letsencrypt/live/${domain}/fullchain.pem;
         ssl_certificate_key                  /etc/letsencrypt/live/${domain}/privkey.pem;
         ssl_trusted_certificate              /etc/letsencrypt/live/${domain}/chain.pem;
+
+        # Diffie-Hellman parameter for DHE ciphersuites
+        ssl_dhparam                          /etc/nginx/dhparam.pem;
 
         # Security headers
         add_header X-XSS-Protection          "1; mode=block" always;
