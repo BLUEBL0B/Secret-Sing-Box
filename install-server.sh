@@ -6,7 +6,7 @@ red='\033[1;31m'
 clear='\033[0m'
 
 check_os() {
-    if [[ ! $(lsb_release -cs) =~ "bookworm" ]] && [[ ! $(lsb_release -cs) =~ "jammy" ]] && [[ ! $(lsb_release -cs) =~ "noble" ]]
+    if ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release
     then
         echo ""
         echo -e "${red}Error: only Debian 12 and Ubuntu 22.04/24.04 are supported${clear}"
@@ -772,7 +772,7 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades sed jq net-tools htop -y
+    apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades lsb-release sed jq net-tools htop -y
 
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
