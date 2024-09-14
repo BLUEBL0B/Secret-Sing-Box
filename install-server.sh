@@ -2457,7 +2457,7 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
     else
-        echo -e "${textcolor}ВАЖНО:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
+        echo -e "${red}Важно:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
         echo ""
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
@@ -2486,7 +2486,7 @@ final_message_en() {
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
     else
-        echo -e "${textcolor}IMPORTANT:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
+        echo -e "${red}Important:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
         echo ""
         echo -e "${textcolor}Client config is available here:${clear}"
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
