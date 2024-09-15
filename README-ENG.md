@@ -4,9 +4,10 @@
 
 ### Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
 This script is designed to fully configure a hidden proxy server with NGINX or HAProxy camouflage. Two setup methods:
-- All requests to the proxy are processed by NGINX, and the server works as a proxy only if the request contains the correct path (WebSocket transport)
-- All requests to the proxy are processed by HAProxy, and the server works as a proxy only if the request contains the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
-<br/>
+- All requests to the proxy are processed by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket transport)
+- All requests to the proxy are processed by HAProxy, the requests are passed to Sing-Box only if they contain the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
+
+Both setup methods make it impossible to detect Sing-Box from the outside.
 
 > [!IMPORTANT]
 > Recommended OS: Debian 12 or Ubuntu 22.04/24.04. You will also need your own domain linked to your Cloudflare account. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.

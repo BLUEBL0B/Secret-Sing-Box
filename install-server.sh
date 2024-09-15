@@ -2375,7 +2375,7 @@ defaults
 frontend haproxy-tls
         mode tcp
         timeout client 1h
-        bind :443 ssl crt /etc/haproxy/certs/${domain}.pem alpn h2,http/1.1
+        bind :::443 v4v6 ssl crt /etc/haproxy/certs/${domain}.pem alpn h2,http/1.1
         acl host_ip hdr(host) -i ${serverip}
         tcp-request content reject if host_ip
         tcp-request inspect-delay 5s
@@ -2394,7 +2394,7 @@ backend http
         server nginx 127.0.0.1:11443
 
 frontend haproxy-http
-        bind :80
+        bind :::80 v4v6
         mode http
         acl host_ip hdr(host) -i ${serverip}
         http-request reject if host_ip
