@@ -863,10 +863,10 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades openssl lsb-release sed jq net-tools htop -y
+    apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades openssl sed jq net-tools htop -y
 
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
-    echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
+    echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(grep "VERSION_CODENAME=" /etc/os-release | cut -d "=" -f 2) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
     apt-get update && apt-get install cloudflare-warp -y
 
     curl -fsSL https://sing-box.app/gpg.key -o /etc/apt/keyrings/sagernet.asc
@@ -913,7 +913,7 @@ setup_ssh() {
         chmod 700 /home/${username}/.ssh
     fi
 
-    if [[ $(lsb_release -cs) =~ "noble" ]]
+    if grep -q "noble" /etc/os-release
     then
         sed -i "s/22/${sshp}/g" /lib/systemd/system/ssh.socket
         systemctl daemon-reload
