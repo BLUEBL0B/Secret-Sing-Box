@@ -73,7 +73,7 @@ enter_language() {
 }
 
 start_message_ru() {
-    echo -e "${textcolor}ВНИМАНИЕ!${clear}"
+    echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Запускайте скрипт на чистой системе"
     echo "Перед запуском скрипта рекомендуется выполнить следующие действия:"
     echo -e "1) Обновить систему командой ${textcolor}apt update && apt full-upgrade -y${clear}"
@@ -87,7 +87,7 @@ start_message_ru() {
 }
 
 start_message_en() {
-    echo -e "${textcolor}ATTENTION!${clear}"
+    echo -e "${red}ATTENTION!${clear}"
     echo "Run the script on a newly installed system"
     echo "Before running the script, it's recommended to do the following:"
     echo -e "1) Update the system (${textcolor}apt update && apt full-upgrade -y${clear})"
@@ -988,6 +988,11 @@ setup_warp() {
     warp-cli mode proxy
     warp-cli proxy port 40000
     warp-cli connect
+    mkdir /etc/systemd/system/warp-svc.service.d
+    echo "[Service]" >> /etc/systemd/system/warp-svc.service.d/override.conf
+    echo "LogLevelMax=3" >> /etc/systemd/system/warp-svc.service.d/override.conf
+    systemctl daemon-reload
+    systemctl restart warp-svc.service
     echo ""
 }
 
@@ -2438,7 +2443,7 @@ add_sbmanager() {
 final_message_ru() {
     echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
     echo ""
-    echo -e "${textcolor}ВНИМАНИЕ!${clear}"
+    echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
     echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
     echo -e "2) Если нет ключей SSH, то сгенерировать их на своём ПК командой ${textcolor}ssh-keygen -t rsa -b 4096${clear}"
@@ -2457,7 +2462,7 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
     else
-        echo -e "${red}Важно:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
+        echo -e "${red}ВАЖНО:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
         echo ""
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
@@ -2467,7 +2472,7 @@ final_message_ru() {
 final_message_en() {
     echo -e "${textcolor}If there are no errors above then the setup is complete${clear}"
     echo ""
-    echo -e "${textcolor}ATTENTION!${clear}"
+    echo -e "${red}ATTENTION!${clear}"
     echo "To increase the security of the server it's recommended to do the following:"
     echo -e "1) Disconnect from the server by pressing ${textcolor}Ctrl + D${clear}"
     echo -e "2) If you don't have SSH keys then generate them on your PC (${textcolor}ssh-keygen -t rsa -b 4096${clear})"
@@ -2486,7 +2491,7 @@ final_message_en() {
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
     else
-        echo -e "${red}Important:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
+        echo -e "${red}IMPORTANT:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
         echo ""
         echo -e "${textcolor}Client config is available here:${clear}"
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
