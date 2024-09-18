@@ -6,10 +6,10 @@ red='\033[1;31m'
 clear='\033[0m'
 
 check_os() {
-    if ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release
+    if ! grep -q "bullseye" /etc/os-release && ! grep -q "bookworm" /etc/os-release && ! grep -q "jammy" /etc/os-release && ! grep -q "noble" /etc/os-release
     then
         echo ""
-        echo -e "${red}Error: only Debian 12 and Ubuntu 22.04/24.04 are supported${clear}"
+        echo -e "${red}Error: only Debian 11/12 and Ubuntu 22.04/24.04 are supported${clear}"
         echo ""
         exit 1
     fi
@@ -865,9 +865,19 @@ install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
     apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades openssl sed jq net-tools htop -y
 
+    if [ ! -d /usr/share/keyrings ]
+    then
+        mkdir /usr/share/keyrings
+    fi
+
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(grep "VERSION_CODENAME=" /etc/os-release | cut -d "=" -f 2) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
     apt-get update && apt-get install cloudflare-warp -y
+
+    if [ ! -d /etc/apt/keyrings ]
+    then
+        mkdir /etc/apt/keyrings
+    fi
 
     curl -fsSL https://sing-box.app/gpg.key -o /etc/apt/keyrings/sagernet.asc
     chmod a+r /etc/apt/keyrings/sagernet.asc
