@@ -951,7 +951,7 @@ setup_ufw() {
     ufw allow 443/tcp
     ufw allow 80/tcp
     # Protection from Reality certificate stealing:
-    ufw insert 1 deny from ${serverip}/22
+    ufw insert 1 deny from ${serverip}/22 &> /dev/null
     echo ""
     yes | ufw enable
     echo ""
@@ -990,7 +990,7 @@ certificates() {
 
     certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 --rsa-key-size 4096 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
-    { crontab -l; echo "0 5 1 */2 * certbot -q renew"; } | crontab -
+    { crontab -l; echo "0 5 1 */2 * certbot -q renew"; } | crontab - &> /dev/null
 
     if [[ "${variant}" == "1" ]]
     then
@@ -998,7 +998,7 @@ certificates() {
         echo ""
         openssl dhparam -out /etc/nginx/dhparam.pem 2048
     else
-        { crontab -l; echo "1 5 1 */2 * cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem"; } | crontab -
+        { crontab -l; echo "1 5 1 */2 * cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem"; } | crontab - &> /dev/null
         echo "renew_hook = sleep 90 && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
         echo ""
         openssl dhparam -out /etc/haproxy/dhparam.pem 2048
