@@ -8,7 +8,7 @@ check_root() {
     if [[ $EUID -ne 0 ]]
     then
         echo ""
-        echo -e "${red}Error: this script should be run as root${clear}"
+        echo -e "${red}Error: this command should be run as root${clear}"
         echo ""
         exit 1
     fi
@@ -28,8 +28,22 @@ templates() {
     fi
 }
 
-get_data() {
+get_ip() {
     serverip=$(curl -s ipinfo.io/ip)
+
+    if [[ ! $serverip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        serverip=$(curl -s 2ip.io)
+    fi
+
+    if [[ ! $serverip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        serverip=$(curl -s ifconfig.me)
+    fi
+}
+
+get_data() {
+    get_ip
 
     if [ -f /etc/haproxy/auth.lua ]
     then

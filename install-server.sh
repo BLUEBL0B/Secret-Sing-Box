@@ -37,6 +37,16 @@ check_sbmanager() {
 
 get_ip() {
     serverip=$(curl -s ipinfo.io/ip)
+
+    if [[ ! $serverip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        serverip=$(curl -s 2ip.io)
+    fi
+
+    if [[ ! $serverip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        serverip=$(curl -s ifconfig.me)
+    fi
 }
 
 banner() {
@@ -842,6 +852,7 @@ enter_data() {
 set_timezone() {
     echo -e "${textcolor_light}Setting up timezone...${clear}"
     timedatectl set-timezone ${timezone}
+    date
     echo ""
 }
 
@@ -939,8 +950,12 @@ setup_ufw() {
     ufw allow ${sshp}/tcp
     ufw allow 443/tcp
     ufw allow 80/tcp
+    # Protection from Reality certificate stealing:
+    ufw insert 1 deny from ${serverip}/22
+    echo ""
     yes | ufw enable
     echo ""
+    ufw status
 }
 
 unattended_upgrades() {
@@ -1049,7 +1064,7 @@ cat > /etc/sing-box/config.json <<EOF
       },
       {
         "tag": "dns-block",
-        "address": "rcode://success"
+        "address": "rcode://refused"
       }
     ],
     "rules": [
@@ -1057,7 +1072,8 @@ cat > /etc/sing-box/config.json <<EOF
         "rule_set": [
           "category-ads-all"
         ],
-        "server": "dns-block"
+        "server": "dns-block",
+        "disable_cache": true
       },
       {
         "outbound": "any",
@@ -1274,7 +1290,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       },
       {
         "tag": "dns-block",
-        "address": "rcode://success"
+        "address": "rcode://refused"
       }
     ],
     "rules": [
@@ -1282,7 +1298,8 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "rule_set": [
           "category-ads-all"
         ],
-        "server": "dns-block"
+        "server": "dns-block",
+        "disable_cache": true
       },
       {
         "domain_suffix": [
@@ -2451,7 +2468,7 @@ add_sbmanager() {
 }
 
 final_message_ru() {
-    echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена${clear}"
+    echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена!${clear}"
     echo ""
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
@@ -2472,15 +2489,15 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
     else
-        echo -e "${red}ВАЖНО:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
-        echo ""
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+        echo ""
+        echo -e "${red}ВАЖНО:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
     fi
 }
 
 final_message_en() {
-    echo -e "${textcolor}If there are no errors above then the setup is complete${clear}"
+    echo -e "${textcolor}If there are no errors above then the setup is complete!${clear}"
     echo ""
     echo -e "${red}ATTENTION!${clear}"
     echo "To increase the security of the server it's recommended to do the following:"
@@ -2501,10 +2518,10 @@ final_message_en() {
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
     else
-        echo -e "${red}IMPORTANT:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
-        echo ""
         echo -e "${textcolor}Client config is available here:${clear}"
         echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+        echo ""
+        echo -e "${red}IMPORTANT:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
     fi
 }
 

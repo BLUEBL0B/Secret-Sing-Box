@@ -16,7 +16,7 @@
       },
       {
         "tag": "dns-block",
-        "address": "rcode://success"
+        "address": "rcode://refused"
       }
     ],
     "rules": [
@@ -24,7 +24,8 @@
         "rule_set": [
           "category-ads-all"
         ],
-        "server": "dns-block"
+        "server": "dns-block",
+        "disable_cache": true
       },
       {
         "domain_suffix": [
