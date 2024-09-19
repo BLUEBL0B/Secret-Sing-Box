@@ -990,7 +990,7 @@ certificates() {
 
     certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 --rsa-key-size 4096 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
-    { crontab -l; echo "0 5 1 */2 * certbot -q renew"; } | crontab - &> /dev/null
+    { crontab -l; echo "0 5 1 */2 * certbot -q renew"; } | crontab -
 
     if [[ "${variant}" == "1" ]]
     then
@@ -998,7 +998,7 @@ certificates() {
         echo ""
         openssl dhparam -out /etc/nginx/dhparam.pem 2048
     else
-        { crontab -l; echo "1 5 1 */2 * cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem"; } | crontab - &> /dev/null
+        { crontab -l; echo "1 5 1 */2 * cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem"; } | crontab -
         echo "renew_hook = sleep 90 && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
         echo ""
         openssl dhparam -out /etc/haproxy/dhparam.pem 2048
