@@ -288,12 +288,7 @@ check_password_en() {
 }
 
 get_test_response() {
-    if [ $(echo -n "${domain}" | grep -Fo '.' | wc -l) -gt 1 ]
-    then
-        testdomain=$(echo "${domain}" | rev | cut -d '.' -f 1-2 | rev)
-    else
-        testdomain=${domain}
-    fi
+    testdomain=$(echo "${domain}" | rev | cut -d '.' -f 1-2 | rev)
 
     if [[ "$cftoken" =~ [A-Z] ]]
     then
