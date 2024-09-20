@@ -300,7 +300,7 @@ check_cf_token_ru() {
     echo "Проверка домена, API токена/ключа и почты..."
     get_test_response
 
-    while [[ -n $(echo $test_response | grep "${domain}") ]] && [[ -n $(echo $test_response | grep '#dns_records:edit') ]] && [[ -n $(echo $test_response | grep '#dns_records:read') ]] && [[ -n $(echo $test_response | grep '#zone:read') ]]
+    while [[ -z $(echo $test_response | grep "${domain}") ]] || [[ -z $(echo $test_response | grep '#dns_records:edit') ]] || [[ -z $(echo $test_response | grep '#dns_records:read') ]] || [[ -z $(echo $test_response | grep '#zone:read') ]]
     do
         domain=""
         email=""
@@ -339,7 +339,7 @@ check_cf_token_en() {
     echo "Checking domain name, API token/key and email..."
     get_test_response
 
-    while [[ -n $(echo $test_response | grep "${domain}") ]] && [[ -n $(echo $test_response | grep '#dns_records:edit') ]] && [[ -n $(echo $test_response | grep '#dns_records:read') ]] && [[ -n $(echo $test_response | grep '#zone:read') ]]
+    while [[ -z $(echo $test_response | grep "${domain}") ]] || [[ -z $(echo $test_response | grep '#dns_records:edit') ]] || [[ -z $(echo $test_response | grep '#dns_records:read') ]] || [[ -z $(echo $test_response | grep '#zone:read') ]]
     do
         domain=""
         email=""
