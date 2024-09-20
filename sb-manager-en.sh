@@ -83,7 +83,7 @@ validate_template() {
 }
 
 validate_local_template() {
-    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template.json ]
+    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template-loc.json ]
     then
         echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
         echo ""

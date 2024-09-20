@@ -83,7 +83,7 @@ validate_template() {
 }
 
 validate_local_template() {
-    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template.json ]
+    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template-loc.json ]
     then
         echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
         echo ""
