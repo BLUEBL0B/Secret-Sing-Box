@@ -73,8 +73,17 @@ get_data() {
     echo ""
 }
 
+validate_template() {
+    if [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template.json ]
+    then
+        echo -e "${red}Ошибка: не удалось загрузить данные с Github${clear}"
+        echo ""
+        exit 1
+    fi
+}
+
 validate_local_template() {
-    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ]
+    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template.json ]
     then
         echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
         echo ""
@@ -82,9 +91,10 @@ validate_local_template() {
         read resettemp
         if [[ "$resettemp" == "reset" ]]
         then
+            echo ""
+            validate_template
             rm /var/www/${subspath}/template-loc.json
             cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-            echo ""
             echo "Шаблон сброшен до исходной версии"
             echo ""
         fi
@@ -438,6 +448,7 @@ sync_with_github() {
     sync_github_message
     exit_sync
     check_users
+    validate_template
     sync_client_configs_github
     main_menu
 }
