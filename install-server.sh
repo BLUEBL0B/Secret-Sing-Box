@@ -288,6 +288,13 @@ check_password_en() {
 }
 
 get_test_response() {
+    if [ $(echo -n "${domain}" | grep -Fo '.' | wc -l) -gt 1 ]
+    then
+        testdomain=$(echo "${domain}" | rev | cut -d '.' -f 1-2 | rev)
+    else
+        testdomain=${domain}
+    fi
+
     if [[ "$cftoken" =~ [A-Z] ]]
     then
         test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${cftoken}" --header "Content-Type: application/json")
@@ -300,7 +307,7 @@ check_cf_token_ru() {
     echo "Проверка домена, API токена/ключа и почты..."
     get_test_response
 
-    while [[ -z $(echo $test_response | grep "${domain}") ]] || [[ -z $(echo $test_response | grep '#dns_records:edit') ]] || [[ -z $(echo $test_response | grep '#dns_records:read') ]] || [[ -z $(echo $test_response | grep '#zone:read') ]]
+    while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
     do
         domain=""
         email=""
@@ -339,7 +346,7 @@ check_cf_token_en() {
     echo "Checking domain name, API token/key and email..."
     get_test_response
 
-    while [[ -z $(echo $test_response | grep "${domain}") ]] || [[ -z $(echo $test_response | grep '#dns_records:edit') ]] || [[ -z $(echo $test_response | grep '#dns_records:read') ]] || [[ -z $(echo $test_response | grep '#zone:read') ]]
+    while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
     do
         domain=""
         email=""
