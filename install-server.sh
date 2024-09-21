@@ -1186,8 +1186,6 @@ cat > /etc/sing-box/config.json <<EOF
           "rutracker.org",
           "habr.com",
           "ntc.party",
-          "meduza.io",
-          "svoboda.org",
           "gemini.google.com",
           "bard.google.com",
           "generativelanguage.googleapis.com",
@@ -2458,15 +2456,28 @@ setup_haproxy() {
 }
 
 add_sbmanager() {
-    touch /usr/local/bin/sbmanager
-    echo '#!/bin/bash' >> /usr/local/bin/sbmanager
     if [[ "${language}" == "1" ]]
     then
-        echo 'bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh)' >> /usr/local/bin/sbmanager
+        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh
     else
-        echo 'bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager-en.sh)' >> /usr/local/bin/sbmanager
+        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager-en.sh
     fi
+
     chmod +x /usr/local/bin/sbmanager
+
+    if [[ "${variant}" != "1" ]]
+    then
+        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
+    else
+        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/Config-Examples-WS/Client-Trojan-WS.json
+    fi
+
+    if [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
+    then
+        cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
+    else
+        cp /var/www/${subspath}/1-me-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
+    fi
 }
 
 final_message_ru() {
