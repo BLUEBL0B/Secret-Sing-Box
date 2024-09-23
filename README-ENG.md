@@ -53,6 +53,16 @@ Then follow the instructions:
 
 Options 4 and 5 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
+To enable AdGuard DNS on the client, use option 5 and specify "tls://94.140.14.14" instead of "tls://1.1.1.1" in the config template. This may reduce performance due to slower domain resolution compared to 1.1.1.1.
+
+### WARP+ keys:
+
+To activate a WARP+ key, enter this command (replace the key with yours):
+
+```
+warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
+```
+
 ### Client setup:
 [Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
 
