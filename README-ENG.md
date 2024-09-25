@@ -1,6 +1,6 @@
-# Sing-Box Reverse Proxy
+# Secret Sing-Box
 
-[**Russian version**](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README.md)
+[**Russian version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README.md)
 
 ### Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
 This script is designed to fully configure a hidden proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. Two setup methods:
@@ -30,7 +30,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside.
 To configure the server, run this command:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/install-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/install-server.sh)
 ```
 
 Then just enter the necessary information:
@@ -64,12 +64,12 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 ```
 
 ### Client setup:
-[Android and iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
+[Android and iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
 
-[Windows 10 and 11](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-en.pdf)
+[Windows 10 and 11](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-en.pdf)
 
-[Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README-ENG.md#client-setup) run the command below.
+[Linux:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md#client-setup) run the command below.
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-pc-linux.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-pc-linux.sh)
 ```
 Then follow the instructions.

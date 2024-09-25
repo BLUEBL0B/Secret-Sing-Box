@@ -1,6 +1,6 @@
-# Sing-Box Reverse Proxy
+# Secret Sing-Box
 
-[**English version**](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/README-ENG.md)
+[**English version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md)
 
 ### Прокси с использованием протоколов Trojan и VLESS и терминированием TLS на NGINX или HAProxy
 Данный скрипт предназначен для полной настройки скрытого прокси-сервера с ядром [Sing-Box](https://sing-box.sagernet.org) и маскировкой при помощи [NGINX](https://nginx.org/ru/) или [HAProxy](https://www.haproxy.org). Два варианта настройки на выбор:
@@ -30,7 +30,7 @@
 Для настройки сервера запустите эту команду:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/install-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/install-server.sh)
 ```
 
 Затем просто введите необходимую информацию:
@@ -64,12 +64,12 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 ```
 
 ### Настройка клиентов:
-[Android и iOS](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf)
+[Android и iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.pdf)
 
-[Windows 10 и 11](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-ru.pdf)
+[Windows 10 и 11](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-ru.pdf)
 
-[Linux:](https://github.com/BLUEBL0B/Sing-Box-NGINX-WS/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2) запустите команду ниже.
+[Linux:](https://github.com/BLUEBL0B/Secret-Sing-Box/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2) запустите команду ниже.
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-pc-linux.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-pc-linux.sh)
 ```
 Далее следуйте инструкциям.

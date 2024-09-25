@@ -52,23 +52,17 @@ get_ip() {
 banner() {
     echo ""
     echo ""
+    echo "╔══╗ ╔═══ ╔══╗ ╦══╗ ╔═══ ══╦══"
+    echo "║    ║    ║    ║  ║ ║      ║  "
+    echo "╚══╗ ╠═══ ║    ╠╦═╝ ╠═══   ║  "
+    echo "   ║ ║    ║    ║╚╗  ║      ║  "
+    echo "╚══╝ ╚═══ ╚══╝ ╩ ╚═ ╚═══   ╩  "
+    echo ""
     echo "╔══╗ ╦ ╦╗  ╦ ╔══╗    ╦══╗ ╔══╗ ═╗  ╔"
     echo "║    ║ ║╚╗ ║ ║       ║  ║ ║  ║  ╚╗╔╝"
     echo "╚══╗ ║ ║ ║ ║ ║ ═╗ ══ ╠══╣ ║  ║  ╔╬╝ "
     echo "   ║ ║ ║ ╚╗║ ║  ║    ║  ║ ║  ║ ╔╝╚╗ "
     echo "╚══╝ ╩ ╩  ╚╩ ╚══╝    ╩══╝ ╚══╝ ╝  ╚═"
-    echo ""
-    echo "╦══╗ ╔══ ╦  ╦ ╔══ ╦══╗ ╔══╗ ╔══"
-    echo "║  ║ ║   ║  ║ ║   ║  ║ ║    ║  "
-    echo "╠╦═╝ ╠══ ║  ║ ╠══ ╠╦═╝ ╚══╗ ╠══"
-    echo "║╚╗  ║   ╚╗╔╝ ║   ║╚╗     ║ ║  "
-    echo "╩ ╚═ ╚══  ╚╝  ╚══ ╩ ╚═ ╚══╝ ╚══"
-    echo ""
-    echo "╦══╗ ╦══╗ ╔══╗ ═╗  ╔ ╦   ╦"
-    echo "║  ║ ║  ║ ║  ║  ╚╗╔╝ ╚╗ ╔╝"
-    echo "╠══╝ ╠╦═╝ ║  ║  ╔╬╝   ╚╦╝ "
-    echo "║    ║╚╗  ║  ║ ╔╝╚╗    ║  "
-    echo "╩    ╩ ╚═ ╚══╝ ╝  ╚═   ╩  "
 }
 
 enter_language() {
@@ -2448,18 +2442,18 @@ setup_haproxy() {
 add_sbmanager() {
     if [[ "${language}" == "1" ]]
     then
-        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager.sh
+        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager.sh
     else
-        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/sb-manager-en.sh
+        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager-en.sh
     fi
 
     chmod +x /usr/local/bin/sbmanager
 
     if [[ "${variant}" != "1" ]]
     then
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
+        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
     else
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Sing-Box-NGINX-WS/master/Config-Examples-WS/Client-Trojan-WS.json
+        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-WS/Client-Trojan-WS.json
     fi
 
     if [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]

@@ -37,7 +37,7 @@ enter_data_ru() {
 	do
 		if [ -f /usr/local/bin/${newcomm} ]
 		then
-			echo -e "${red}Ошибка: эта команда уже существует${clear}"
+			echo -e "${red}Ошибка: эта команда уже существует в /usr/local/bin${clear}"
 			echo ""
 		elif [[ -z $newcomm ]]
 		then
@@ -100,8 +100,8 @@ create_proxy_command_ru() {
 	echo ""
 	echo "Sing-Box запущен"
 	echo "Не закрывайте это окно, пока Sing-Box работает"
-	echo -e "Введите команду \${textcolor}stop\${clear}, чтобы отключиться:"
-	while [[ \$run != "stop" ]]
+	echo -e "Введите \${textcolor}x\${clear}, чтобы отключиться:"
+	while [[ \$run != "x" ]] && [[ \$run != "х" ]]
 	do
 	    read run
 	done
@@ -126,20 +126,20 @@ enter_data_en() {
 		read link
 		echo ""
 	done
-	echo "Enter the new command for this proxy (and write it down):"
+	echo "Enter the new command for this proxy (and remember it):"
 	read newcomm
 	echo ""
 	while [ -f /usr/local/bin/${newcomm} ] || [[ -z $newcomm ]]
 	do
 		if [ -f /usr/local/bin/${newcomm} ]
 		then
-			echo -e "${red}Error: this command already exists${clear}"
+			echo -e "${red}Error: this command already exists in /usr/local/bin${clear}"
 			echo ""
 		elif [[ -z $newcomm ]]
 		then
 			:
 		fi
-		echo "Enter the new command for this proxy (and write it down):"
+		echo "Enter the new command for this proxy (and remember it):"
 		read newcomm
 		echo ""
 	done
@@ -196,8 +196,8 @@ create_proxy_command_en() {
 	echo ""
 	echo "Started Sing-Box"
 	echo "Do not close this window while Sing-Box is running"
-	echo -e "Enter \${textcolor}stop\${clear} command to disconnect:"
-	while [[ \$run != "stop" ]]
+	echo -e "Enter \${textcolor}x\${clear} to disconnect:"
+	while [[ \$run != "x" ]] && [[ \$run != "х" ]]
 	do
 	    read run
 	done
