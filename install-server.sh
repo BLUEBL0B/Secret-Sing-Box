@@ -972,19 +972,19 @@ setup_security() {
 
 certificates() {
     echo -e "${textcolor_light}Requesting a certificate...${clear}"
-    touch cloudflare.credentials
-    chown root:root cloudflare.credentials
-    chmod 600 cloudflare.credentials
+    touch /etc/letsencrypt/cloudflare.credentials
+    chown root:root /etc/letsencrypt/cloudflare.credentials
+    chmod 600 /etc/letsencrypt/cloudflare.credentials
 
     if [[ "$cftoken" =~ [A-Z] ]]
     then
-        echo "dns_cloudflare_api_token = ${cftoken}" >> /root/cloudflare.credentials
+        echo "dns_cloudflare_api_token = ${cftoken}" >> /etc/letsencrypt/cloudflare.credentials
     else
-        echo "dns_cloudflare_email = ${email}" >> /root/cloudflare.credentials
-        echo "dns_cloudflare_api_key = ${cftoken}" >> /root/cloudflare.credentials
+        echo "dns_cloudflare_email = ${email}" >> /etc/letsencrypt/cloudflare.credentials
+        echo "dns_cloudflare_api_key = ${cftoken}" >> /etc/letsencrypt/cloudflare.credentials
     fi
 
-    certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 --rsa-key-size 4096 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+    certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 --rsa-key-size 4096 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
     { crontab -l; echo "0 5 1 */2 * certbot -q renew"; } | crontab -
 
@@ -1296,28 +1296,8 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "disable_cache": true
       },
       {
-        "domain_suffix": [
-          "gemini.google.com",
-          "bard.google.com",
-          "generativelanguage.googleapis.com",
-          "ai.google.dev",
-          "aida.googleapis.com",
-          "aistudio.google.com",
-          "alkalimakersuite-pa.clients6.google.com",
-          "makersuite.google.com",
-          "deepmind.com",
-          "deepmind.google",
-          "generativeai.google",
-          "proactivebackend-pa.googleapis.com",
-          "news.google.com"
-        ],
-        "domain_keyword": [
-          "generativelanguage",
-          "generativeai"
-        ],
         "rule_set": [
           "openai",
-          "youtube",
           "telegram"
         ],
         "server": "dns-remote"
@@ -1363,7 +1343,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "yandex",
           "vk",
           "mailru",
-          "discord",
           "zoom",
           "reddit",
           "twitch",
@@ -1372,7 +1351,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "tiktok",
           "pinterest",
           "deviantart",
-          "google",
           "duckduckgo",
           "yahoo",
           "mozilla",
@@ -1505,28 +1483,8 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "outbound": "block"
       },
       {
-        "domain_suffix": [
-          "gemini.google.com",
-          "bard.google.com",
-          "generativelanguage.googleapis.com",
-          "ai.google.dev",
-          "aida.googleapis.com",
-          "aistudio.google.com",
-          "alkalimakersuite-pa.clients6.google.com",
-          "makersuite.google.com",
-          "deepmind.com",
-          "deepmind.google",
-          "generativeai.google",
-          "proactivebackend-pa.googleapis.com",
-          "news.google.com"
-        ],
-        "domain_keyword": [
-          "generativelanguage",
-          "generativeai"
-        ],
         "rule_set": [
           "openai",
-          "youtube",
           "telegram"
         ],
         "outbound": "proxy"
@@ -1572,7 +1530,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "yandex",
           "vk",
           "mailru",
-          "discord",
           "zoom",
           "reddit",
           "twitch",
@@ -1581,7 +1538,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "tiktok",
           "pinterest",
           "deviantart",
-          "google",
           "duckduckgo",
           "yahoo",
           "mozilla",
@@ -1664,12 +1620,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-mailru.srs"
       },
       {
-        "tag": "discord",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-discord.srs"
-      },
-      {
         "tag": "zoom",
         "type": "remote",
         "format": "binary",
@@ -1716,18 +1666,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-deviantart.srs"
-      },
-      {
-        "tag": "google",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
-      },
-      {
-        "tag": "youtube",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-youtube.srs"
       },
       {
         "tag": "duckduckgo",

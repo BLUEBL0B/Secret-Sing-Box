@@ -28,28 +28,8 @@
         "disable_cache": true
       },
       {
-        "domain_suffix": [
-          "gemini.google.com",
-          "bard.google.com",
-          "generativelanguage.googleapis.com",
-          "ai.google.dev",
-          "aida.googleapis.com",
-          "aistudio.google.com",
-          "alkalimakersuite-pa.clients6.google.com",
-          "makersuite.google.com",
-          "deepmind.com",
-          "deepmind.google",
-          "generativeai.google",
-          "proactivebackend-pa.googleapis.com",
-          "news.google.com"
-        ],
-        "domain_keyword": [
-          "generativelanguage",
-          "generativeai"
-        ],
         "rule_set": [
           "openai",
-          "youtube",
           "telegram"
         ],
         "server": "dns-remote"
@@ -95,7 +75,6 @@
           "yandex",
           "vk",
           "mailru",
-          "discord",
           "zoom",
           "reddit",
           "twitch",
@@ -104,7 +83,6 @@
           "tiktok",
           "pinterest",
           "deviantart",
-          "google",
           "duckduckgo",
           "yahoo",
           "mozilla",
@@ -234,28 +212,8 @@
         "outbound": "block"
       },
       {
-        "domain_suffix": [
-          "gemini.google.com",
-          "bard.google.com",
-          "generativelanguage.googleapis.com",
-          "ai.google.dev",
-          "aida.googleapis.com",
-          "aistudio.google.com",
-          "alkalimakersuite-pa.clients6.google.com",
-          "makersuite.google.com",
-          "deepmind.com",
-          "deepmind.google",
-          "generativeai.google",
-          "proactivebackend-pa.googleapis.com",
-          "news.google.com"
-        ],
-        "domain_keyword": [
-          "generativelanguage",
-          "generativeai"
-        ],
         "rule_set": [
           "openai",
-          "youtube",
           "telegram"
         ],
         "outbound": "proxy"
@@ -301,7 +259,6 @@
           "yandex",
           "vk",
           "mailru",
-          "discord",
           "zoom",
           "reddit",
           "twitch",
@@ -310,7 +267,6 @@
           "tiktok",
           "pinterest",
           "deviantart",
-          "google",
           "duckduckgo",
           "yahoo",
           "mozilla",
@@ -393,12 +349,6 @@
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-mailru.srs"
       },
       {
-        "tag": "discord",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-discord.srs"
-      },
-      {
         "tag": "zoom",
         "type": "remote",
         "format": "binary",
@@ -445,18 +395,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-deviantart.srs"
-      },
-      {
-        "tag": "google",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
-      },
-      {
-        "tag": "youtube",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-youtube.srs"
       },
       {
         "tag": "duckduckgo",
