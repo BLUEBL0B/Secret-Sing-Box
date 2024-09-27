@@ -990,12 +990,11 @@ certificates() {
 
     if [[ "${variant}" == "1" ]]
     then
-        echo "renew_hook = sleep 90 && systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
         echo ""
         openssl dhparam -out /etc/nginx/dhparam.pem 2048
     else
-        { crontab -l; echo "1 5 1 */2 * cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem"; } | crontab -
-        echo "renew_hook = sleep 90 && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
         echo ""
         openssl dhparam -out /etc/haproxy/dhparam.pem 2048
     fi
