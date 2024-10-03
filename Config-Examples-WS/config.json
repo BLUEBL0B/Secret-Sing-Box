@@ -12,7 +12,7 @@
       },
       {
         "tag": "dns-block",
-        "address": "rcode://refused"
+        "address": "rcode://success"
       }
     ],
     "rules": [
@@ -108,6 +108,9 @@
         "rule_set": [
           "category-ads-all"
         ],
+        "outbound": "block"
+      },
+      {
         "protocol": "quic",
         "outbound": "block"
       },
@@ -195,8 +198,7 @@
   },
   "experimental": {
     "cache_file": {
-      "enabled": true,
-      "path": "cache.db"
+      "enabled": true
     }
   }
 }

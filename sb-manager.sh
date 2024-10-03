@@ -541,9 +541,147 @@ delete_warp_domains() {
     done
 }
 
+exit_enter_nextlink() {
+    if [[ $nextlink == "x" ]] || [[ $nextlink == "х" ]]
+    then
+        nextlink=""
+        main_menu
+    fi
+}
+
+check_nextlink() {
+    nextconfig=$(curl -s ${nextlink})
+
+    while [ $(jq -e . >/dev/null 2>&1 <<< "${nextconfig}"; echo $?) -ne 0 ] || [[ $(echo "${nextconfig}" | jq 'any(.outbounds[]; .tag == "proxy")') == "false" ]] || [ -z "${nextconfig}" ]
+    do
+        nextlink=""
+        echo -e "${red}Ошибка: неверная ссылка на конфиг${clear}"
+        echo ""
+        while [[ -z $nextlink ]]
+        do
+            echo -e "Введите ссылку на клиентский конфиг со следующего сервера в цепочке или введите ${textcolor}x${clear}, чтобы выйти:"
+            read nextlink
+            echo ""
+            exit_enter_nextlink
+        done
+        nextconfig=$(curl -s ${nextlink})
+    done
+}
+
+chain_end() {
+    config_temp=$(curl -s https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/config.json)
+    warp_rule=$(echo "${config_temp}" | jq '.route.rules[] | select(.outbound=="warp")')
+    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
+
+    echo "$(jq ".route.rules[${warpnum}] |= . + ${warp_rule} | del(.route.rules[] | select(.outbound==\"proxy\")) | del(.outbounds[] | select(.tag==\"proxy\"))" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "false" ]]
+    then
+        telegram_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="telegram")')
+        echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${telegram_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    fi
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "false" ]]
+    then
+        openai_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="openai")')
+        echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${openai_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    fi
+
+    systemctl reload sing-box.service
+
+    echo "Изменение настроек завершено"
+    echo ""
+
+    main_menu
+}
+
+chain_middle() {
+    while [[ -z $nextlink ]]
+    do
+        echo -e "Введите ссылку на клиентский конфиг со следующего сервера в цепочке или введите ${textcolor}x${clear}, чтобы выйти:"
+        read nextlink
+        echo ""
+    done
+    exit_enter_nextlink
+    check_nextlink
+
+    nextoutbound=$(echo "${nextconfig}" | jq '.outbounds[] | select(.tag=="proxy")')
+    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
+
+    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
+    then
+        proxy_num=$(jq '.outbounds | length' /etc/sing-box/config.json)
+        proxy_rule_num=$(jq '.route.rules | length' /etc/sing-box/config.json)
+    else
+        proxy_num=$(jq '[.outbounds[].tag] | index("proxy")' /etc/sing-box/config.json)
+        proxy_rule_num=$(jq '[.route.rules[].outbound] | index("proxy")' /etc/sing-box/config.json)
+    fi
+
+    echo "$(jq ".route.rules[${proxy_rule_num}] |= . + {\"inbound\":\"trojan-in\",\"outbound\":\"proxy\"} | .outbounds[${proxy_num}] |= . + ${nextoutbound}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    echo "$(jq ".route.rules[${warpnum}] |= . + {\"rule_set\":[\"geoip-ru\",\"gov-ru\"],\"domain_suffix\":[\".ru\",\".su\",\".ru.com\",\".ru.net\"],\"domain_keyword\":[\"xn--\"],\"outbound\":\"warp\"}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "true" ]]
+    then
+        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="telegram"))')" > /etc/sing-box/config.json
+    fi
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "true" ]]
+    then
+        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="openai"))')" > /etc/sing-box/config.json
+    fi
+
+    systemctl reload sing-box.service
+
+    nextlink=""
+    echo "Изменение настроек завершено"
+    echo ""
+
+    main_menu
+}
+
+chain_setup() {
+    echo -e "${textcolor}Выберите положение сервера цепочке:${clear}"
+    echo "0 - Выйти"
+    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
+    then
+        echo "1 - Настроить этот сервер как конечный в цепочке или единственный                     [Выбрано]"
+        echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер"
+    else
+        echo "1 - Настроить этот сервер как конечный в цепочке или единственный"
+        echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер   [Выбрано]"
+    fi
+    read chain_option
+    echo ""
+
+    while [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]] && [[ $chain_option == "1" ]]
+    do
+        echo -e "${red}Ошибка: этот сервер уже настроен как конечный в цепочке или единственный${clear}"
+        echo ""
+        echo -e "${textcolor}Выберите положение сервера цепочке:${clear}"
+        echo "0 - Выйти"
+        echo "1 - Настроить этот сервер как конечный в цепочке или единственный                     [Выбрано]"
+        echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер"
+        read chain_option
+        echo ""
+    done
+
+    case $chain_option in
+        1)
+        chain_end
+        ;;
+        2)
+        chain_middle
+        ;;
+        *)
+        main_menu
+    esac
+}
+
 main_menu() {
     echo ""
     echo -e "${textcolor}Выберите действие:${clear}"
+    echo "0 - Выйти"
+    echo "------------------------"
     echo "1 - Вывести список пользователей"
     echo "2 - Добавить нового пользователя"
     echo "3 - Удалить пользователя"
@@ -555,7 +693,7 @@ main_menu() {
     echo "7 - Добавить домен/суффикс в WARP"
     echo "8 - Удалить домен/суффикс из WARP"
     echo "------------------------"
-    echo "9 - Выйти"
+    echo "9 - Настроить цепочку из двух и более серверов"
     read option
     echo ""
 
@@ -583,6 +721,9 @@ main_menu() {
         ;;
         8)
         delete_warp_domains
+        ;;
+        9)
+        chain_setup
         ;;
         *)
         exit 0

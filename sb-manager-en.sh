@@ -541,9 +541,147 @@ delete_warp_domains() {
     done
 }
 
+exit_enter_nextlink() {
+    if [[ $nextlink == "x" ]] || [[ $nextlink == "х" ]]
+    then
+        nextlink=""
+        main_menu
+    fi
+}
+
+check_nextlink() {
+    nextconfig=$(curl -s ${nextlink})
+
+    while [ $(jq -e . >/dev/null 2>&1 <<< "${nextconfig}"; echo $?) -ne 0 ] || [[ $(echo "${nextconfig}" | jq 'any(.outbounds[]; .tag == "proxy")') == "false" ]] || [ -z "${nextconfig}" ]
+    do
+        nextlink=""
+        echo -e "${red}Error: invalid link to client config${clear}"
+        echo ""
+        while [[ -z $nextlink ]]
+        do
+            echo -e "Enter the link to client config from the next server in the chain or enter ${textcolor}x${clear} to exit:"
+            read nextlink
+            echo ""
+            exit_enter_nextlink
+        done
+        nextconfig=$(curl -s ${nextlink})
+    done
+}
+
+chain_end() {
+    config_temp=$(curl -s https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/config.json)
+    warp_rule=$(echo "${config_temp}" | jq '.route.rules[] | select(.outbound=="warp")')
+    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
+
+    echo "$(jq ".route.rules[${warpnum}] |= . + ${warp_rule} | del(.route.rules[] | select(.outbound==\"proxy\")) | del(.outbounds[] | select(.tag==\"proxy\"))" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "false" ]]
+    then
+        telegram_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="telegram")')
+        echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${telegram_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    fi
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "false" ]]
+    then
+        openai_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="openai")')
+        echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${openai_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    fi
+
+    systemctl reload sing-box.service
+
+    echo "Settings changed"
+    echo ""
+
+    main_menu
+}
+
+chain_middle() {
+    while [[ -z $nextlink ]]
+    do
+        echo -e "Enter the link to client config from the next server in the chain or enter ${textcolor}x${clear} to exit:"
+        read nextlink
+        echo ""
+    done
+    exit_enter_nextlink
+    check_nextlink
+
+    nextoutbound=$(echo "${nextconfig}" | jq '.outbounds[] | select(.tag=="proxy")')
+    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
+
+    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
+    then
+        proxy_num=$(jq '.outbounds | length' /etc/sing-box/config.json)
+        proxy_rule_num=$(jq '.route.rules | length' /etc/sing-box/config.json)
+    else
+        proxy_num=$(jq '[.outbounds[].tag] | index("proxy")' /etc/sing-box/config.json)
+        proxy_rule_num=$(jq '[.route.rules[].outbound] | index("proxy")' /etc/sing-box/config.json)
+    fi
+
+    echo "$(jq ".route.rules[${proxy_rule_num}] |= . + {\"inbound\":\"trojan-in\",\"outbound\":\"proxy\"} | .outbounds[${proxy_num}] |= . + ${nextoutbound}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    echo "$(jq ".route.rules[${warpnum}] |= . + {\"rule_set\":[\"geoip-ru\",\"gov-ru\"],\"domain_suffix\":[\".ru\",\".su\",\".ru.com\",\".ru.net\"],\"domain_keyword\":[\"xn--\"],\"outbound\":\"warp\"}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "true" ]]
+    then
+        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="telegram"))')" > /etc/sing-box/config.json
+    fi
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "true" ]]
+    then
+        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="openai"))')" > /etc/sing-box/config.json
+    fi
+
+    systemctl reload sing-box.service
+
+    nextlink=""
+    echo "Settings changed"
+    echo ""
+
+    main_menu
+}
+
+chain_setup() {
+    echo -e "${textcolor}Select the position of the server in the chain:${clear}"
+    echo "0 - Exit"
+    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
+    then
+        echo "1 - Configure this server as the end of the chain or the only one                  [Selected]"
+        echo "2 - Configure this server as intermediate in the chain or change the next server"
+    else
+        echo "1 - Configure this server as the end of the chain or the only one"
+        echo "2 - Configure this server as intermediate in the chain or change the next server   [Selected]"
+    fi
+    read chain_option
+    echo ""
+
+    while [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]] && [[ $chain_option == "1" ]]
+    do
+        echo -e "${red}Error: this server is already configured as the end of the chain or the only one${clear}"
+        echo ""
+        echo -e "${textcolor}Select the position of the server in the chain:${clear}"
+        echo "0 - Exit"
+        echo "1 - Configure this server as the end of the chain or the only one                  [Selected]"
+        echo "2 - Configure this server as intermediate in the chain or change the next server"
+        read chain_option
+        echo ""
+    done
+
+    case $chain_option in
+        1)
+        chain_end
+        ;;
+        2)
+        chain_middle
+        ;;
+        *)
+        main_menu
+    esac
+}
+
 main_menu() {
     echo ""
     echo -e "${textcolor}Select an option:${clear}"
+    echo "0 - Exit"
+    echo "------------------------"
     echo "1 - Show the list of users"
     echo "2 - Add a new user"
     echo "3 - Delete a user"
@@ -555,7 +693,7 @@ main_menu() {
     echo "7 - Add a new domain/suffix to WARP routing"
     echo "8 - Delete a domain/suffix from WARP routing"
     echo "------------------------"
-    echo "9 - Exit"
+    echo "9 - Setup a chain of two or more servers"
     read option
     echo ""
 
@@ -583,6 +721,9 @@ main_menu() {
         ;;
         8)
         delete_warp_domains
+        ;;
+        9)
+        chain_setup
         ;;
         *)
         exit 0

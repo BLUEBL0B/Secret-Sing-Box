@@ -1059,7 +1059,7 @@ cat > /etc/sing-box/config.json <<EOF
       },
       {
         "tag": "dns-block",
-        "address": "rcode://refused"
+        "address": "rcode://success"
       }
     ],
     "rules": [
@@ -1155,6 +1155,9 @@ cat > /etc/sing-box/config.json <<EOF
         "rule_set": [
           "category-ads-all"
         ],
+        "outbound": "block"
+      },
+      {
         "protocol": "quic",
         "outbound": "block"
       },
@@ -1242,8 +1245,7 @@ cat > /etc/sing-box/config.json <<EOF
   },
   "experimental": {
     "cache_file": {
-      "enabled": true,
-      "path": "cache.db"
+      "enabled": true
     }
   }
 }
@@ -1283,7 +1285,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       },
       {
         "tag": "dns-block",
-        "address": "rcode://refused"
+        "address": "rcode://success"
       }
     ],
     "rules": [
@@ -1888,8 +1890,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
   },
   "experimental": {
     "cache_file": {
-      "enabled": true,
-      "path": "cache.db"
+      "enabled": true
     }
   }
 }
