@@ -1299,8 +1299,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       {
         "rule_set": [
           "openai",
-          "telegram",
-          "google"
+          "telegram"
         ],
         "server": "dns-remote"
       },
@@ -1486,8 +1485,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       {
         "rule_set": [
           "openai",
-          "telegram",
-          "google"
+          "telegram"
         ],
         "outbound": "proxy"
       },
@@ -1649,12 +1647,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-4chan.srs"
-      },
-      {
-        "tag": "google",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
       },
       {
         "tag": "pinterest",

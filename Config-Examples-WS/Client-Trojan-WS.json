@@ -30,8 +30,7 @@
       {
         "rule_set": [
           "openai",
-          "telegram",
-          "google"
+          "telegram"
         ],
         "server": "dns-remote"
       },
@@ -217,8 +216,7 @@
       {
         "rule_set": [
           "openai",
-          "telegram",
-          "google"
+          "telegram"
         ],
         "outbound": "proxy"
       },
@@ -380,12 +378,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-4chan.srs"
-      },
-      {
-        "tag": "google",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
       },
       {
         "tag": "pinterest",
