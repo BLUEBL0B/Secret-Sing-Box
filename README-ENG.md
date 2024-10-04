@@ -24,6 +24,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside.
 6) Enable BBR
 7) Client Sing-Box configs with routing rules for Russia
 8) Automated management of user config files
+9) Optional setup of proxy chains of two or more servers
  
 ### Usage:
 
@@ -49,7 +50,7 @@ sbmanager
 
 Then follow the instructions:
 
-![pic-2-en](https://github.com/user-attachments/assets/d82312eb-96c1-4020-be4e-fa3afa9d27a9)
+![pic-2-en](https://github.com/user-attachments/assets/392f7d53-e375-4a83-b176-a8bfce3e617c)
 
 Options 4 and 5 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
