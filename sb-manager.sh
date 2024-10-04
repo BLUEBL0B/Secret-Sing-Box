@@ -555,7 +555,7 @@ check_nextlink() {
     while [ $(jq -e . >/dev/null 2>&1 <<< "${nextconfig}"; echo $?) -ne 0 ] || [[ $(echo "${nextconfig}" | jq 'any(.outbounds[]; .tag == "proxy")') == "false" ]] || [ -z "${nextconfig}" ]
     do
         nextlink=""
-        echo -e "${red}Ошибка: неверная ссылка на конфиг${clear}"
+        echo -e "${red}Ошибка: неверная ссылка на конфиг или следующий сервер не отвечает${clear}"
         echo ""
         while [[ -z $nextlink ]]
         do
@@ -570,18 +570,23 @@ check_nextlink() {
 
 chain_end() {
     config_temp=$(curl -s https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/config.json)
-    warp_rule=$(echo "${config_temp}" | jq '.route.rules[] | select(.outbound=="warp")')
-    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
 
-    echo "$(jq ".route.rules[${warpnum}] |= . + ${warp_rule} | del(.route.rules[] | select(.outbound==\"proxy\")) | del(.outbounds[] | select(.tag==\"proxy\"))" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    if [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
+    then
+        warp_rule=$(echo "${config_temp}" | jq '.route.rules[] | select(.outbound=="warp")')
+        warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
+        echo "$(jq ".route.rules[${warpnum}] |= . + ${warp_rule}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    fi
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "false" ]]
+    echo "$(jq 'del(.route.rules[] | select(.outbound=="proxy")) | del(.outbounds[] | select(.tag=="proxy"))' /etc/sing-box/config.json)" > /etc/sing-box/config.json
+
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "false" ]] && [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
     then
         telegram_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="telegram")')
         echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${telegram_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
     fi
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "false" ]]
+    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "false" ]] && [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
     then
         openai_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="openai")')
         echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${openai_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
@@ -693,7 +698,7 @@ main_menu() {
     echo "7 - Добавить домен/суффикс в WARP"
     echo "8 - Удалить домен/суффикс из WARP"
     echo "------------------------"
-    echo "9 - Настроить цепочку из двух и более серверов"
+    echo "9 - Настроить/убрать цепочку из двух и более серверов"
     read option
     echo ""
 
