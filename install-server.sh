@@ -1163,12 +1163,6 @@ cat > /etc/sing-box/config.json <<EOF
       },
       {
         "rule_set": [
-          "google"
-        ],
-        "outbound": "IPv4"
-      },
-      {
-        "rule_set": [
           "geoip-ru",
           "gov-ru",
           "openai",
@@ -1202,6 +1196,12 @@ cat > /etc/sing-box/config.json <<EOF
           "generativeai"
         ],
         "outbound": "warp"
+      },
+      {
+        "rule_set": [
+          "google"
+        ],
+        "outbound": "IPv4"
       }
     ],
     "rule_set": [
@@ -1299,7 +1299,8 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       {
         "rule_set": [
           "openai",
-          "telegram"
+          "telegram",
+          "google"
         ],
         "server": "dns-remote"
       },
@@ -1349,7 +1350,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "twitch",
           "tumblr",
           "4chan",
-          "tiktok",
           "pinterest",
           "deviantart",
           "duckduckgo",
@@ -1486,7 +1486,8 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       {
         "rule_set": [
           "openai",
-          "telegram"
+          "telegram",
+          "google"
         ],
         "outbound": "proxy"
       },
@@ -1536,7 +1537,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "twitch",
           "tumblr",
           "4chan",
-          "tiktok",
           "pinterest",
           "deviantart",
           "duckduckgo",
@@ -1651,10 +1651,10 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-4chan.srs"
       },
       {
-        "tag": "tiktok",
+        "tag": "google",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-tiktok.srs"
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
       },
       {
         "tag": "pinterest",

@@ -116,12 +116,6 @@
       },
       {
         "rule_set": [
-          "google"
-        ],
-        "outbound": "IPv4"
-      },
-      {
-        "rule_set": [
           "geoip-ru",
           "gov-ru",
           "openai",
@@ -155,6 +149,12 @@
           "generativeai"
         ],
         "outbound": "warp"
+      },
+      {
+        "rule_set": [
+          "google"
+        ],
+        "outbound": "IPv4"
       }
     ],
     "rule_set": [

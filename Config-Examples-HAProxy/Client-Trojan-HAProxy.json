@@ -30,7 +30,8 @@
       {
         "rule_set": [
           "openai",
-          "telegram"
+          "telegram",
+          "google"
         ],
         "server": "dns-remote"
       },
@@ -80,7 +81,6 @@
           "twitch",
           "tumblr",
           "4chan",
-          "tiktok",
           "pinterest",
           "deviantart",
           "duckduckgo",
@@ -214,7 +214,8 @@
       {
         "rule_set": [
           "openai",
-          "telegram"
+          "telegram",
+          "google"
         ],
         "outbound": "proxy"
       },
@@ -264,7 +265,6 @@
           "twitch",
           "tumblr",
           "4chan",
-          "tiktok",
           "pinterest",
           "deviantart",
           "duckduckgo",
@@ -379,10 +379,10 @@
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-4chan.srs"
       },
       {
-        "tag": "tiktok",
+        "tag": "google",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-tiktok.srs"
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
       },
       {
         "tag": "pinterest",
