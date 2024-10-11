@@ -39,7 +39,7 @@
       "users": [
         {
           "name": "1-me",
-          "password": "YOUR-TROJAN-PASSWORD"
+          "password": "TROJAN-PASSWORD"
         }
       ],
       "transport": {},
@@ -107,16 +107,18 @@
           "ntc.party",
           "gemini.google.com",
           "bard.google.com",
-          "generativelanguage.googleapis.com",
-          "ai.google.dev",
-          "aida.googleapis.com",
           "aistudio.google.com",
-          "alkalimakersuite-pa.clients6.google.com",
           "makersuite.google.com",
+          "alkalimakersuite-pa.clients6.google.com",
+          "alkalicore-pa.clients6.google.com",
+          "aida.googleapis.com",
+          "generativelanguage.googleapis.com",
+          "proactivebackend-pa.googleapis.com",
+          "geller-pa.googleapis.com",
           "deepmind.com",
           "deepmind.google",
           "generativeai.google",
-          "proactivebackend-pa.googleapis.com",
+          "ai.google.dev",
           "canva.com"
         ],
         "domain_keyword": [

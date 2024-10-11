@@ -1,7 +1,7 @@
 local passwords = {
-    ["YOUR-TROJAN-PASSWORD-HASH-1"] = true,			-- Run this command to hash your password: echo -n "YOUR-TROJAN-PASSWORD" | openssl dgst -sha224 | sed 's/.* //'
-    ["YOUR-TROJAN-PASSWORD-HASH-2"] = true,
-    ["YOUR-TROJAN-PASSWORD-HASH-3"] = true
+    ["TROJAN-PASSWORD-HASH-1"] = true,			-- Run this command to hash your password: echo -n "TROJAN-PASSWORD" | openssl dgst -sha224 | sed 's/.* //'
+    ["TROJAN-PASSWORD-HASH-2"] = true,
+    ["TROJAN-PASSWORD-HASH-3"] = true
 }
 
 function trojan_auth(txn)

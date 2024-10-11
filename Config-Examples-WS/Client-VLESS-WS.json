@@ -8,7 +8,7 @@
       {
         "tag": "dns-remote",
         "address": "tls://1.1.1.1",
-        "client_subnet": "YOUR-SERVER-IP"
+        "client_subnet": "SERVER-IP"
       },
       {
         "tag": "dns-local",
@@ -29,7 +29,6 @@
       },
       {
         "rule_set": [
-          "openai",
           "telegram"
         ],
         "server": "dns-remote"
@@ -40,9 +39,8 @@
           ".su",
           ".ru.com",
           ".ru.net",
-          "YOUR-DOMAIN",
-          "wikipedia.org",
-          "independent.co.uk"
+          "DOMAIN",
+          "wikipedia.org"
         ],
         "domain_keyword": [
           "xn--",
@@ -64,10 +62,7 @@
           "roblox",
           "ozon",
           "wildberries",
-          "aliexpress",
-          "theguardian",
-          "politico",
-          "washingtonpost"
+          "aliexpress"
         ],
         "rule_set": [
           "geoip-ru",
@@ -112,10 +107,7 @@
           "sci-hub",
           "duolingo",
           "aljazeera",
-          "cnn",
-          "reuters",
-          "bloomberg",
-          "nytimes"
+          "torrent-clients"
         ],
         "server": "dns-local"
       },
@@ -172,12 +164,12 @@
     {
       "type": "vless",
       "tag": "proxy",
-      "server": "YOUR-DOMAIN",
+      "server": "DOMAIN",
       "server_port": 443,
-      "uuid": "YOUR-VLESS-UUID",
+      "uuid": "VLESS-UUID",
       "tls": {
         "enabled": true,
-        "server_name": "YOUR-DOMAIN",
+        "server_name": "DOMAIN",
         "utls": {
           "enabled": true,
           "fingerprint": "randomized"
@@ -189,7 +181,7 @@
       },
       "transport": {
         "type": "ws",
-        "path": "/YOUR-VLESS-PATH"
+        "path": "/VLESS-PATH"
       }
     }
   ],
@@ -215,7 +207,6 @@
       },
       {
         "rule_set": [
-          "openai",
           "telegram"
         ],
         "outbound": "proxy"
@@ -226,9 +217,8 @@
           ".su",
           ".ru.com",
           ".ru.net",
-          "YOUR-DOMAIN",
-          "wikipedia.org",
-          "independent.co.uk"
+          "DOMAIN",
+          "wikipedia.org"
         ],
         "domain_keyword": [
           "xn--",
@@ -250,10 +240,7 @@
           "roblox",
           "ozon",
           "wildberries",
-          "aliexpress",
-          "theguardian",
-          "politico",
-          "washingtonpost"
+          "aliexpress"
         ],
         "rule_set": [
           "geoip-ru",
@@ -298,10 +285,7 @@
           "sci-hub",
           "duolingo",
           "aljazeera",
-          "cnn",
-          "reuters",
-          "bloomberg",
-          "nytimes"
+          "torrent-clients"
         ],
         "outbound": "direct"
       },
@@ -572,40 +556,16 @@
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-aljazeera.srs"
       },
       {
-        "tag": "cnn",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-cnn.srs"
-      },
-      {
-        "tag": "reuters",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-reuters.srs"
-      },
-      {
-        "tag": "bloomberg",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-bloomberg.srs"
-      },
-      {
-        "tag": "nytimes",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-nytimes.srs"
-      },
-      {
-        "tag": "openai",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
-      },
-      {
         "tag": "category-ads-all",
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-ads-all.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "torrent-clients",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json"
       }
     ],
     "auto_detect_interface": true,

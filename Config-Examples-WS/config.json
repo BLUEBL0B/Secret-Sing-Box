@@ -39,12 +39,12 @@
       "users": [
         {
           "name": "1-me",
-          "password": "YOUR-TROJAN-PASSWORD"
+          "password": "TROJAN-PASSWORD"
         }
       ],
       "transport": {
         "type": "ws",
-        "path": "/YOUR-TROJAN-PATH"
+        "path": "/TROJAN-PATH"
       },
       "multiplex": {
         "enabled": true,
@@ -60,12 +60,12 @@
       "users": [
         {
           "name": "1-me",
-          "uuid": "YOUR-VLESS-UUID"
+          "uuid": "VLESS-UUID"
         }
       ],
       "transport": {
         "type": "ws",
-        "path": "/YOUR-VLESS-PATH"
+        "path": "/VLESS-PATH"
       },
       "multiplex": {
         "enabled": true,
@@ -131,16 +131,18 @@
           "ntc.party",
           "gemini.google.com",
           "bard.google.com",
-          "generativelanguage.googleapis.com",
-          "ai.google.dev",
-          "aida.googleapis.com",
           "aistudio.google.com",
-          "alkalimakersuite-pa.clients6.google.com",
           "makersuite.google.com",
+          "alkalimakersuite-pa.clients6.google.com",
+          "alkalicore-pa.clients6.google.com",
+          "aida.googleapis.com",
+          "generativelanguage.googleapis.com",
+          "proactivebackend-pa.googleapis.com",
+          "geller-pa.googleapis.com",
           "deepmind.com",
           "deepmind.google",
           "generativeai.google",
-          "proactivebackend-pa.googleapis.com",
+          "ai.google.dev",
           "canva.com"
         ],
         "domain_keyword": [

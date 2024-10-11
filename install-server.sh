@@ -139,16 +139,46 @@ select_variant() {
 }
 
 crop_domain() {
+    if [[ "$domain" == "https://"* ]]
+    then
+        domain=${domain#"https://"}
+    fi
+
+    if [[ "$domain" == "http://"* ]]
+    then
+        domain=${domain#"http://"}
+    fi
+
     if [[ "$domain" == "www."* ]]
     then
         domain=${domain#"www."}
     fi
+
+    if [[ "$domain" =~ "/" ]]
+    then
+        domain=$(echo "${domain}" | cut -d "/" -f 1)
+    fi
 }
 
 crop_redirect_domain() {
+    if [[ "$redirect" == "https://"* ]]
+    then
+        redirect=${redirect#"https://"}
+    fi
+
+    if [[ "$redirect" == "http://"* ]]
+    then
+        redirect=${redirect#"http://"}
+    fi
+
     if [[ "$redirect" == "www."* ]]
     then
         redirect=${redirect#"www."}
+    fi
+
+    if [[ "$redirect" =~ "/" ]]
+    then
+        redirect=$(echo "${redirect}" | cut -d "/" -f 1)
     fi
 }
 
@@ -440,6 +470,40 @@ check_subscription_path_en() {
     done
 }
 
+check_redirect_domain_ru() {
+    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${redirect}/)" == "000" ]] || [[ -z $redirect ]]
+    do
+        if [[ -z $redirect ]]
+        then
+            :
+        else
+            echo -e "${red}Ошибка: домен введён неправильно или не имеет HTTPS${clear}"
+            echo ""
+        fi
+        echo "Введите домен, на который будет идти перенаправление:"
+        read redirect
+        echo ""
+        crop_redirect_domain
+    done
+}
+
+check_redirect_domain_en() {
+    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${redirect}/)" == "000" ]] || [[ -z $redirect ]]
+    do
+        if [[ -z $redirect ]]
+        then
+            :
+        else
+            echo -e "${red}Error: this domain is invalid or does not have HTTPS${clear}"
+            echo ""
+        fi
+        echo "Enter the domain to which requests will be redirected:"
+        read redirect
+        echo ""
+        crop_redirect_domain
+    done
+}
+
 check_sitedir_ru() {
     while [ ! -d /root/${sitedir} ] || [ -z "$sitedir" ]
     do
@@ -508,19 +572,20 @@ check_timezone_en() {
 
 nginx_login() {
     comment1="#"
-    comment2=" "
-    comment3=" "
+    comment2=""
+    comment3=""
     redirect="${domain}"
     sitedir="html"
     index="index.html index.htm"
 }
 
 nginx_redirect() {
-    comment1=" "
+    comment1=""
     comment2="#"
-    comment3=" "
+    comment3=""
     sitedir="html"
     index="index.html index.htm"
+
     while [[ -z $redirect ]]
     do
         if [[ "${language}" == "1" ]]
@@ -533,11 +598,18 @@ nginx_redirect() {
         echo ""
     done
     crop_redirect_domain
+
+    if [[ "${language}" == "1" ]]
+    then
+        check_redirect_domain_ru
+    else
+        check_redirect_domain_en
+    fi
 }
 
 nginx_site_ru() {
-    comment1=" "
-    comment2=" "
+    comment1=""
+    comment2=""
     comment3="#"
     redirect="${domain}"
     echo "Введите название папки с файлами вашего сайта, загруженной в /root:"
@@ -551,8 +623,8 @@ nginx_site_ru() {
 }
 
 nginx_site_en() {
-    comment1=" "
-    comment2=" "
+    comment1=""
+    comment2=""
     comment3="#"
     redirect="${domain}"
     echo "Enter the name of the folder with your website contents uploaded to /root:"
@@ -641,7 +713,7 @@ enter_data_ru_ws() {
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
     check_subscription_path_ru
-    echo "Выберите вариант настройки NGINX (1 по умолчанию):"
+    echo "Выберите вариант настройки NGINX/HAProxy (1 по умолчанию):"
     echo "1 - Будет спрашивать логин и пароль вместо сайта"
     echo "2 - Будет перенаправлять на другой домен"
     echo "3 - Свой сайт (при наличии)"
@@ -708,7 +780,7 @@ enter_data_en_ws() {
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
     check_subscription_path_en
-    echo "Select NGINX setup option (1 by default):"
+    echo "Select NGINX/HAProxy setup option (1 by default):"
     echo "1 - Will show a login popup asking for username and password"
     echo "2 - Will redirect to another domain"
     echo "3 - Your own website (if you have one)"
@@ -761,7 +833,7 @@ enter_data_ru_haproxy() {
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
-    echo "Выберите вариант настройки NGINX (1 по умолчанию):"
+    echo "Выберите вариант настройки NGINX/HAProxy (1 по умолчанию):"
     echo "1 - Будет спрашивать логин и пароль вместо сайта"
     echo "2 - Будет перенаправлять на другой домен"
     echo "3 - Свой сайт (при наличии)"
@@ -814,7 +886,7 @@ enter_data_en_haproxy() {
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
-    echo "Select NGINX setup option (1 by default):"
+    echo "Select NGINX/HAProxy setup option (1 by default):"
     echo "1 - Will show a login popup asking for username and password"
     echo "2 - Will redirect to another domain"
     echo "3 - Your own website (if you have one)"
@@ -1180,16 +1252,18 @@ cat > /etc/sing-box/config.json <<EOF
           "ntc.party",
           "gemini.google.com",
           "bard.google.com",
-          "generativelanguage.googleapis.com",
-          "ai.google.dev",
-          "aida.googleapis.com",
           "aistudio.google.com",
-          "alkalimakersuite-pa.clients6.google.com",
           "makersuite.google.com",
+          "alkalimakersuite-pa.clients6.google.com",
+          "alkalicore-pa.clients6.google.com",
+          "aida.googleapis.com",
+          "generativelanguage.googleapis.com",
+          "proactivebackend-pa.googleapis.com",
+          "geller-pa.googleapis.com",
           "deepmind.com",
           "deepmind.google",
           "generativeai.google",
-          "proactivebackend-pa.googleapis.com",
+          "ai.google.dev",
           "canva.com"
         ],
         "domain_keyword": [
@@ -1300,7 +1374,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       },
       {
         "rule_set": [
-          "openai",
           "telegram"
         ],
         "server": "dns-remote"
@@ -1312,8 +1385,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           ".ru.com",
           ".ru.net",
           "${domain}",
-          "wikipedia.org",
-          "independent.co.uk"
+          "wikipedia.org"
         ],
         "domain_keyword": [
           "xn--",
@@ -1335,10 +1407,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "roblox",
           "ozon",
           "wildberries",
-          "aliexpress",
-          "theguardian",
-          "politico",
-          "washingtonpost"
+          "aliexpress"
         ],
         "rule_set": [
           "geoip-ru",
@@ -1383,10 +1452,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "sci-hub",
           "duolingo",
           "aljazeera",
-          "cnn",
-          "reuters",
-          "bloomberg",
-          "nytimes"
+          "torrent-clients"
         ],
         "server": "dns-local"
       },
@@ -1486,7 +1552,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       },
       {
         "rule_set": [
-          "openai",
           "telegram"
         ],
         "outbound": "proxy"
@@ -1498,8 +1563,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           ".ru.com",
           ".ru.net",
           "${domain}",
-          "wikipedia.org",
-          "independent.co.uk"
+          "wikipedia.org"
         ],
         "domain_keyword": [
           "xn--",
@@ -1521,10 +1585,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "roblox",
           "ozon",
           "wildberries",
-          "aliexpress",
-          "theguardian",
-          "politico",
-          "washingtonpost"
+          "aliexpress"
         ],
         "rule_set": [
           "geoip-ru",
@@ -1569,10 +1630,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "sci-hub",
           "duolingo",
           "aljazeera",
-          "cnn",
-          "reuters",
-          "bloomberg",
-          "nytimes"
+          "torrent-clients"
         ],
         "outbound": "direct"
       },
@@ -1843,40 +1901,16 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-aljazeera.srs"
       },
       {
-        "tag": "cnn",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-cnn.srs"
-      },
-      {
-        "tag": "reuters",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-reuters.srs"
-      },
-      {
-        "tag": "bloomberg",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-bloomberg.srs"
-      },
-      {
-        "tag": "nytimes",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-nytimes.srs"
-      },
-      {
-        "tag": "openai",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
-      },
-      {
         "tag": "category-ads-all",
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-ads-all.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "torrent-clients",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json"
       }
     ],
     "auto_detect_interface": true,
@@ -2008,9 +2042,9 @@ http {
     server {
         listen                               443 ssl http2 default_server;
         listen                               [::]:443 ssl http2 default_server;
-        server_name                          ${domain} www.${domain};
-      ${comment1}${comment2}root                                 /var/www/${sitedir};
-      ${comment1}${comment2}index                                ${index};
+        server_name                          ${domain} *.${domain};
+        ${comment1}${comment2}root                                 /var/www/${sitedir};
+        ${comment1}${comment2}index                                ${index};
 
         # SSL
         ssl_certificate                      /etc/letsencrypt/live/${domain}/fullchain.pem;
@@ -2041,13 +2075,13 @@ http {
         }
 
         # Main location
-       ${comment3}location / {
-          ${comment2}${comment3}root /var/www/html;
-          ${comment2}${comment3}index index.html index.htm;
-          ${comment2}${comment3}auth_basic "Login Required";
-          ${comment2}${comment3}auth_basic_user_file /etc/nginx/.htpasswd;
-          ${comment1}${comment3}return 301 https://${redirect}\$request_uri;
-       ${comment3}}
+        ${comment3}location / {
+            ${comment2}${comment3}root /var/www/html;
+            ${comment2}${comment3}index index.html index.htm;
+            ${comment2}${comment3}auth_basic "Login Required";
+            ${comment2}${comment3}auth_basic_user_file /etc/nginx/.htpasswd;
+            ${comment1}${comment3}return 301 https://${redirect}\$request_uri;
+        ${comment3}}
 
         # Subsciption
         location ~ ^/${subspath} {
@@ -2132,7 +2166,7 @@ http {
             return 444;
         }
 
-        return 301  https://${domain}\$request_uri;
+        return 301  https://${redirect}\$request_uri;
     }
 }
 EOF
@@ -2186,8 +2220,8 @@ http {
     server {
         listen                               127.0.0.1:11443 default_server;
         server_name                          _;
-      ${comment1}${comment2}root                                 /var/www/${sitedir};
-      ${comment1}${comment2}index                                ${index};
+        ${comment1}${comment2}root                                 /var/www/${sitedir};
+        ${comment1}${comment2}index                                ${index};
 
         # Security headers
         add_header X-XSS-Protection          "1; mode=block" always;
@@ -2203,15 +2237,6 @@ http {
         location ~ /\.(?!well-known) {
             deny all;
         }
-
-        # Main location
-       ${comment3}location / {
-          ${comment2}${comment3}root /var/www/html;
-          ${comment2}${comment3}index index.html index.htm;
-          ${comment2}${comment3}auth_basic "Login Required";
-          ${comment2}${comment3}auth_basic_user_file /etc/nginx/.htpasswd;
-          ${comment1}${comment3}return 301 https://${redirect}\$request_uri;
-       ${comment3}}
 
         # Subsciption
         location ~ ^/${subspath} {
@@ -2328,6 +2353,7 @@ frontend haproxy-tls
         tcp-request content reject if host_ip
         tcp-request inspect-delay 5s
         tcp-request content accept if { req_ssl_hello_type 1 }
+        ${comment3}use_backend http-sub if { path /${subspath} } || { path_beg /${subspath}/ }
         use_backend %[lua.trojan_auth]
         default_backend http
 
@@ -2338,8 +2364,17 @@ backend trojan
 
 backend http
         mode http
-        # Web server
-        server nginx 127.0.0.1:11443
+        timeout server 1h
+        ${comment2}${comment3}http-request auth unless { http_auth(mycredentials) }
+        ${comment1}${comment3}http-request redirect code 301 location https://${redirect}/
+        ${comment1}${comment2}server nginx 127.0.0.1:11443
+
+${comment3}backend http-sub
+        ${comment3}mode http
+        ${comment3}timeout server 1h
+        ${comment3}server nginx 127.0.0.1:11443
+
+${comment2}${comment3}userlist mycredentials
 
 frontend haproxy-http
         bind :::80 v4v6
@@ -2353,7 +2388,8 @@ frontend haproxy-http
 
 backend https-redirect
         mode http
-        http-request redirect scheme https
+        ${comment2}http-request redirect scheme https
+        ${comment1}${comment3}http-request redirect code 301 location https://${redirect}/
 EOF
 
 systemctl enable haproxy.service
