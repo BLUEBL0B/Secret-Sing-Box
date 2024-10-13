@@ -974,7 +974,12 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo ufw certbot python3-certbot-dns-cloudflare gnupg2 nginx-full unattended-upgrades openssl sed jq net-tools htop -y
+    apt install sudo certbot python3-certbot-dns-cloudflare gnupg2 nginx-full openssl sed jq net-tools htop -y
+
+    if [[ "${sshufw}" != "2" ]]
+    then
+        apt install ufw unattended-upgrades -y
+    fi
 
     if [ ! -d /usr/share/keyrings ]
     then
