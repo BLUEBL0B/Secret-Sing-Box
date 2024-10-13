@@ -1038,7 +1038,7 @@ setup_ssh() {
 
     if grep -q "noble" /etc/os-release
     then
-        sed -i "s/22/${sshp}/g" /lib/systemd/system/ssh.socket
+        sed -i "s/.*ListenStream.*/ListenStream=${sshp}/g" /lib/systemd/system/ssh.socket
         systemctl daemon-reload
         systemctl restart ssh.socket
     fi
