@@ -660,18 +660,26 @@ nginx_options() {
 }
 
 enter_data_ru_ws() {
-    echo "Введите новый номер порта SSH или 22 (не рекомендуется):"
-    read sshp
+    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
+    echo "1 - Да"
+    echo "2 - Нет"
+    read sshufw
     echo ""
-    check_ssh_port_ru
-    echo "Введите имя нового пользователя или root (не рекомендуется):"
-    read username
-    echo ""
-    check_username_ru
-    echo "Введите пароль SSH для пользователя:"
-    read password
-    echo ""
-    check_password_ru
+    if [[ "${sshufw}" != "2" ]]
+    then
+        echo "Введите новый номер порта SSH или 22 (рекомендуется номер более 1024):"
+        read sshp
+        echo ""
+        check_ssh_port_ru
+        echo "Введите имя нового пользователя или root (рекомендуется не root):"
+        read username
+        echo ""
+        check_username_ru
+        echo "Введите пароль SSH для пользователя:"
+        read password
+        echo ""
+        check_password_ru
+    fi
     while [[ -z $domain ]]
     do
         echo "Введите ваш домен:"
@@ -727,18 +735,26 @@ enter_data_ru_ws() {
 }
 
 enter_data_en_ws() {
-    echo "Enter new SSH port number or 22 (not recommended):"
-    read sshp
+    echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
+    echo "1 - Yes"
+    echo "2 - No"
+    read sshufw
     echo ""
-    check_ssh_port_en
-    echo "Enter your username or root (not recommended):"
-    read username
-    echo ""
-    check_username_en
-    echo "Enter new SSH password:"
-    read password
-    echo ""
-    check_password_en
+    if [[ "${sshufw}" != "2" ]]
+    then
+        echo "Enter new SSH port number or 22 (number above 1024 is recommended):"
+        read sshp
+        echo ""
+        check_ssh_port_en
+        echo "Enter your username or root (non-root user is recommended):"
+        read username
+        echo ""
+        check_username_en
+        echo "Enter new SSH password:"
+        read password
+        echo ""
+        check_password_en
+    fi
     while [[ -z $domain ]]
     do
         echo "Enter your domain name:"
@@ -794,18 +810,26 @@ enter_data_en_ws() {
 }
 
 enter_data_ru_haproxy() {
-    echo "Введите новый номер порта SSH или 22 (не рекомендуется):"
-    read sshp
+    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
+    echo "1 - Да"
+    echo "2 - Нет"
+    read sshufw
     echo ""
-    check_ssh_port_ru
-    echo "Введите имя нового пользователя или root (не рекомендуется):"
-    read username
-    echo ""
-    check_username_ru
-    echo "Введите пароль SSH для пользователя:"
-    read password
-    echo ""
-    check_password_ru
+    if [[ "${sshufw}" != "2" ]]
+    then
+        echo "Введите новый номер порта SSH или 22 (рекомендуется номер более 1024):"
+        read sshp
+        echo ""
+        check_ssh_port_ru
+        echo "Введите имя нового пользователя или root (рекомендуется не root):"
+        read username
+        echo ""
+        check_username_ru
+        echo "Введите пароль SSH для пользователя:"
+        read password
+        echo ""
+        check_password_ru
+    fi
     while [[ -z $domain ]]
     do
         echo "Введите ваш домен:"
@@ -847,18 +871,26 @@ enter_data_ru_haproxy() {
 }
 
 enter_data_en_haproxy() {
-    echo "Enter new SSH port number or 22 (not recommended):"
-    read sshp
+    echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
+    echo "1 - Yes"
+    echo "2 - No"
+    read sshufw
     echo ""
-    check_ssh_port_en
-    echo "Enter your username or root (not recommended):"
-    read username
-    echo ""
-    check_username_en
-    echo "Enter new SSH password:"
-    read password
-    echo ""
-    check_password_en
+    if [[ "${sshufw}" != "2" ]]
+    then
+        echo "Enter new SSH port number or 22 (number above 1024 is recommended):"
+        read sshp
+        echo ""
+        check_ssh_port_en
+        echo "Enter your username or root (non-root user is recommended):"
+        read username
+        echo ""
+        check_username_en
+        echo "Enter new SSH password:"
+        read password
+        echo ""
+        check_password_en
+    fi
     while [[ -z $domain ]]
     do
         echo "Enter your domain name:"
@@ -992,13 +1024,13 @@ setup_ssh() {
 
     if [[ "$username" == "root" ]]
     then
-        sed -i -e "s/#Port/Port/g" -e "s/Port 22/Port ${sshp}/g" -e "s/#PasswordAuthentication /PasswordAuthentication /g" /etc/ssh/sshd_config
+        sed -i -e "s/.*Port 22.*/Port ${sshp}/g" -e "s/#PasswordAuthentication /PasswordAuthentication /g" /etc/ssh/sshd_config
         if [ ! -d /root/.ssh ]
         then
             mkdir /root/.ssh
         fi
     else
-        sed -i -e "s/#Port/Port/g" -e "s/Port 22/Port ${sshp}/g" -e "s/#PermitRootLogin/PermitRootLogin/g" -e "s/PermitRootLogin yes/PermitRootLogin no/g" -e "s/#PasswordAuthentication /PasswordAuthentication /g" /etc/ssh/sshd_config
+        sed -i -e "s/.*Port 22.*/Port ${sshp}/g" -e "s/.*PermitRootLogin.*/PermitRootLogin no/g" -e "s/#PasswordAuthentication /PasswordAuthentication /g" /etc/ssh/sshd_config
         mkdir /home/${username}/.ssh
         chown ${username}:sudo /home/${username}/.ssh
         chmod 700 /home/${username}/.ssh
@@ -1038,10 +1070,13 @@ unattended_upgrades() {
 }
 
 setup_security() {
-    create_user
-    setup_ssh
-    setup_ufw
-    unattended_upgrades
+    if [[ "${sshufw}" != "2" ]]
+    then
+        create_user
+        setup_ssh
+        setup_ufw
+        unattended_upgrades
+    fi
 }
 
 certificates() {
@@ -2435,16 +2470,23 @@ add_sbmanager() {
 final_message_ru() {
     echo -e "${textcolor}Если выше не возникло ошибок, то настройка завершена!${clear}"
     echo ""
-    echo -e "${red}ВНИМАНИЕ!${clear}"
-    echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
-    echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
-    echo -e "2) Если нет ключей SSH, то сгенерировать их на своём ПК командой ${textcolor}ssh-keygen -t rsa -b 4096${clear}"
-    echo "3) Отправить публичный ключ на сервер"
-    echo -e "   Команда для Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
-    echo -e "   Команда для Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
-    echo -e "4) Подключиться к серверу ещё раз командой ${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear}"
-    echo -e "5) Открыть конфиг sshd командой ${textcolor}sudo nano /etc/ssh/sshd_config${clear} и в PasswordAuthentication заменить yes на no"
-    echo -e "6) Перезапустить SSH командой ${textcolor}sudo systemctl restart ssh.service${clear}"
+    if [[ "${sshufw}" != "2" ]]
+    then
+        echo -e "${red}ВНИМАНИЕ!${clear}"
+        echo "Для повышения безопасности сервера рекомендуется выполнить следующие действия:"
+        echo -e "1) Отключиться от сервера ${textcolor}Ctrl + D${clear}"
+        echo -e "2) Если нет ключей SSH, то сгенерировать их на своём ПК командой ${textcolor}ssh-keygen -t rsa -b 4096${clear}"
+        echo "3) Отправить публичный ключ на сервер"
+        echo -e "   Команда для Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
+        echo -e "   Команда для Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
+        echo -e "4) Подключиться к серверу ещё раз командой ${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear}"
+        echo -e "5) Открыть конфиг sshd командой ${textcolor}sudo nano /etc/ssh/sshd_config${clear} и в PasswordAuthentication заменить yes на no"
+        echo -e "6) Перезапустить SSH командой ${textcolor}sudo systemctl restart ssh.service${clear}"
+    else
+        echo -e "${red}ВНИМАНИЕ!${clear}"
+        echo "Вы пропустили настройку безопасности"
+        echo "Настоятельно рекомендуется почитать о безопасности сервера и выполнить настройку самостоятельно"
+    fi
     echo ""
     echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}sudo reboot${clear}"
     echo ""
@@ -2464,16 +2506,23 @@ final_message_ru() {
 final_message_en() {
     echo -e "${textcolor}If there are no errors above then the setup is complete!${clear}"
     echo ""
-    echo -e "${red}ATTENTION!${clear}"
-    echo "To increase the security of the server it's recommended to do the following:"
-    echo -e "1) Disconnect from the server by pressing ${textcolor}Ctrl + D${clear}"
-    echo -e "2) If you don't have SSH keys then generate them on your PC (${textcolor}ssh-keygen -t rsa -b 4096${clear})"
-    echo "3) Send the public key to the server"
-    echo -e "   Command for Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
-    echo -e "   Command for Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
-    echo -e "4) Connect to the server again (${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear})"
-    echo -e "5) Open sshd config (${textcolor}sudo nano /etc/ssh/sshd_config${clear}) and change PasswordAuthentication value from yes to no"
-    echo -e "6) Restart SSH (${textcolor}sudo systemctl restart ssh.service${clear})"
+    if [[ "${sshufw}" != "2" ]]
+    then
+        echo -e "${red}ATTENTION!${clear}"
+        echo "To increase the security of the server it's recommended to do the following:"
+        echo -e "1) Disconnect from the server by pressing ${textcolor}Ctrl + D${clear}"
+        echo -e "2) If you don't have SSH keys then generate them on your PC (${textcolor}ssh-keygen -t rsa -b 4096${clear})"
+        echo "3) Send the public key to the server"
+        echo -e "   Command for Linux: ${textcolor}ssh-copy-id -p ${sshp} ${username}@${serverip}${clear}"
+        echo -e "   Command for Windows: ${textcolor}type \$env:USERPROFILE\.ssh\id_rsa.pub | ssh -p ${sshp} ${username}@${serverip} \"cat >> ~/.ssh/authorized_keys\"${clear}"
+        echo -e "4) Connect to the server again (${textcolor}ssh -p ${sshp} ${username}@${serverip}${clear})"
+        echo -e "5) Open sshd config (${textcolor}sudo nano /etc/ssh/sshd_config${clear}) and change PasswordAuthentication value from yes to no"
+        echo -e "6) Restart SSH (${textcolor}sudo systemctl restart ssh.service${clear})"
+    else
+        echo -e "${red}ATTENTION!${clear}"
+        echo "You have skipped security setup"
+        echo "It is highly recommended to find information about server security and to configure it yourself"
+    fi
     echo ""
     echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}sudo reboot${clear})"
     echo ""
