@@ -1030,7 +1030,7 @@ setup_ssh() {
             mkdir /root/.ssh
         fi
     else
-        sed -i -e "s/.*Port 22.*/Port ${sshp}/g" -e "s/.*PermitRootLogin.*/PermitRootLogin no/g" -e "s/#PasswordAuthentication /PasswordAuthentication /g" /etc/ssh/sshd_config
+        sed -i -e "s/.*Port 22.*/Port ${sshp}/g" -e "s/.*PermitRootLogin yes.*/PermitRootLogin no/g" -e "s/#PasswordAuthentication /PasswordAuthentication /g" /etc/ssh/sshd_config
         mkdir /home/${username}/.ssh
         chown ${username}:sudo /home/${username}/.ssh
         chmod 700 /home/${username}/.ssh
