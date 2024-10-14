@@ -18,7 +18,7 @@
 ### Включает:
 1) Настройку сервера Sing-Box
 2) Настройку обратного прокси на NGINX или HAProxy на 443 порту, а также сайта-заглушки на NGINX
-3) Настройку безопасности, включая автоматические обновления (unattended-upgrades)
+3) Опционально настройку безопасности, включая автоматические обновления (unattended-upgrades)
 4) SSL сертификаты Cloudflare с автоматическим обновлением
 5) Настройку WARP
 6) Включение BBR
@@ -36,7 +36,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Затем просто введите необходимую информацию:
 
-![pic-1-ru](https://github.com/user-attachments/assets/d7630d62-39f1-43fc-aa93-28162bff3552)
+![pic-1-ru](https://github.com/user-attachments/assets/68d752d6-2643-4f31-a988-e016c696d901)
 
 В конце скрипт покажет ссылки на клиентские конфиги.
 
@@ -50,7 +50,7 @@ sbmanager
 
 Далее следуйте инструкциям:
 
-![pic-2-ru](https://github.com/user-attachments/assets/e982d24f-b4e6-439f-b1ec-4c4c04df715e)
+![pic-2-ru](https://github.com/user-attachments/assets/eedaa753-0959-4c91-a715-ca36f2dbf725)
 
 Пункты 4 и 5 синхронизируют настройки в клиентских конфигах всех пользователей, что позволяет не редактировать конфиг каждого пользователя отдельно.
 
