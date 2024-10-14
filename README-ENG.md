@@ -18,7 +18,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside.
 ### Includes:
 1) Sing-Box server setup
 2) NGINX or HAProxy reverse proxy and website setup on port 443
-3) Security setup including unattended-upgrades
+3) Optional security setup including unattended-upgrades
 4) Cloudflare SSL certificates with auto renewal
 5) WARP setup
 6) Enable BBR
@@ -36,7 +36,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/e6ab259b-5ed0-4881-aa83-a52e6e81ac6d)
+![pic-1-en](https://github.com/user-attachments/assets/18df9322-28f7-44f3-87bf-28ee45cb0693)
 
 The script will show your client links in the end.
 
@@ -50,7 +50,7 @@ sbmanager
 
 Then follow the instructions:
 
-![pic-2-en](https://github.com/user-attachments/assets/392f7d53-e375-4a83-b176-a8bfce3e617c)
+![pic-2-en](https://github.com/user-attachments/assets/85b951dd-504c-4650-b699-353971021b7d)
 
 Options 4 and 5 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
