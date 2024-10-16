@@ -1,6 +1,6 @@
 {
   "log": {
-    "level": "fatal",
+    "level": "warn",
     "output": "box.log",
     "timestamp": true
   },

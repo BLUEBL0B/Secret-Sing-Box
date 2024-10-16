@@ -1161,7 +1161,7 @@ server_config() {
 cat > /etc/sing-box/config.json <<EOF
 {
   "log": {
-    "level": "fatal",
+    "level": "warn",
     "output": "box.log",
     "timestamp": true
   },
@@ -1385,7 +1385,7 @@ touch /var/www/${subspath}/1-me-TRJ-CLIENT.json
 cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
 {
   "log": {
-    "level": "fatal",
+    "level": "warn",
     "timestamp": true
   },
   "dns": {
