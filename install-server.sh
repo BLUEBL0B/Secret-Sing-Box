@@ -659,12 +659,7 @@ nginx_options() {
     esac
 }
 
-enter_data_ru_ws() {
-    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
-    echo "1 - Да"
-    echo "2 - Нет"
-    read sshufw
-    echo ""
+enter_ssh_data_ru() {
     if [[ "${sshufw}" != "2" ]]
     then
         echo "Введите новый номер порта SSH или 22 (рекомендуется номер более 1024):"
@@ -680,6 +675,33 @@ enter_data_ru_ws() {
         echo ""
         check_password_ru
     fi
+}
+
+enter_ssh_data_en() {
+    if [[ "${sshufw}" != "2" ]]
+    then
+        echo "Enter new SSH port number or 22 (number above 1024 is recommended):"
+        read sshp
+        echo ""
+        check_ssh_port_en
+        echo "Enter your username or root (non-root user is recommended):"
+        read username
+        echo ""
+        check_username_en
+        echo "Enter new SSH password:"
+        read password
+        echo ""
+        check_password_en
+    fi
+}
+
+enter_data_ru_ws() {
+    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
+    echo "1 - Да"
+    echo "2 - Нет"
+    read sshufw
+    echo ""
+    enter_ssh_data_ru
     while [[ -z $domain ]]
     do
         echo "Введите ваш домен:"
@@ -740,21 +762,7 @@ enter_data_en_ws() {
     echo "2 - No"
     read sshufw
     echo ""
-    if [[ "${sshufw}" != "2" ]]
-    then
-        echo "Enter new SSH port number or 22 (number above 1024 is recommended):"
-        read sshp
-        echo ""
-        check_ssh_port_en
-        echo "Enter your username or root (non-root user is recommended):"
-        read username
-        echo ""
-        check_username_en
-        echo "Enter new SSH password:"
-        read password
-        echo ""
-        check_password_en
-    fi
+    enter_ssh_data_en
     while [[ -z $domain ]]
     do
         echo "Enter your domain name:"
@@ -815,21 +823,7 @@ enter_data_ru_haproxy() {
     echo "2 - Нет"
     read sshufw
     echo ""
-    if [[ "${sshufw}" != "2" ]]
-    then
-        echo "Введите новый номер порта SSH или 22 (рекомендуется номер более 1024):"
-        read sshp
-        echo ""
-        check_ssh_port_ru
-        echo "Введите имя нового пользователя или root (рекомендуется не root):"
-        read username
-        echo ""
-        check_username_ru
-        echo "Введите пароль SSH для пользователя:"
-        read password
-        echo ""
-        check_password_ru
-    fi
+    enter_ssh_data_ru
     while [[ -z $domain ]]
     do
         echo "Введите ваш домен:"
@@ -876,21 +870,7 @@ enter_data_en_haproxy() {
     echo "2 - No"
     read sshufw
     echo ""
-    if [[ "${sshufw}" != "2" ]]
-    then
-        echo "Enter new SSH port number or 22 (number above 1024 is recommended):"
-        read sshp
-        echo ""
-        check_ssh_port_en
-        echo "Enter your username or root (non-root user is recommended):"
-        read username
-        echo ""
-        check_username_en
-        echo "Enter new SSH password:"
-        read password
-        echo ""
-        check_password_en
-    fi
+    enter_ssh_data_en
     while [[ -z $domain ]]
     do
         echo "Enter your domain name:"
@@ -2355,9 +2335,9 @@ global
 
         # Mozilla Modern
         ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
-        ssl-default-bind-options prefer-client-ciphers no-sslv3 no-tlsv10 no-tlsv11 no-tlsv12 no-tls-tickets
+        ssl-default-bind-options prefer-client-ciphers no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
         ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
-        ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tlsv12 no-tls-tickets
+        ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
 
         # You must first generate DH parameters - [ openssl dhparam -out /etc/haproxy/dhparam.pem 2048 ]
         ssl-dh-param-file /etc/haproxy/dhparam.pem
