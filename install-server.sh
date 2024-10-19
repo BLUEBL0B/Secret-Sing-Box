@@ -1141,7 +1141,7 @@ server_config() {
 cat > /etc/sing-box/config.json <<EOF
 {
   "log": {
-    "level": "warn",
+    "level": "fatal",
     "output": "box.log",
     "timestamp": true
   },
@@ -1365,7 +1365,7 @@ touch /var/www/${subspath}/1-me-TRJ-CLIENT.json
 cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
 {
   "log": {
-    "level": "warn",
+    "level": "fatal",
     "timestamp": true
   },
   "dns": {
@@ -1495,8 +1495,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       "inet4_address": "172.19.0.1/28",
       "auto_route": true,
       "strict_route": true,
-      "sniff": true,
-      "sniff_override_destination": true
+      "sniff": true
     }
   ],
   "outbounds": [

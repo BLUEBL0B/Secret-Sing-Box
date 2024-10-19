@@ -11,7 +11,7 @@
 
 ![dns-1](https://github.com/user-attachments/assets/461f07c7-94e1-47c2-967e-5fa36b50509f)
 
-Пример DNS записей для варианта настройки с терминированием TLS на HAProxy и выбором бэкенда Sing-Box или NGINX по паролю Trojan (2 вариант):
+Пример DNS записей для варианта настройки с терминированием TLS на HAProxy и выбором бэкенда по паролю Trojan (2 вариант):
 
 ![dns-2](https://github.com/user-attachments/assets/a0be45a5-2013-48b7-a3f9-565a396b33bb)
 

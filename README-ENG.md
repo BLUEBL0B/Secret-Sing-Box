@@ -10,7 +10,7 @@ This script is designed to fully configure a hidden proxy server with [Sing-Box]
 Both setup methods make it impossible to detect Sing-Box from the outside.
 
 > [!IMPORTANT]
-> Recommended OS: Debian 11/12 or Ubuntu 22.04/24.04. You will also need your own domain linked to your Cloudflare account. Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
+> Recommended OS: Debian 11/12 or Ubuntu 22.04/24.04. You will also need your own domain linked to your Cloudflare account ([How to set it up?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/cf-settings-en.md)). Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
 > With routing rules for Russia.
@@ -18,7 +18,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside.
 ### Includes:
 1) Sing-Box server setup
 2) NGINX or HAProxy reverse proxy and website setup on port 443
-3) Optional security setup including unattended-upgrades
+3) Security setup (optional)
 4) Cloudflare SSL certificates with auto renewal
 5) WARP setup
 6) Enable BBR
