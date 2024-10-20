@@ -310,7 +310,7 @@ del_from_auth_lua() {
 }
 
 sync_github_message() {
-    echo -e "${textcolor}ВНИМАНИЕ!${clear}"
+    echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Настройки в клиентских конфигах всех пользователей будут синхронизированы с последней версией на Github"
     echo ""
     echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
@@ -372,7 +372,7 @@ sync_client_configs_github() {
 }
 
 sync_local_message() {
-    echo -e "${textcolor}ВНИМАНИЕ!${clear}"
+    echo -e "${red}ВНИМАНИЕ!${clear}"
     echo -e "Вы можете вручную отредактировать настройки в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
     echo "Настройки в этом файле будут применены к клиентским конфигам всех пользователей"
     echo ""

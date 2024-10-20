@@ -35,6 +35,20 @@ check_sbmanager() {
     fi
 }
 
+check_if_updated() {
+    if ! grep -q "update" ~/.bash_history || ! grep -q "full-upgrade" ~/.bash_history || ! grep -q "reboot" ~/.bash_history
+    then
+        if [[ "${language}" == "1" ]]
+        then
+            echo -e "${red}Ошибка: обновите систему и перезагрузите сервер перед запуском скрипта${clear}"
+        else
+            echo -e "${red}Error: update the system and reboot the server before running the script${clear}"
+        fi
+        echo ""
+        exit 1
+    fi
+}
+
 get_ip() {
     serverip=$(curl -s ipinfo.io/ip)
 
@@ -2529,6 +2543,7 @@ get_ip
 banner
 enter_language
 start_message
+check_if_updated
 select_variant
 enter_data
 set_timezone
