@@ -1023,13 +1023,13 @@ setup_ssh() {
 
     if [[ "$username" == "root" ]]
     then
-        sed -i -e "s/.*Port .*/Port ${sshp}/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+        sed -i -e "s/.*Port .*/Port ${sshp}/g" -e "s/.*PermitRootLogin no.*/PermitRootLogin yes/g" -e "s/.*#PermitRootLogin.*/PermitRootLogin yes/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" -e "s/.*PasswordAuthentication no.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
         if [ ! -d /root/.ssh ]
         then
             mkdir /root/.ssh
         fi
     else
-        sed -i -e "s/.*Port .*/Port ${sshp}/g" -e "s/.*PermitRootLogin yes.*/PermitRootLogin no/g" -e "s/.*#PermitRootLogin.*/PermitRootLogin no/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+        sed -i -e "s/.*Port .*/Port ${sshp}/g" -e "s/.*PermitRootLogin yes.*/PermitRootLogin no/g" -e "s/.*#PermitRootLogin.*/PermitRootLogin no/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" -e "s/.*PasswordAuthentication no.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
         mkdir /home/${username}/.ssh
         chown ${username}:sudo /home/${username}/.ssh
         chmod 700 /home/${username}/.ssh
