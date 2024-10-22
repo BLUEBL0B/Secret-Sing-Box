@@ -100,7 +100,6 @@ start_message_ru() {
     echo ""
     echo -e "Если это сделано, то нажмите ${textcolor}Enter${clear}, чтобы продолжить"
     echo -e "В противном случае нажмите ${textcolor}Ctrl + C${clear} для завершения работы скрипта"
-    echo ""
     read BigRedButton
 }
 
@@ -114,7 +113,6 @@ start_message_en() {
     echo ""
     echo -e "If it's done then press ${textcolor}Enter${clear} to continue"
     echo -e "If not then press ${textcolor}Ctrl + C${clear} to exit the script"
-    echo ""
     read BigRedButton
 }
 
@@ -128,6 +126,7 @@ start_message() {
 }
 
 select_variant_ru() {
+    echo ""
     echo "Выберите вариант настройки прокси:"
     echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket"
     echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
@@ -136,6 +135,7 @@ select_variant_ru() {
 }
 
 select_variant_en() {
+    echo ""
     echo "Select a proxy setup option:"
     echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket transport"
     echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
@@ -1023,13 +1023,13 @@ setup_ssh() {
 
     if [[ "$username" == "root" ]]
     then
-        sed -i -e "s/.*Port 22.*/Port ${sshp}/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+        sed -i -e "s/.*Port .*/Port ${sshp}/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
         if [ ! -d /root/.ssh ]
         then
             mkdir /root/.ssh
         fi
     else
-        sed -i -e "s/.*Port 22.*/Port ${sshp}/g" -e "s/.*PermitRootLogin yes.*/PermitRootLogin no/g" -e "s/.*#PermitRootLogin.*/PermitRootLogin no/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+        sed -i -e "s/.*Port .*/Port ${sshp}/g" -e "s/.*PermitRootLogin yes.*/PermitRootLogin no/g" -e "s/.*#PermitRootLogin.*/PermitRootLogin no/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
         mkdir /home/${username}/.ssh
         chown ${username}:sudo /home/${username}/.ssh
         chmod 700 /home/${username}/.ssh
