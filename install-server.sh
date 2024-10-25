@@ -36,7 +36,7 @@ check_sbmanager() {
 }
 
 check_if_updated() {
-    if ! grep -q "update" ~/.bash_history || ! grep -q "full-upgrade" ~/.bash_history || ! grep -q "reboot" ~/.bash_history
+    if [ ! -f ~/.bash_history ] || ! grep -q "update" ~/.bash_history || ! grep -q "full-upgrade" ~/.bash_history || ! grep -q "reboot" ~/.bash_history
     then
         if [[ "${language}" == "1" ]]
         then
