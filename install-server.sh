@@ -36,16 +36,37 @@ check_sbmanager() {
 }
 
 check_if_updated() {
-    if [ ! -f ~/.bash_history ] || ! grep -q "update" ~/.bash_history || ! grep -q "full-upgrade" ~/.bash_history || ! grep -q "reboot" ~/.bash_history
+    if [[ "${language}" == "1" ]]
     then
-        if [[ "${language}" == "1" ]]
-        then
-            echo -e "${red}Ошибка: обновите систему и перезагрузите сервер перед запуском скрипта${clear}"
-        else
-            echo -e "${red}Error: update the system and reboot the server before running the script${clear}"
-        fi
         echo ""
-        exit 1
+        echo "Вы точно обновили систему и перезагрузили сервер перед запуском скрипта?"
+        echo "1 - Обновить и перезагрузить"
+        echo "2 - Продолжить (система была обновлена и перезагружена)"
+        read systemupdated
+
+        if [[ "${systemupdated}" == "1" ]]
+        then
+            echo ""
+            apt update && apt full-upgrade -y
+            echo ""
+            reboot
+            exit 0
+        fi
+    else
+        echo ""
+        echo "Are you sure you have updated the system and rebooted the server before running the script?"
+        echo "1 - Update and reboot"
+        echo "2 - Continue (the system has been updated and rebooted)"
+        read systemupdated
+
+        if [[ "${systemupdated}" == "1" ]]
+        then
+            echo ""
+            apt update && apt full-upgrade -y
+            echo ""
+            reboot
+            exit 0
+        fi
     fi
 }
 
@@ -94,8 +115,8 @@ start_message_ru() {
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Запускайте скрипт на чистой системе"
     echo "Перед запуском скрипта рекомендуется выполнить следующие действия:"
-    echo -e "1) Обновить систему (${textcolor}apt update && apt full-upgrade -y${clear})"
-    echo -e "2) Перезагрузить сервер (${textcolor}reboot${clear})"
+    echo -e "1) Обновить систему командой ${textcolor}apt update && apt full-upgrade -y${clear}"
+    echo -e "2) Перезагрузить сервер командой ${textcolor}reboot${clear}"
     echo -e "3) При наличии своего сайта отправить папку с его файлами в ${textcolor}/root${clear} директорию сервера"
     echo ""
     echo -e "Если это сделано, то нажмите ${textcolor}Enter${clear}, чтобы продолжить"
@@ -128,19 +149,35 @@ start_message() {
 select_variant_ru() {
     echo ""
     echo "Выберите вариант настройки прокси:"
-    echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket"
+    echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
     echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
     read variant
     echo ""
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Выберите транспорт:"
+        echo "1 - WebSocket"
+        echo "2 - HTTPUpgrade"
+        read transport
+        echo ""
+    fi
 }
 
 select_variant_en() {
     echo ""
     echo "Select a proxy setup option:"
-    echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket transport"
+    echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
     echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
     read variant
     echo ""
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Select transport:"
+        echo "1 - WebSocket"
+        echo "2 - HTTPUpgrade"
+        read transport
+        echo ""
+    fi
 }
 
 select_variant() {
@@ -1030,7 +1067,10 @@ setup_ssh() {
         fi
     else
         sed -i -e "s/.*Port .*/Port ${sshp}/g" -e "s/.*PermitRootLogin yes.*/PermitRootLogin no/g" -e "s/.*#PermitRootLogin.*/PermitRootLogin no/g" -e "s/.*#PasswordAuthentication .*/PasswordAuthentication yes/g" -e "s/.*PasswordAuthentication no.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
-        mkdir /home/${username}/.ssh
+        if [ ! -d /home/${username}/.ssh ]
+        then
+            mkdir /home/${username}/.ssh
+        fi
         chown ${username}:sudo /home/${username}/.ssh
         chmod 700 /home/${username}/.ssh
     fi
@@ -1048,6 +1088,7 @@ setup_ssh() {
 
 setup_ufw() {
     echo -e "${textcolor_light}Setting up UFW...${clear}"
+    yes | ufw reset &> /dev/null
     ufw allow ${sshp}/tcp
     ufw allow 443/tcp
     ufw allow 80/tcp
@@ -1360,6 +1401,13 @@ cat > /etc/sing-box/config.json <<EOF
   }
 }
 EOF
+
+if [[ "${transport}" == "2" ]]
+then
+    inboundnumbervl=$(jq '[.inbounds[].tag] | index("vless-in")' /etc/sing-box/config.json)
+    inboundnumbertr=$(jq '[.inbounds[].tag] | index("trojan-in")' /etc/sing-box/config.json)
+    echo "$(jq ".inbounds[${inboundnumbertr}].transport.type = \"httpupgrade\" | .inbounds[${inboundnumbervl}].transport.type = \"httpupgrade\"" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+fi
 
 if [[ "${variant}" != "1" ]]
 then
@@ -1944,6 +1992,12 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
 }
 EOF
 
+if [[ "${transport}" == "2" ]]
+then
+    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/1-me-TRJ-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnumber}].transport.type = \"httpupgrade\"" /var/www/${subspath}/1-me-TRJ-CLIENT.json)" > /var/www/${subspath}/1-me-TRJ-CLIENT.json
+fi
+
 if [[ "${variant}" == "1" ]]
 then
     cp /var/www/${subspath}/1-me-TRJ-CLIENT.json /var/www/${subspath}/1-me-VLESS-CLIENT.json
@@ -2193,7 +2247,7 @@ EOF
 
 systemctl enable nginx
 nginx -t
-systemctl reload nginx
+systemctl restart nginx
 }
 
 nginx_config_2() {
@@ -2276,7 +2330,7 @@ EOF
 
 systemctl enable nginx
 nginx -t
-systemctl reload nginx
+systemctl restart nginx
 }
 
 setup_nginx() {
@@ -2437,11 +2491,14 @@ add_sbmanager() {
 
     chmod +x /usr/local/bin/sbmanager
 
-    if [[ "${variant}" != "1" ]]
+    if [[ "${variant}" == "1" ]] && [[ "${transport}" != "2" ]]
     then
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
-    else
         curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-WS/Client-Trojan-WS.json
+    elif [[ "${variant}" == "1" ]] && [[ "${transport}" == "2" ]]
+    then
+        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HTTPUpgrade/Client-Trojan-HTTPUpgrade.json
+    else
+        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
     fi
 
     if [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
