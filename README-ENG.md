@@ -4,7 +4,7 @@
 
 ### Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
 This script is designed to fully configure a hidden proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. Two setup methods:
-- All requests to the proxy are processed by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket transport)
+- All requests to the proxy are processed by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket or HTTPUpgrade transport)
 - All requests to the proxy are processed by HAProxy, the requests are passed to Sing-Box only if they contain the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
 
 Both setup methods make it impossible to detect Sing-Box from the outside.
@@ -36,7 +36,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/18df9322-28f7-44f3-87bf-28ee45cb0693)
+![pic-1-en](https://github.com/user-attachments/assets/03a25a31-7b7a-40ab-874c-8b1fb87e86a1)
 
 The script will show your client links in the end.
 
@@ -65,12 +65,19 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 ```
 
 ### Client setup:
-[Android and iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.pdf)
+[Android and iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.md)
 
-[Windows 10 and 11](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-10-11-en.pdf)
+[Windows 10 and 11](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-en.md)
 
-[Linux:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md#client-setup) run the command below.
+[Linux:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md#client-setup) run the command below and follow the instructions.
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-pc-linux.sh)
 ```
-Then follow the instructions.
+
+### Uninstalling the packages installed by the script (TEST VERSION):
+
+```
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/uninstall-server.sh)
+```
+
+Or you can reinstall the system.
