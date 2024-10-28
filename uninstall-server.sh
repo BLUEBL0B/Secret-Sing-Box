@@ -118,7 +118,7 @@ remove_ufw() {
     if [[ "${removenum}" =~ "4" ]] && dpkg -s ufw &>/dev/null
     then
         echo -e "${textcolor_light}Removing UFW...${clear}"
-        ufw disable
+        yes | ufw reset &> /dev/null
         apt purge ufw -y
         echo ""
     fi
