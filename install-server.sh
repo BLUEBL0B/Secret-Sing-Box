@@ -43,30 +43,21 @@ check_if_updated() {
         echo "1 - Обновить и перезагрузить"
         echo "2 - Продолжить (система была обновлена и перезагружена)"
         read systemupdated
-
-        if [[ "${systemupdated}" == "1" ]]
-        then
-            echo ""
-            apt update && apt full-upgrade -y
-            echo ""
-            reboot
-            exit 0
-        fi
     else
         echo ""
         echo "Are you sure you have updated the system and rebooted the server before running the script?"
         echo "1 - Update and reboot"
         echo "2 - Continue (the system has been updated and rebooted)"
         read systemupdated
+    fi
 
-        if [[ "${systemupdated}" == "1" ]]
-        then
-            echo ""
-            apt update && apt full-upgrade -y
-            echo ""
-            reboot
-            exit 0
-        fi
+    if [[ "${systemupdated}" == "1" ]]
+    then
+        echo ""
+        apt update && apt full-upgrade -y
+        echo ""
+        reboot
+        exit 0
     fi
 }
 
@@ -1088,7 +1079,6 @@ setup_ssh() {
 
 setup_ufw() {
     echo -e "${textcolor_light}Setting up UFW...${clear}"
-    yes | ufw reset &> /dev/null
     ufw allow ${sshp}/tcp
     ufw allow 443/tcp
     ufw allow 80/tcp
