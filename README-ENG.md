@@ -67,7 +67,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 ### Client setup:
 [Android and iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.md)
 
-[Windows 10 and 11](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-en.md)
+[Windows](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-en.md)
 
 [Linux:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md#client-setup) run the command below and follow the instructions.
 ```
