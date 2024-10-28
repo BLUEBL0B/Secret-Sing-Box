@@ -1,0 +1,71 @@
+
+### Устанавливаем Sing-Box (Windows 10 and 11)
+
+Жмём Win + X, после этого открываем командную строку с правами аминистратора:
+
+![w1](https://github.com/user-attachments/assets/ebffb58e-9251-4ec5-94a7-8b5416b0ced2)
+
+Далее вводим команду:
+
+```
+winget install sing-box
+```
+
+После окончания установки командную строку можно закрыть
+
+-----
+
+### Устанавливаем Sing-Box (более старые версии Windows)
+
+Скачиваем Sing-Box для Windows из официальной репозитории:
+
+https://github.com/SagerNet/sing-box/releases
+
+Далее извлекаем sing-box.exe из архива
+
+-----
+
+### Создаём .cmd или .bat файл с таким содержимым:
+
+```
+@echo off
+echo Started sing-box
+echo.
+echo Do not close this window while sing-box is running
+echo.
+echo Press Ctrl + C to disconnect
+echo.
+if not exist "C:\1-sbconfig\" mkdir C:\1-sbconfig
+curl --silent https://domain.com/secret175subscr1pt10n/1-me-VLESS-CLIENT.json -o C:\1-sbconfig\VLESS-CLIENT.json
+sing-box run -c C:\1-sbconfig\VLESS-CLIENT.json
+```
+
+Ссылку в предпоследней строчке меняем на свою
+
+Для более старых версий Windows заменяем последнюю строчку таким образом и меняем путь к sing-box.exe на свой:
+
+```
+C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\VLESS-CLIENT.json
+```
+
+-----
+
+### Создаём ярлык для этого .cmd или .bat файла
+
+Далее настраиваем ярлык, чтобы запускать его с правами администратора
+
+![w2](https://github.com/user-attachments/assets/22d79731-f46d-4d1a-868c-36b45a9e4d36)
+
+![w3](https://github.com/user-attachments/assets/5e7eeae2-c9ff-4f76-bd73-f83802144537)
+
+![w4](https://github.com/user-attachments/assets/d35d5648-e593-4ab5-9afb-f8e8a2201f41)
+
+Везде жмём OK
+
+-----
+
+### Для подключения к прокси просто жмём на ярлык
+
+Не нужно закрывать появившееся окно, пока ПК подключён к прокси
+
+Чтобы отключиться, жмём на окно командной строки, а далее Ctrl + C
