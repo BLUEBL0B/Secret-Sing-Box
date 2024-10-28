@@ -73,11 +73,3 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-pc-linux.sh)
 ```
-
-### Uninstalling the packages installed by the script (TEST VERSION):
-
-```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/uninstall-server.sh)
-```
-
-Or you can reinstall the system.
