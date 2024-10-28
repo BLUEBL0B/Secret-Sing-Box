@@ -7,7 +7,7 @@
 3) SSL/TLS > Edge Certificates > TLS 1.3 > Включить
 
 ### Настройки DNS
-Пример DNS записей для варианта настройки с терминированием TLS на NGINX и транспортом WebSocket (1 вариант):
+Пример DNS записей для варианта настройки с терминированием TLS на NGINX и транспортом WebSocket или HTTPUpgrade (1 вариант):
 
 ![dns-1](https://github.com/user-attachments/assets/461f07c7-94e1-47c2-967e-5fa36b50509f)
 
