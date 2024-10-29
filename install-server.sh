@@ -1543,7 +1543,6 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       "tag": "tun-in",
       "interface_name": "tun0",
       "stack": "gvisor",
-      "mtu": 9000,
       "inet4_address": "172.19.0.1/28",
       "auto_route": true,
       "strict_route": true,
