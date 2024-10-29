@@ -13,12 +13,14 @@ https://apps.apple.com/us/app/sing-box-vt/id6673731168
 ![a2](https://github.com/user-attachments/assets/7dd5ee7f-2fd9-4258-81c2-032ca7631663)
 
 ![a3e](https://github.com/user-attachments/assets/9c2999c5-f62f-4e1c-bc26-557e67fa6218)
+
 Paste the link after step 6
 
 -----
 
 ### Check the connection:
 ![a4](https://github.com/user-attachments/assets/b1031b28-df75-4993-92f7-c1c9a0e6fb05)
+
 The proxy should work now
 
 But the setup is not complete yet
@@ -27,6 +29,7 @@ But the setup is not complete yet
 
 ### It’s strongly recommended to use proxy only for the apps where you need to bypass censorship:
 ![a5](https://github.com/user-attachments/assets/ded0c2bb-09b6-47f9-82ff-f221fef2ad6a)
+
 Then click on 3 dots in the upper right corner, select «Proxy Mode», and then select «Include»
 
 After that select the apps
