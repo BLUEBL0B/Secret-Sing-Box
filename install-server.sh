@@ -55,6 +55,7 @@ check_if_updated() {
     then
         echo ""
         apt update && apt full-upgrade -y
+        sleep 1.5
         echo ""
         reboot
         exit 0
@@ -134,49 +135,6 @@ start_message() {
         start_message_ru
     else
         start_message_en
-    fi
-}
-
-select_variant_ru() {
-    echo ""
-    echo "Выберите вариант настройки прокси:"
-    echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
-    echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
-    read variant
-    echo ""
-    if [[ "${variant}" == "1" ]]
-    then
-        echo "Выберите транспорт:"
-        echo "1 - WebSocket"
-        echo "2 - HTTPUpgrade"
-        read transport
-        echo ""
-    fi
-}
-
-select_variant_en() {
-    echo ""
-    echo "Select a proxy setup option:"
-    echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
-    echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
-    read variant
-    echo ""
-    if [[ "${variant}" == "1" ]]
-    then
-        echo "Select transport:"
-        echo "1 - WebSocket"
-        echo "2 - HTTPUpgrade"
-        read transport
-        echo ""
-    fi
-}
-
-select_variant() {
-    if [[ "${language}" == "1" ]]
-    then
-        select_variant_ru
-    else
-        select_variant_en
     fi
 }
 
@@ -737,7 +695,21 @@ enter_ssh_data_en() {
     fi
 }
 
-enter_data_ru_ws() {
+enter_data_ru() {
+    echo ""
+    echo "Выберите вариант настройки прокси:"
+    echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
+    echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
+    read variant
+    echo ""
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Выберите транспорт:"
+        echo "1 - WebSocket"
+        echo "2 - HTTPUpgrade"
+        read transport
+        echo ""
+    fi
     echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
     echo "1 - Да"
     echo "2 - Нет"
@@ -767,24 +739,30 @@ enter_data_ru_ws() {
     echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
-    echo "Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
-    read trojanpath
-    [[ ! -z $trojanpath ]] && echo ""
-    crop_trojan_path
-    echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
-    read uuid
-    [[ ! -z $uuid ]] && echo ""
-    check_uuid_ru
-    echo "Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
-    read vlesspath
-    [[ ! -z $vlesspath ]] && echo ""
-    crop_vless_path
-    check_vless_path_ru
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
+        read trojanpath
+        [[ ! -z $trojanpath ]] && echo ""
+        crop_trojan_path
+        echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+        read uuid
+        [[ ! -z $uuid ]] && echo ""
+        check_uuid_ru
+        echo "Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
+        read vlesspath
+        [[ ! -z $vlesspath ]] && echo ""
+        crop_vless_path
+        check_vless_path_ru
+    fi
     echo "Введите путь для подписки или оставьте пустым для генерации случайного пути:"
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
-    check_subscription_path_ru
+    if [[ "${variant}" == "1" ]]
+    then
+        check_subscription_path_ru
+    fi
     echo "Выберите вариант настройки NGINX/HAProxy (1 по умолчанию):"
     echo "1 - Будет спрашивать логин и пароль вместо сайта"
     echo "2 - Будет перенаправлять на другой домен"
@@ -798,7 +776,21 @@ enter_data_ru_ws() {
     check_timezone_ru
 }
 
-enter_data_en_ws() {
+enter_data_en() {
+    echo ""
+    echo "Select a proxy setup option:"
+    echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
+    echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
+    read variant
+    echo ""
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Select transport:"
+        echo "1 - WebSocket"
+        echo "2 - HTTPUpgrade"
+        read transport
+        echo ""
+    fi
     echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
     echo "1 - Yes"
     echo "2 - No"
@@ -828,118 +820,30 @@ enter_data_en_ws() {
     echo "Enter your password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
-    echo "Enter your path for Trojan or leave this empty to generate a random path:"
-    read trojanpath
-    [[ ! -z $trojanpath ]] && echo ""
-    crop_trojan_path
-    echo "Enter your UUID for VLESS or leave this empty to generate a random UUID:"
-    read uuid
-    [[ ! -z $uuid ]] && echo ""
-    check_uuid_en
-    echo "Enter your path for VLESS or leave this empty to generate a random path:"
-    read vlesspath
-    [[ ! -z $vlesspath ]] && echo ""
-    crop_vless_path
-    check_vless_path_en
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Enter your path for Trojan or leave this empty to generate a random path:"
+        read trojanpath
+        [[ ! -z $trojanpath ]] && echo ""
+        crop_trojan_path
+        echo "Enter your UUID for VLESS or leave this empty to generate a random UUID:"
+        read uuid
+        [[ ! -z $uuid ]] && echo ""
+        check_uuid_en
+        echo "Enter your path for VLESS or leave this empty to generate a random path:"
+        read vlesspath
+        [[ ! -z $vlesspath ]] && echo ""
+        crop_vless_path
+        check_vless_path_en
+    fi
     echo "Enter your subscription path or leave this empty to generate a random path:"
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
-    check_subscription_path_en
-    echo "Select NGINX/HAProxy setup option (1 by default):"
-    echo "1 - Will show a login popup asking for username and password"
-    echo "2 - Will redirect to another domain"
-    echo "3 - Your own website (if you have one)"
-    read option;
-    echo ""
-    nginx_options
-    echo "Enter the timezone to set the time on the server (e.g. Europe/Amsterdam):"
-    read timezone
-    echo ""
-    check_timezone_en
-}
-
-enter_data_ru_haproxy() {
-    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
-    echo "1 - Да"
-    echo "2 - Нет"
-    read sshufw
-    echo ""
-    enter_ssh_data_ru
-    while [[ -z $domain ]]
-    do
-        echo "Введите ваш домен:"
-        read domain
-        echo ""
-    done
-    crop_domain
-    while [[ -z $email ]]
-    do
-        echo "Введите вашу почту, зарегистрированную на Cloudflare:"
-        read email
-        echo ""
-    done
-    while [[ -z $cftoken ]]
-    do
-        echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
-        read cftoken
-        echo ""
-    done
-    check_cf_token_ru
-    echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
-    read trjpass
-    [[ ! -z $trjpass ]] && echo ""
-    echo "Введите путь для подписки или оставьте пустым для генерации случайного пути:"
-    read subspath
-    [[ ! -z $subspath ]] && echo ""
-    crop_subscription_path
-    echo "Выберите вариант настройки NGINX/HAProxy (1 по умолчанию):"
-    echo "1 - Будет спрашивать логин и пароль вместо сайта"
-    echo "2 - Будет перенаправлять на другой домен"
-    echo "3 - Свой сайт (при наличии)"
-    read option;
-    echo ""
-    nginx_options
-    echo "Введите часовой пояс для установки времени на сервере (например, Europe/Amsterdam):"
-    read timezone
-    echo ""
-    check_timezone_ru
-}
-
-enter_data_en_haproxy() {
-    echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
-    echo "1 - Yes"
-    echo "2 - No"
-    read sshufw
-    echo ""
-    enter_ssh_data_en
-    while [[ -z $domain ]]
-    do
-        echo "Enter your domain name:"
-        read domain
-        echo ""
-    done
-    crop_domain
-    while [[ -z $email ]]
-    do
-        echo "Enter your email registered on Cloudflare:"
-        read email
-        echo ""
-    done
-    while [[ -z $cftoken ]]
-    do
-        echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
-        read cftoken
-        echo ""
-    done
-    check_cf_token_en
-    echo "Enter your password for Trojan or leave this empty to generate a random password:"
-    read trjpass
-    [[ ! -z $trjpass ]] && echo ""
-    echo "Enter your subscription path or leave this empty to generate a random path:"
-    read subspath
-    [[ ! -z $subspath ]] && echo ""
-    crop_subscription_path
+    if [[ "${variant}" == "1" ]]
+    then
+        check_subscription_path_en
+    fi
     echo "Select NGINX/HAProxy setup option (1 by default):"
     echo "1 - Will show a login popup asking for username and password"
     echo "2 - Will redirect to another domain"
@@ -954,18 +858,11 @@ enter_data_en_haproxy() {
 }
 
 enter_data() {
-    if [[ "${language}" == "1" ]] && [[ "${variant}" == "1" ]]
+    if [[ "${language}" == "1" ]]
     then
-        enter_data_ru_ws
-    elif [[ "${language}" == "1" ]] && [[ "${variant}" != "1" ]]
-    then
-        enter_data_ru_haproxy
-    elif [[ "${language}" != "1" ]] && [[ "${variant}" == "1" ]]
-    then
-        enter_data_en_ws
-    elif [[ "${language}" != "1" ]] && [[ "${variant}" != "1" ]]
-    then
-        enter_data_en_haproxy
+        enter_data_ru
+    else
+        enter_data_en
     fi
     echo ""
     echo ""
@@ -1542,7 +1439,7 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
       "type": "tun",
       "tag": "tun-in",
       "interface_name": "tun0",
-      "stack": "gvisor",
+      "stack": "system",
       "inet4_address": "172.19.0.1/28",
       "auto_route": true,
       "strict_route": true,
@@ -2591,7 +2488,6 @@ banner
 enter_language
 start_message
 check_if_updated
-select_variant
 enter_data
 set_timezone
 enable_bbr
