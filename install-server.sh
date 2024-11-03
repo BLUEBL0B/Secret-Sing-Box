@@ -893,7 +893,14 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo certbot python3-certbot-dns-cloudflare gnupg2 nginx-full openssl sed jq net-tools htop -y
+    apt install sudo certbot python3-certbot-dns-cloudflare gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
+
+    if grep -q "bullseye" /etc/os-release || grep -q "bookworm" /etc/os-release
+    then
+        apt install debian-archive-keyring -y
+    else
+        apt install ubuntu-keyring -y
+    fi
 
     if [[ "${sshufw}" != "2" ]]
     then
@@ -921,6 +928,23 @@ install_packages() {
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/sagernet.asc] https://deb.sagernet.org/ * *" | tee /etc/apt/sources.list.d/sagernet.list > /dev/null
     apt-get update
     apt-get install sing-box -y
+
+    curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+    gpg --dry-run --quiet --no-keyring --import --import-options import-show /usr/share/keyrings/nginx-archive-keyring.gpg
+    if grep -q "bullseye" /etc/os-release || grep -q "bookworm" /etc/os-release
+    then
+        echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/debian `lsb_release -cs` nginx" | tee /etc/apt/sources.list.d/nginx.list
+    else
+        echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | tee /etc/apt/sources.list.d/nginx.list
+    fi
+    echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | tee /etc/apt/preferences.d/99nginx
+    apt update
+    apt install nginx -y
+
+    if [ ! -d /var/www ]
+    then
+        mkdir /var/www
+    fi
 
     if [[ "${variant}" != "1" ]]
     then
@@ -1995,13 +2019,11 @@ http {
         default "\$proxy_forwarded_elem";
     }
 
-    # Load configs
-    include /etc/nginx/conf.d/*.conf;
-
     # Site
     server {
-        listen                               443 ssl http2 default_server;
-        listen                               [::]:443 ssl http2 default_server;
+        listen                               443 ssl default_server;
+        listen                               [::]:443 ssl default_server;
+        http2                                on;
         server_name                          ${domain} *.${domain};
         ${comment1}${comment2}root                                 /var/www/${sitedir};
         ${comment1}${comment2}index                                ${index};
@@ -2172,9 +2194,6 @@ http {
     # Logging
     access_log                off;
     error_log                 off;
-
-    # Load configs
-    include /etc/nginx/conf.d/*.conf;
 
     # Site
     server {
