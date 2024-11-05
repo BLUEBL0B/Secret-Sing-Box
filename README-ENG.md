@@ -50,11 +50,11 @@ sbmanager
 
 Then follow the instructions:
 
-![pic-2-en](https://github.com/user-attachments/assets/85b951dd-504c-4650-b699-353971021b7d)
+![pic-2-en](https://github.com/user-attachments/assets/a2ee3d75-0dcf-4dda-a7d7-30657a5b8a1e)
 
-Options 4 and 5 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
+Options 5 and 6 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
-To enable AdGuard DNS on the client, use option 5 and specify "tls://94.140.14.14" instead of "tls://1.1.1.1" in the config template. This may reduce performance due to slower domain resolution compared to 1.1.1.1.
+To enable AdGuard DNS on the client, use option 6 and specify "tls://94.140.14.14" instead of "tls://1.1.1.1" in the config template. This may reduce performance due to slower domain resolution compared to 1.1.1.1.
 
 ### WARP+ keys:
 
@@ -67,7 +67,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 ### Client setup:
 [Android and iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.md)
 
-On some Android devices, especially older ones, "stack": "system" in tun interface settings in client configs might not work. In such cases, it is recommended to replace it with "gvisor" (may have lower performance than with "system").
+On some Android devices, especially older ones, "stack": "system" in tun interface settings in client configs might not work. In such cases, it is recommended to replace it with "gvisor" by using option 4 in sbmanager.
 
 [Windows](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-en.md)
 
