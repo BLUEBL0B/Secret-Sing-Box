@@ -339,6 +339,8 @@ check_users() {
 }
 
 get_pass() {
+    stack=$(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' ${file})
+
     if grep -q ": \"trojan\"" "$file"
     then
         protocol="trojan"
@@ -355,18 +357,20 @@ sync_client_configs_github() {
         get_pass
         rm ${file}
         cp /var/www/${subspath}/template.json ${file}
+        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
         if [[ "$protocol" == "trojan" ]] && [ -f /etc/haproxy/auth.lua ]
         then
-            echo "$(jq ".outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
         elif [[ "$protocol" == "trojan" ]] && [ ! -f /etc/haproxy/auth.lua ]
         then
-            echo "$(jq ".outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${trojanpath}\"" ${file})" > ${file}
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${trojanpath}\"" ${file})" > ${file}
         else
-            echo "$(jq ".outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
         sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" ${file}
         cred=""
+        inboundnum=""
         outboundnum=""
     done
 
@@ -392,18 +396,20 @@ sync_client_configs_local() {
         get_pass
         rm ${file}
         cp /var/www/${subspath}/template-loc.json ${file}
+        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
         if [[ "$protocol" == "trojan" ]] && [ -f /etc/haproxy/auth.lua ]
         then
-            echo "$(jq ".outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
         elif [[ "$protocol" == "trojan" ]] && [ ! -f /etc/haproxy/auth.lua ]
         then
-            echo "$(jq ".outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${trojanpath}\"" ${file})" > ${file}
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${trojanpath}\"" ${file})" > ${file}
         else
-            echo "$(jq ".outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
         sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" ${file}
         cred=""
+        inboundnum=""
         outboundnum=""
     done
 
@@ -722,6 +728,104 @@ chain_setup() {
     esac
 }
 
+change_stack() {
+    echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    read username
+    echo ""
+    exit_username
+    check_username_del
+
+    echo -e "${textcolor}Выберите \"stack\" для пользователя ${username}${clear}:"
+    echo "0 - Выйти"
+    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
+    then
+        echo "1 - \"system\" (системный стек, лучшая производительность, значение по умолчанию)    [Выбрано]"
+    else
+        echo "1 - \"system\" (системный стек, лучшая производительность, значение по умолчанию)"
+    fi
+    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "gvisor" ]]
+    then
+        echo "2 - \"gvisor\" (запускается в userspace, рекомендуется, если не работает \"system\")   [Выбрано]"
+    else
+        echo "2 - \"gvisor\" (запускается в userspace, рекомендуется, если не работает \"system\")"
+    fi
+    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "mixed" ]]
+    then
+        echo "3 - \"mixed\" (смешанный вариант: \"system\" для TCP, \"gvisor\" для UDP)                [Выбрано]"
+    else
+        echo "3 - \"mixed\" (смешанный вариант: \"system\" для TCP, \"gvisor\" для UDP)"
+    fi
+    read stackoption
+    echo ""
+
+    inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+
+    case $stackoption in
+        1)
+        echo "$(jq ".inbounds[${inboundnum}].stack = \"system\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+        ;;
+        2)
+        echo "$(jq ".inbounds[${inboundnum}].stack = \"gvisor\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+        ;;
+        3)
+        echo "$(jq ".inbounds[${inboundnum}].stack = \"mixed\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+        ;;
+        *)
+        main_menu
+    esac
+
+    if [ ! -f /etc/haproxy/auth.lua ]
+    then
+        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+
+        case $stackoption in
+            2)
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"gvisor\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+            ;;
+            3)
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"mixed\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+            ;;
+            *)
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"system\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+        esac
+    fi
+
+    inboundnum=""
+    echo "Изменение \"stack\" завершено, для применения новых настроек обновите конфиг на клиенте"
+    echo ""
+
+    main_menu
+}
+
+disable_ipv6() {
+    if ! grep -q "net.ipv6.conf.all.disable_ipv6 = 1" /etc/sysctl.conf
+    then
+        echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+    fi
+
+    if ! grep -q "net.ipv6.conf.default.disable_ipv6 = 1" /etc/sysctl.conf
+    then
+        echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+    fi
+
+    echo -e "${textcolor}IPv6 отключён:${clear}"
+    sysctl -p
+    echo ""
+
+    main_menu
+}
+
+enable_ipv6() {
+    sed -i "/net.ipv6.conf.all.disable_ipv6 = 1/d" /etc/sysctl.conf
+    sed -i "/net.ipv6.conf.default.disable_ipv6 = 1/d" /etc/sysctl.conf
+
+    echo -e "${textcolor}IPv6 не отключён:${clear}"
+    sysctl -p
+    echo ""
+
+    main_menu
+}
+
 main_menu() {
     echo ""
     echo -e "${textcolor}Выберите действие:${clear}"
@@ -731,14 +835,18 @@ main_menu() {
     echo "2 - Добавить нового пользователя"
     echo "3 - Удалить пользователя"
     echo "------------------------"
-    echo "4 - Синхронизировать настройки во всех клиентских конфигах с Github"
-    echo "5 - Синхронизировать настройки во всех клиентских конфигах с локальным шаблоном (свои настройки)"
+    echo "4 - Поменять \"stack\" в tun-интерфейсе у пользователя"
+    echo "5 - Синхронизировать настройки во всех клиентских конфигах с Github"
+    echo "6 - Синхронизировать настройки во всех клиентских конфигах с локальным шаблоном (свои настройки)"
     echo "------------------------"
-    echo "6 - Вывести список доменов/суффиксов WARP"
-    echo "7 - Добавить домен/суффикс в WARP"
-    echo "8 - Удалить домен/суффикс из WARP"
+    echo "7 - Вывести список доменов/суффиксов WARP"
+    echo "8 - Добавить домен/суффикс в WARP"
+    echo "9 - Удалить домен/суффикс из WARP"
     echo "------------------------"
-    echo "9 - Настроить/убрать цепочку из двух и более серверов"
+    echo "10 - Настроить/убрать цепочку из двух и более серверов"
+    echo "------------------------"
+    echo "11 - Отключить IPv6 на сервере"
+    echo "12 - Не отключать IPv6 на сервере"
     read option
     echo ""
 
@@ -753,22 +861,31 @@ main_menu() {
         delete_users
         ;;
         4)
-        sync_with_github
+        change_stack
         ;;
         5)
-        sync_with_local_temp
+        sync_with_github
         ;;
         6)
-        show_warp_domains
+        sync_with_local_temp
         ;;
         7)
-        add_warp_domains
+        show_warp_domains
         ;;
         8)
-        delete_warp_domains
+        add_warp_domains
         ;;
         9)
+        delete_warp_domains
+        ;;
+        10)
         chain_setup
+        ;;
+        11)
+        disable_ipv6
+        ;;
+        12)
+        enable_ipv6
         ;;
         *)
         exit 0
