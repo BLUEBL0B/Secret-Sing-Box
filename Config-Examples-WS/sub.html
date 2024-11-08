@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>secret-sing-box</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+function openVlessUrl() {
+    var name = document.getElementById("nameInput").value;
+    var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SITE-DIRECTORY//";
+    var fullUrl = baseUrl + encodeURIComponent(name) + "-VLESS-CLIENT.json";
+    window.open(fullUrl);
+}
+
+function openTrojanUrl() {
+    var name = document.getElementById("nameInput").value;
+    var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SITE-DIRECTORY//";
+    var fullUrl = baseUrl + encodeURIComponent(name) + "-TRJ-CLIENT.json";
+    window.open(fullUrl);
+}
+</script>
+</head>
+<style>
+    body {background-color:#ffffff;background-repeat:no-repeat;background-position:top left;background-attachment:fixed;text-align:center;}
+    h2{text-align:center;font-family:Arial, sans-serif;color:#000000;background-color:#ffffff;}
+    p {font-family:Georgia, serif;font-size:14px;font-style:normal;font-weight:normal;color:#000000;background-color:#ffffff;}
+</style>
+<body>
+    <p>
+        <form onsubmit="return false;">
+            <label for="nameInput">Введите имя:</label><br>
+            <input type="text" id="nameInput" required><br><br>
+            <button onclick="openVlessUrl()">Открыть VLESS URL</button><br><br>
+            <button onclick="openTrojanUrl()">Открыть Trojan URL</button><br>
+        </form>
+    </p>
+    <h2>Скачать приложение</h2>
+    <a href="https://play.google.com/store/apps/details?id=io.nekohasekai.sfa" target="_blank">Скачать для Android</a><br>
+    <a href="https://apps.apple.com/us/app/sing-box-vt/id6673731168" target="_blank">Скачать для iOS</a><br>
+    <a href="https://github.com/hiddify/hiddify-next/releases/latest/download/Hiddify-Windows-Setup-x64.exe" target="_blank">Скачать для Windows (Hiddify)</a><br>
+</body>
+</html>
