@@ -1046,7 +1046,7 @@ certificates() {
 
     certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 --rsa-key-size 4096 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
-    { crontab -l; echo "0 5 1 */2 * certbot -q renew"; } | crontab -
+    { crontab -l; echo "0 5 1 */2 * certbot -q renew --force-renewal"; } | crontab -
 
     if [[ "${variant}" == "1" ]]
     then
