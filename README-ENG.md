@@ -54,8 +54,6 @@ Then follow the instructions:
 
 Options 5 and 6 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
-To enable AdGuard DNS on the client, use option 6 and specify "tls://94.140.14.14" instead of "tls://1.1.1.1" in the config template. This may reduce performance due to slower domain resolution compared to 1.1.1.1.
-
 ### WARP+ keys:
 
 To activate a WARP+ key, enter this command (replace the key with yours):
