@@ -711,7 +711,7 @@ enter_data_ru() {
         echo ""
     fi
     echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
-    echo "1 - Да"
+    echo "1 - Да (в случае ошибки при вводе данных можно потерять доступ к серверу)"
     echo "2 - Нет"
     read sshufw
     echo ""
@@ -792,7 +792,7 @@ enter_data_en() {
         echo ""
     fi
     echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
-    echo "1 - Yes"
+    echo "1 - Yes (in case of a mistake while entering data, access to the server might be lost)"
     echo "2 - No"
     read sshufw
     echo ""
