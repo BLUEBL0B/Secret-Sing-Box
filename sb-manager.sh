@@ -735,7 +735,7 @@ change_stack() {
     exit_username
     check_username_del
 
-    echo -e "${textcolor}Выберите \"stack\" для пользователя ${username}${clear}:"
+    echo -e "${textcolor}Выберите \"stack\" для пользователя ${username}:${clear}"
     echo "0 - Выйти"
     if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
     then
