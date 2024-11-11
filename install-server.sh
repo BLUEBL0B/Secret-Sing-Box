@@ -712,7 +712,7 @@ enter_data_ru() {
     fi
     echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
     echo "1 - Да (в случае ошибки при вводе данных можно потерять доступ к серверу)"
-    echo "2 - Нет"
+    echo "2 - Нет (выбирайте этот вариант, если уже настроен вход по ключу в ЛК хостера)"
     read sshufw
     echo ""
     enter_ssh_data_ru
@@ -793,7 +793,7 @@ enter_data_en() {
     fi
     echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
     echo "1 - Yes (in case of a mistake while entering data, access to the server might be lost)"
-    echo "2 - No"
+    echo "2 - No (choose this option if SSH key is already configured in hosting control panel)"
     read sshufw
     echo ""
     enter_ssh_data_en
@@ -893,7 +893,7 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo certbot python3-certbot-dns-cloudflare gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
+    apt install sudo certbot python3-certbot-dns-cloudflare cron gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
 
     if grep -q "bullseye" /etc/os-release || grep -q "bookworm" /etc/os-release
     then
