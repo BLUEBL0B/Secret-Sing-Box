@@ -712,7 +712,7 @@ enter_data_ru() {
     fi
     echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
     echo "1 - Да (в случае ошибки при вводе данных можно потерять доступ к серверу)"
-    echo "2 - Нет (выбирайте этот вариант, если в ЛК хостера уже настроен вход по SSH ключу)"
+    echo "2 - Нет"
     read sshufw
     echo ""
     enter_ssh_data_ru
@@ -793,7 +793,7 @@ enter_data_en() {
     fi
     echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
     echo "1 - Yes (in case of a mistake while entering data, access to the server might be lost)"
-    echo "2 - No (choose this option if SSH key is already configured in hosting control panel)"
+    echo "2 - No"
     read sshufw
     echo ""
     enter_ssh_data_en
@@ -1073,6 +1073,7 @@ setup_warp() {
     echo "LogLevelMax=3" >> /etc/systemd/system/warp-svc.service.d/override.conf
     systemctl daemon-reload
     systemctl restart warp-svc.service
+    apt-mark hold cloudflare-warp
     echo ""
 }
 
