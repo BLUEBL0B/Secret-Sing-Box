@@ -1566,6 +1566,9 @@ cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
           "wildberries",
           "aliexpress"
         ],
+        "ip_cidr": [
+          "${serverip}"
+        ],
         "rule_set": [
           "geoip-ru",
           "gov-ru",

@@ -224,6 +224,9 @@
           "wildberries",
           "aliexpress"
         ],
+        "ip_cidr": [
+          "SERVER-IP"
+        ],
         "rule_set": [
           "geoip-ru",
           "gov-ru",
