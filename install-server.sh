@@ -893,7 +893,7 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo certbot python3-certbot-dns-cloudflare cron gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
+    apt install sudo wget certbot python3-certbot-dns-cloudflare cron gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
 
     if grep -q "bullseye" /etc/os-release || grep -q "bookworm" /etc/os-release
     then
