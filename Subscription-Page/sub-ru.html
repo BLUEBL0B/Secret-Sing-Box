@@ -1,101 +1,113 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>SSB</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-function openTrojanUrl() {
-    var name = document.getElementById("nameInput").value;
-    var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SITE-DIRECTORY/";
-    var fullUrl = baseUrl + encodeURIComponent(name) + "-TRJ-CLIENT.json";
-    window.open(fullUrl);
-}
 
-function openVlessUrl() {
-    var name = document.getElementById("nameInput").value;
-    var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SITE-DIRECTORY/";
-    var fullUrl = baseUrl + encodeURIComponent(name) + "-VLESS-CLIENT.json";
-    window.open(fullUrl);
-}
-</script>
-<style>
-    body {
-        background-color: #ffffff;
-        background-image: url('background.jpg');
-        background-repeat: no-repeat;
-        background-position: top left;
-        background-attachment: fixed;
-        text-align: center;
-    }
-	
-    h2 {
-        font-family: Arial, sans-serif;
-        color: #000000;
-    }
-	
-    h3 {
-        font-family: Arial, sans-serif;
-		font-weight: normal;
-        color: #000000;
-		line-height: 0.1em;
-    }
-	
-    p, label {
-        font-family: Arial, sans-serif;
-		font-style: italic;
-        font-size: 15px;
-        color: #000000;
-    }
-	
-    .button {
-        background-color: rgba(25, 25, 25, 0.1); /* Grey background */
-        color: #000000; /* White text */
-        border: 1px solid black; /* No border */
-        padding: 5px 10px; /* Button size */
-        text-align: center;
-        text-decoration: none; /* No underline */
-        display: inline-block; /* Inline layout */
-        font-size: 14px;
-        margin: 8px 4px; /* Spacing */
-        cursor: pointer;
-        border-radius: 4px; /* Rounded corners */
-		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
-	
-    .button:hover {
-        background-color: lightgrey; /* Darker grey on hover */
-    }
-	
-    input {
-        padding: 3px;
-        font-size: 14px;
-    }
-</style>
+<head>
+    <meta charset="UTF-8">
+    <title>SSB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        function openTrojanUrl() {
+            var name = document.getElementById("nameInput").value;
+            var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SUBSCRIPTION-PATH/";
+            var fullUrl = baseUrl + encodeURIComponent(name) + "-TRJ-CLIENT.json";
+            window.open(fullUrl);
+        }
+
+        function openVlessUrl() {
+            var name = document.getElementById("nameInput").value;
+            var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SUBSCRIPTION-PATH/";
+            var fullUrl = baseUrl + encodeURIComponent(name) + "-VLESS-CLIENT.json";
+            window.open(fullUrl);
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            background-image: url('background.jpg');
+            background-repeat: no-repeat;
+            background-position: top left;
+            background-attachment: fixed;
+            text-align: center;
+        }
+
+        h2 {
+            font-family: Arial, sans-serif;
+            color: #000000;
+        }
+
+        h3 {
+            font-family: Arial, sans-serif;
+            font-weight: normal;
+            color: #000000;
+            line-height: 0.1em;
+        }
+
+        p,
+        label {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            font-size: 15px;
+            color: #000000;
+        }
+
+        .button {
+            background-color: rgba(25, 25, 25, 0.1);
+            color: #000000;
+            border: 1px solid black;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 8px 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:hover {
+            background-color: lightgrey;
+        }
+
+        input {
+            padding: 3px;
+            font-size: 14px;
+        }
+    </style>
 </head>
+
 <body>
     <h2 style="line-height: 2.5em;">1. Скачать приложение</h2>
     <h3>- Android и iOS -</h3>
-    <button class="button" onclick="window.open('https://play.google.com/store/apps/details?id=io.nekohasekai.sfa', '_blank')">Android</button>
-    <button class="button" onclick="window.open('https://apps.apple.com/us/app/sing-box-vt/id6673731168', '_blank')">iOS</button>
+    <button class="button"
+        onclick="window.open('https://play.google.com/store/apps/details?id=io.nekohasekai.sfa', '_blank')">Android</button>
+    <button class="button"
+        onclick="window.open('https://apps.apple.com/us/app/sing-box-vt/id6673731168', '_blank')">iOS</button>
     <br><br>
     <h3>- Windows -</h3>
-    <button class="button" onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-ru.md', '_blank')">Рекомендуемый способ</button>
-    <button class="button" onclick="window.open('https://github.com/hiddify/hiddify-app/releases/latest', '_blank')">Или скачать Hiddify</button>
+    <button class="button"
+        onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-ru.md', '_blank')">Рекомендуемый
+        способ</button>
+    <button class="button" onclick="window.open('https://github.com/hiddify/hiddify-app/releases/latest', '_blank')">Или
+        скачать Hiddify</button>
     <br><br>
     <h3>- Linux -</h3>
-    <button class="button" onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2', '_blank')">Рекомендуемый способ</button>
-	<button class="button" onclick="window.open('https://github.com/hiddify/hiddify-app/releases/latest', '_blank')">Или скачать Hiddify</button>
+    <button class="button"
+        onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2', '_blank')">Рекомендуемый
+        способ</button>
+    <button class="button" onclick="window.open('https://github.com/hiddify/hiddify-app/releases/latest', '_blank')">Или
+        скачать Hiddify</button>
     <br><br>
     <h2>2. Подключиться к серверу</h2>
     <p>
-        <form onsubmit="return false;">
-            <label for="nameInput">Введите имя пользователя:</label><br>
-            <input type="text" id="nameInput" required><br><br>
-            <button class="button" onclick="openTrojanUrl()">Открыть Trojan URL</button>
-            <button class="button" onclick="openVlessUrl()">Открыть VLESS URL</button>
-        </form>
+    <form onsubmit="return false;">
+        <label for="nameInput">Введите имя пользователя:</label><br>
+        <input type="text" id="nameInput" required><br><br>
+        <button class="button" onclick="openTrojanUrl()">Открыть Trojan URL</button>
+        <button class="button" onclick="openVlessUrl()">Открыть VLESS URL</button>
+    </form>
     </p>
-	<br>
+    <br>
 </body>
+
 </html>

@@ -1146,7 +1146,7 @@ cat > /etc/sing-box/config.json <<EOF
       "sniff": true,
       "users": [
         {
-          "name": "1-me",
+          "name": "admin",
           "password": "${trjpass}"
         }
       ],
@@ -1167,7 +1167,7 @@ cat > /etc/sing-box/config.json <<EOF
       "sniff": true,
       "users": [
         {
-          "name": "1-me",
+          "name": "admin",
           "uuid": "${uuid}"
         }
       ],
@@ -1334,9 +1334,9 @@ systemctl start sing-box.service
 
 client_config() {
 mkdir /var/www/${subspath}
-touch /var/www/${subspath}/1-me-TRJ-CLIENT.json
+touch /var/www/${subspath}/admin-TRJ-CLIENT.json
 
-cat > /var/www/${subspath}/1-me-TRJ-CLIENT.json <<EOF
+cat > /var/www/${subspath}/admin-TRJ-CLIENT.json <<EOF
 {
   "log": {
     "level": "fatal",
@@ -1908,17 +1908,17 @@ EOF
 
 if [[ "${transport}" == "2" ]]
 then
-    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/1-me-TRJ-CLIENT.json)
-    echo "$(jq ".outbounds[${outboundnumber}].transport.type = \"httpupgrade\"" /var/www/${subspath}/1-me-TRJ-CLIENT.json)" > /var/www/${subspath}/1-me-TRJ-CLIENT.json
+    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/admin-TRJ-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnumber}].transport.type = \"httpupgrade\"" /var/www/${subspath}/admin-TRJ-CLIENT.json)" > /var/www/${subspath}/admin-TRJ-CLIENT.json
 fi
 
 if [[ "${variant}" == "1" ]]
 then
-    cp /var/www/${subspath}/1-me-TRJ-CLIENT.json /var/www/${subspath}/1-me-VLESS-CLIENT.json
-    sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/1-me-VLESS-CLIENT.json
+    cp /var/www/${subspath}/admin-TRJ-CLIENT.json /var/www/${subspath}/admin-VLESS-CLIENT.json
+    sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/admin-VLESS-CLIENT.json
 else
-    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/1-me-TRJ-CLIENT.json)
-    echo "$(jq "del(.outbounds[${outboundnumber}].transport.type) | del(.outbounds[${outboundnumber}].transport.path)" /var/www/${subspath}/1-me-TRJ-CLIENT.json)" > /var/www/${subspath}/1-me-TRJ-CLIENT.json
+    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/admin-TRJ-CLIENT.json)
+    echo "$(jq "del(.outbounds[${outboundnumber}].transport.type) | del(.outbounds[${outboundnumber}].transport.path)" /var/www/${subspath}/admin-TRJ-CLIENT.json)" > /var/www/${subspath}/admin-TRJ-CLIENT.json
 fi
 }
 
@@ -2410,12 +2410,31 @@ add_sbmanager() {
         curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
     fi
 
-    if [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
+    if [ -f /var/www/${subspath}/template.json ] && [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
     then
         cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
     else
-        cp /var/www/${subspath}/1-me-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
+        cp /var/www/${subspath}/admin-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
     fi
+}
+
+add_sub_page() {
+    if [[ "${variant}" == "1" ]] && [[ "${language}" == "1" ]]
+    then
+        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru.html
+    elif [[ "${variant}" == "1" ]] && [[ "${language}" != "1" ]]
+    then
+        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en.html
+    elif [[ "${variant}" != "1" ]] && [[ "${language}" == "1" ]]
+    then
+        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru-hapr.html
+    else
+        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en-hapr.html
+    fi
+
+    sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
+
+    curl -s -o /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/background.jpg
 }
 
 final_message_ru() {
@@ -2444,11 +2463,17 @@ final_message_ru() {
     if [[ "${variant}" == "1" ]]
     then
         echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
-        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
-        echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
+        echo ""
+        echo -e "${textcolor}Страница выдачи подписок (пользователь admin):${clear}"
+        echo "https://${domain}/${subspath}/sub.html"
     else
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
-        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
+        echo ""
+        echo -e "${textcolor}Страница выдачи подписок (пользователь admin):${clear}"
+        echo "https://${domain}/${subspath}/sub.html"
         echo ""
         echo -e "${red}ВАЖНО:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
     fi
@@ -2480,11 +2505,17 @@ final_message_en() {
     if [[ "${variant}" == "1" ]]
     then
         echo -e "${textcolor}Client configs are available here:${clear}"
-        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
-        echo "https://${domain}/${subspath}/1-me-VLESS-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
+        echo ""
+        echo -e "${textcolor}Subscription page (username admin):${clear}"
+        echo "https://${domain}/${subspath}/sub.html"
     else
         echo -e "${textcolor}Client config is available here:${clear}"
-        echo "https://${domain}/${subspath}/1-me-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
+        echo ""
+        echo -e "${textcolor}Subscription page (username admin):${clear}"
+        echo "https://${domain}/${subspath}/sub.html"
         echo ""
         echo -e "${red}IMPORTANT:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
     fi
@@ -2522,4 +2553,5 @@ setup_sing_box
 setup_nginx
 setup_haproxy
 add_sbmanager
+add_sub_page
 final_message
