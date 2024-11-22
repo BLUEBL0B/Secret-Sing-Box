@@ -2391,6 +2391,8 @@ setup_haproxy() {
 }
 
 add_sbmanager() {
+    echo -e "${textcolor_light}Adding sbmanager...${clear}"
+
     if [[ "${language}" == "1" ]]
     then
         curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager.sh
@@ -2416,9 +2418,13 @@ add_sbmanager() {
     else
         cp /var/www/${subspath}/admin-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
     fi
+
+    echo ""
 }
 
 add_sub_page() {
+    echo -e "${textcolor_light}Adding subscription page...${clear}"
+
     if [[ "${variant}" == "1" ]] && [[ "${language}" == "1" ]]
     then
         curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru.html
@@ -2435,6 +2441,8 @@ add_sub_page() {
     sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
 
     curl -s -o /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/background.jpg
+
+    echo ""
 }
 
 final_message_ru() {
@@ -2466,14 +2474,16 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
         echo ""
-        echo -e "${textcolor}Страница выдачи подписок (пользователь admin):${clear}"
+        echo -e "${textcolor}Страница выдачи подписок пользователей:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
+        echo -e "Ваше имя пользователя - ${textcolor}admin${clear}"
     else
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo ""
-        echo -e "${textcolor}Страница выдачи подписок (пользователь admin):${clear}"
+        echo -e "${textcolor}Страница выдачи подписок пользователей:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
+        echo -e "Ваше имя пользователя - ${textcolor}admin${clear}"
         echo ""
         echo -e "${red}ВАЖНО:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
     fi
@@ -2508,14 +2518,16 @@ final_message_en() {
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
         echo ""
-        echo -e "${textcolor}Subscription page (username admin):${clear}"
+        echo -e "${textcolor}Subscription page:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
+        echo -e "Your username is ${textcolor}admin${clear}"
     else
         echo -e "${textcolor}Client config is available here:${clear}"
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo ""
-        echo -e "${textcolor}Subscription page (username admin):${clear}"
+        echo -e "${textcolor}Subscription page:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
+        echo -e "Your username is ${textcolor}admin${clear}"
         echo ""
         echo -e "${red}IMPORTANT:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
     fi

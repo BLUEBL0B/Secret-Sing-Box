@@ -42,10 +42,8 @@
             line-height: 0.1em;
         }
 
-        p,
-        label {
+        p {
             font-family: Arial, sans-serif;
-            font-style: italic;
             font-size: 15px;
             color: #000000;
         }
@@ -66,12 +64,20 @@
         }
 
         .button:hover {
-            background-color: lightgrey;
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         input {
             padding: 3px;
             font-size: 14px;
+            border: 1px solid black;
+            border-radius: 4px;
+            text-indent: 5px;
+            width: 230px;
+        }
+
+        input:hover {
+            background-color: rgba(240, 240, 240, 1);
         }
     </style>
 </head>
@@ -98,11 +104,10 @@
     <button class="button" onclick="window.open('https://github.com/hiddify/hiddify-app/releases/latest', '_blank')">Или
         скачать Hiddify</button>
     <br><br>
-    <h2>2. Подключиться к серверу</h2>
+    <h2 style="line-height: 1.5em;">2. Подключиться к серверу</h2>
     <p>
     <form onsubmit="return false;">
-        <label for="nameInput">Введите имя пользователя:</label><br>
-        <input type="text" id="nameInput" required><br><br>
+        <input type="text" placeholder="Введите имя пользователя..." id="nameInput" required><br><br>
         <button class="button" onclick="openTrojanUrl()">Открыть Trojan URL</button>
         <button class="button" onclick="openVlessUrl()">Открыть VLESS URL</button>
     </form>

@@ -42,10 +42,8 @@
             line-height: 0.1em;
         }
 
-        p,
-        label {
+        p {
             font-family: Arial, sans-serif;
-            font-style: italic;
             font-size: 15px;
             color: #000000;
         }
@@ -66,12 +64,20 @@
         }
 
         .button:hover {
-            background-color: lightgrey;
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         input {
             padding: 3px;
             font-size: 14px;
+            border: 1px solid black;
+            border-radius: 4px;
+            text-indent: 5px;
+            width: 230px;
+        }
+
+        input:hover {
+            background-color: rgba(240, 240, 240, 1);
         }
     </style>
 </head>
@@ -86,23 +92,22 @@
     <br><br>
     <h3>- Windows -</h3>
     <button class="button"
-        onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-ru.md', '_blank')">Recommended
+        onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-en.md', '_blank')">Recommended
         method</button>
     <button class="button" onclick="window.open('https://github.com/hiddify/hiddify-app/releases/latest', '_blank')">Or
         download Hiddify</button>
     <br><br>
     <h3>- Linux -</h3>
     <button class="button"
-        onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2', '_blank')">Recommended
+        onclick="window.open('https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md#client-setup', '_blank')">Recommended
         method</button>
     <button class="button" onclick="window.open('https://github.com/hiddify/hiddify-app/releases/latest', '_blank')">Or
         download Hiddify</button>
     <br><br>
-    <h2>2. Connect to the server</h2>
+    <h2 style="line-height: 1.5em;">2. Connect to the server</h2>
     <p>
     <form onsubmit="return false;">
-        <label for="nameInput">Enter your username:</label><br>
-        <input type="text" id="nameInput" required><br><br>
+        <input type="text" placeholder="Enter your username..." id="nameInput" required><br><br>
         <button class="button" onclick="openTrojanUrl()">Open Trojan URL</button>
         <button class="button" onclick="openVlessUrl()">Open VLESS URL</button>
     </form>
