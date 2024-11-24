@@ -204,14 +204,14 @@ crop_subscription_path() {
 }
 
 check_ssh_port_ru() {
-    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
+    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
     do
         if [[ ! $sshp =~ ^[0-9]+$ ]]
         then
             echo -e "${red}Ошибка: введённое значение не является числом${clear}"
-        elif [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        elif [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         then
-            echo -e "${red}Ошибка: порты 80, 443, 10443, 11443 и 40000 будут заняты${clear}"
+            echo -e "${red}Ошибка: порты 443, 10443, 11443 и 40000 будут заняты${clear}"
         elif [ $sshp -gt 65535 ]
         then
             echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
@@ -224,14 +224,14 @@ check_ssh_port_ru() {
 }
 
 check_ssh_port_en() {
-    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
+    while [[ ! $sshp =~ ^[0-9]+$ ]] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ] || [ $sshp -gt 65535 ]
     do
         if [[ ! $sshp =~ ^[0-9]+$ ]]
         then
             echo -e "${red}Error: this is not a number${clear}"
-        elif [ $sshp -eq 80 ] || [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
+        elif [ $sshp -eq 443 ] || [ $sshp -eq 10443 ] || [ $sshp -eq 11443 ] || [ $sshp -eq 40000 ]
         then
-            echo -e "${red}Error: ports 80, 443, 10443, 11443 and 40000 will be taken${clear}"
+            echo -e "${red}Error: ports 443, 10443, 11443 and 40000 will be taken${clear}"
         elif [ $sshp -gt 65535 ]
         then
             echo -e "${red}Error: port number can't be greater than 65535${clear}"
@@ -548,28 +548,6 @@ check_index_en() {
     done
 }
 
-check_timezone_ru() {
-    while [ ! -f /usr/share/zoneinfo/${timezone} ]
-    do
-        echo -e "${red}Ошибка: введённого часового пояса не существует в /usr/share/zoneinfo, проверьте правильность написания${clear}"
-        echo ""
-        echo "Введите часовой пояс для установки времени на сервере (например, Europe/Amsterdam):"
-        read timezone
-        echo ""
-    done
-}
-
-check_timezone_en() {
-    while [ ! -f /usr/share/zoneinfo/${timezone} ]
-    do
-        echo -e "${red}Error: this timezone doesn't exist in /usr/share/zoneinfo, check your spelling${clear}"
-        echo ""
-        echo "Enter the timezone to set the time on the server (e.g. Europe/Amsterdam):"
-        read timezone
-        echo ""
-    done
-}
-
 nginx_login() {
     comment1="#"
     comment2=""
@@ -697,25 +675,6 @@ enter_ssh_data_en() {
 
 enter_data_ru() {
     echo ""
-    echo "Выберите вариант настройки прокси:"
-    echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
-    echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
-    read variant
-    echo ""
-    if [[ "${variant}" == "1" ]]
-    then
-        echo "Выберите транспорт:"
-        echo "1 - WebSocket"
-        echo "2 - HTTPUpgrade"
-        read transport
-        echo ""
-    fi
-    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
-    echo "1 - Да (в случае нестандартных настроек у хостера или ошибки при вводе данных можно потерять доступ к серверу)"
-    echo "2 - Нет"
-    read sshufw
-    echo ""
-    enter_ssh_data_ru
     while [[ -z $domain ]]
     do
         echo "Введите ваш домен:"
@@ -736,6 +695,26 @@ enter_data_ru() {
         echo ""
     done
     check_cf_token_ru
+    echo "Выберите вариант настройки прокси:"
+    echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
+    echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
+    read variant
+    echo ""
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Выберите транспорт:"
+        echo "1 - WebSocket"
+        echo "2 - HTTPUpgrade"
+        read transport
+        echo ""
+    fi
+    echo "Выберите вариант настройки NGINX/HAProxy (1 по умолчанию):"
+    echo "1 - Будет спрашивать логин и пароль вместо сайта"
+    echo "2 - Будет перенаправлять на другой домен"
+    echo "3 - Свой сайт (при наличии)"
+    read option;
+    echo ""
+    nginx_options
     echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
@@ -763,40 +742,16 @@ enter_data_ru() {
     then
         check_subscription_path_ru
     fi
-    echo "Выберите вариант настройки NGINX/HAProxy (1 по умолчанию):"
-    echo "1 - Будет спрашивать логин и пароль вместо сайта"
-    echo "2 - Будет перенаправлять на другой домен"
-    echo "3 - Свой сайт (при наличии)"
-    read option;
+    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
+    echo "1 - Да (в случае нестандартных настроек у хостера или ошибки при вводе данных можно потерять доступ к серверу)"
+    echo "2 - Нет"
+    read sshufw
     echo ""
-    nginx_options
-    echo "Введите часовой пояс для установки времени на сервере (например, Europe/Amsterdam):"
-    read timezone
-    echo ""
-    check_timezone_ru
+    enter_ssh_data_ru
 }
 
 enter_data_en() {
     echo ""
-    echo "Select a proxy setup option:"
-    echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
-    echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
-    read variant
-    echo ""
-    if [[ "${variant}" == "1" ]]
-    then
-        echo "Select transport:"
-        echo "1 - WebSocket"
-        echo "2 - HTTPUpgrade"
-        read transport
-        echo ""
-    fi
-    echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
-    echo "1 - Yes (in case of hoster's non-standard settings or a mistake while entering data, access to the server might be lost)"
-    echo "2 - No"
-    read sshufw
-    echo ""
-    enter_ssh_data_en
     while [[ -z $domain ]]
     do
         echo "Enter your domain name:"
@@ -817,6 +772,26 @@ enter_data_en() {
         echo ""
     done
     check_cf_token_en
+    echo "Select a proxy setup option:"
+    echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
+    echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
+    read variant
+    echo ""
+    if [[ "${variant}" == "1" ]]
+    then
+        echo "Select transport:"
+        echo "1 - WebSocket"
+        echo "2 - HTTPUpgrade"
+        read transport
+        echo ""
+    fi
+    echo "Select NGINX/HAProxy setup option (1 by default):"
+    echo "1 - Will show a login popup asking for username and password"
+    echo "2 - Will redirect to another domain"
+    echo "3 - Your own website (if you have one)"
+    read option;
+    echo ""
+    nginx_options
     echo "Enter your password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
@@ -844,17 +819,12 @@ enter_data_en() {
     then
         check_subscription_path_en
     fi
-    echo "Select NGINX/HAProxy setup option (1 by default):"
-    echo "1 - Will show a login popup asking for username and password"
-    echo "2 - Will redirect to another domain"
-    echo "3 - Your own website (if you have one)"
-    read option;
+    echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
+    echo "1 - Yes (in case of hoster's non-standard settings or a mistake while entering data, access to the server might be lost)"
+    echo "2 - No"
+    read sshufw
     echo ""
-    nginx_options
-    echo "Enter the timezone to set the time on the server (e.g. Europe/Amsterdam):"
-    read timezone
-    echo ""
-    check_timezone_en
+    enter_ssh_data_en
 }
 
 enter_data() {
@@ -865,13 +835,6 @@ enter_data() {
         enter_data_en
     fi
     echo ""
-    echo ""
-}
-
-set_timezone() {
-    echo -e "${textcolor_light}Setting up timezone...${clear}"
-    timedatectl set-timezone ${timezone}
-    date
     echo ""
 }
 
@@ -1002,7 +965,6 @@ setup_ufw() {
     echo -e "${textcolor_light}Setting up UFW...${clear}"
     ufw allow ${sshp}/tcp
     ufw allow 443/tcp
-    ufw allow 80/tcp
     # Protection from Reality certificate stealing:
     ufw insert 1 deny from ${serverip}/22 &> /dev/null
     echo ""
@@ -1017,6 +979,7 @@ unattended_upgrades() {
     echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | debconf-set-selections
     dpkg-reconfigure -f noninteractive unattended-upgrades
     systemctl restart unattended-upgrades
+    systemctl enable unattended-upgrades.service
     echo ""
 }
 
@@ -1046,6 +1009,14 @@ certificates() {
 
     certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
+    if [ $? -ne 0 ]
+    then
+        sleep 3
+        echo ""
+        echo -e "${textcolor_light}Requesting a certificate: 2nd attempt...${clear}"
+        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+    fi
+
     { crontab -l; echo "0 5 1 */2 * certbot -q renew --force-renewal"; } | crontab -
 
     if [[ "${variant}" == "1" ]]
@@ -1073,6 +1044,7 @@ setup_warp() {
     echo "LogLevelMax=3" >> /etc/systemd/system/warp-svc.service.d/override.conf
     systemctl daemon-reload
     systemctl restart warp-svc.service
+    systemctl enable warp-svc.service
     apt-mark hold cloudflare-warp
     echo ""
 }
@@ -1465,7 +1437,7 @@ cat > /var/www/${subspath}/admin-TRJ-CLIENT.json <<EOF
       "tag": "tun-in",
       "interface_name": "tun0",
       "stack": "system",
-      "inet4_address": "172.19.0.1/28",
+      "address": "172.19.0.1/28",
       "auto_route": true,
       "strict_route": true,
       "sniff": true,
@@ -2139,21 +2111,6 @@ http {
         gzip_comp_level 6;
         gzip_types      text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
     }
-
-    # HTTP redirect
-    server {
-        listen      80;
-        listen      [::]:80;
-
-        server_name _;
-
-        # Disable direct IP access
-        if (\$host = ${serverip}) {
-            return 444;
-        }
-
-        return 301  https://${redirect}\$request_uri;
-    }
 }
 EOF
 
@@ -2358,21 +2315,6 @@ ${comment3}backend http-sub
         ${comment3}server nginx 127.0.0.1:11443
 
 ${comment2}${comment3}userlist mycredentials
-
-frontend haproxy-http
-        bind :::80 v4v6
-        mode http
-        acl host_ip hdr(host) -i ${serverip}
-        http-request reject if host_ip
-        # For HTTPS Redirect
-        default_backend https-redirect
-        # For HTTP Web Server
-        # default_backend http
-
-backend https-redirect
-        mode http
-        ${comment2}http-request redirect scheme https
-        ${comment1}${comment3}http-request redirect code 301 location https://${redirect}/
 EOF
 
 systemctl enable haproxy.service
@@ -2555,7 +2497,6 @@ enter_language
 start_message
 check_if_updated
 enter_data
-set_timezone
 enable_bbr
 install_packages
 setup_security

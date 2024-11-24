@@ -126,7 +126,7 @@
       "tag": "tun-in",
       "interface_name": "tun0",
       "stack": "system",
-      "inet4_address": "172.19.0.1/28",
+      "address": "172.19.0.1/28",
       "auto_route": true,
       "strict_route": true,
       "sniff": true,
