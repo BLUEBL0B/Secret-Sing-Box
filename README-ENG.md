@@ -13,7 +13,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside.
 > Recommended OS: Debian 11/12 or Ubuntu 22.04/24.04. You will also need your own domain linked to your Cloudflare account ([How to set it up?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/cf-settings-en.md)). Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
-> With routing rules for Russia. Open ports on the server: 443, 80 and SSH.
+> With routing rules for Russia. Open ports on the server: 443 and SSH.
  
 ### Includes:
 1) Sing-Box server setup
@@ -36,7 +36,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/03a25a31-7b7a-40ab-874c-8b1fb87e86a1)
+![pic-1-en](https://github.com/user-attachments/assets/1ac0340b-4400-481f-a84a-51027a406685)
 
 The script will show your client links in the end.
 
