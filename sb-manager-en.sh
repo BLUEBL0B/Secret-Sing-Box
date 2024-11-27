@@ -808,6 +808,11 @@ disable_ipv6() {
         echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
     fi
 
+    if ! grep -q "net.ipv6.conf.lo.disable_ipv6 = 1" /etc/sysctl.conf
+    then
+        echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
+    fi
+
     echo -e "${textcolor}IPv6 is disabled:${clear}"
     sysctl -p
     echo ""
@@ -818,6 +823,7 @@ disable_ipv6() {
 enable_ipv6() {
     sed -i "/net.ipv6.conf.all.disable_ipv6 = 1/d" /etc/sysctl.conf
     sed -i "/net.ipv6.conf.default.disable_ipv6 = 1/d" /etc/sysctl.conf
+    sed -i "/net.ipv6.conf.lo.disable_ipv6 = 1/d" /etc/sysctl.conf
 
     echo -e "${textcolor}IPv6 is not disabled:${clear}"
     sysctl -p

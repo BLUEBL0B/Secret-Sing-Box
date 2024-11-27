@@ -708,7 +708,7 @@ enter_data_ru() {
         read transport
         echo ""
     fi
-    echo "Выберите вариант настройки NGINX/HAProxy (1 по умолчанию):"
+    echo "Выберите вариант настройки NGINX/HAProxy:"
     echo "1 - Будет спрашивать логин и пароль вместо сайта"
     echo "2 - Будет перенаправлять на другой домен"
     echo "3 - Свой сайт (при наличии)"
@@ -785,7 +785,7 @@ enter_data_en() {
         read transport
         echo ""
     fi
-    echo "Select NGINX/HAProxy setup option (1 by default):"
+    echo "Select NGINX/HAProxy setup option:"
     echo "1 - Will show a login popup asking for username and password"
     echo "2 - Will redirect to another domain"
     echo "3 - Your own website (if you have one)"
