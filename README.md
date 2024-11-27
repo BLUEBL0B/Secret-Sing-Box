@@ -13,7 +13,7 @@
 > Рекомендуемая ОС: Debian 11/12 или Ubuntu 22.04/24.04. Для настройки понадобится свой домен, прикреплённый к аккаунту Cloudflare ([Как настроить?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/cf-settings-ru.md)). Запускайте от имени root на чистой системе. Рекомендуется обновить систему и перезагрузить сервер перед запуском скрипта.
 
 > [!NOTE]
-> С правилами маршрутизации для России. Открытые порты на сервере: 443, 80 и SSH.
+> С правилами маршрутизации для России. Открытые порты на сервере: 443 и SSH.
  
 ### Включает:
 1) Настройку сервера Sing-Box
@@ -36,7 +36,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Затем просто введите необходимую информацию:
 
-![pic-1-ru](https://github.com/user-attachments/assets/637ce944-5a7d-4e90-aa7a-e5eec862e3c7)
+![pic-1-ru](https://github.com/user-attachments/assets/8a80abf1-bb03-485f-8d52-f39aec901aa0)
 
 В конце скрипт покажет ссылки на клиентские конфиги.
 
