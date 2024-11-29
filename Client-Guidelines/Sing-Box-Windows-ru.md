@@ -56,7 +56,7 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\VLESS-CLIENT.json
 
 ![w2](https://github.com/user-attachments/assets/22d79731-f46d-4d1a-868c-36b45a9e4d36)
 
-![w3](https://github.com/user-attachments/assets/5e7eeae2-c9ff-4f76-bd73-f83802144537)
+![w3](https://github.com/user-attachments/assets/bce8b230-f0f4-4f99-9bf4-609e74290897)
 
 ![w4](https://github.com/user-attachments/assets/d35d5648-e593-4ab5-9afb-f8e8a2201f41)
 
