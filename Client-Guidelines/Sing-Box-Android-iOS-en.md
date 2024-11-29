@@ -27,7 +27,7 @@ But the setup is not complete yet
 
 -----
 
-### It’s strongly recommended to use proxy only for the apps where you need to bypass censorship:
+### It’s strongly recommended to use proxy only for the necessary apps:
 ![a5](https://github.com/user-attachments/assets/ded0c2bb-09b6-47f9-82ff-f221fef2ad6a)
 
 Then click on 3 dots in the upper right corner, select «Proxy Mode», and then select «Include»
