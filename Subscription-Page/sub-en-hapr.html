@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
         function openTrojanUrl() {
-            var name = document.getElementById("nameInput").value;
+            var name = document.getElementById("nameInput").value.trim();
             var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SUBSCRIPTION-PATH/";
             var fullUrl = baseUrl + encodeURIComponent(name) + "-TRJ-CLIENT.json";
             window.open(fullUrl);

@@ -2408,10 +2408,11 @@ final_message_ru() {
         echo "Настоятельно рекомендуется почитать о безопасности сервера и выполнить настройку самостоятельно"
     fi
     echo ""
+    echo -e "${red}ВАЖНО:${clear}"
     echo -e "Для начала работы прокси может потребоваться перезагрузка сервера командой ${textcolor}sudo reboot${clear}"
-    echo ""
     if [[ "${variant}" == "1" ]]
     then
+        echo ""
         echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
@@ -2420,14 +2421,14 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Ваше имя пользователя - ${textcolor}admin${clear}"
     else
+        echo "Чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
+        echo ""
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo ""
         echo -e "${textcolor}Страница выдачи подписок пользователей:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Ваше имя пользователя - ${textcolor}admin${clear}"
-        echo ""
-        echo -e "${red}ВАЖНО:${clear} чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
     fi
 }
 
@@ -2452,10 +2453,11 @@ final_message_en() {
         echo "It is highly recommended to find information about server security and to configure it yourself"
     fi
     echo ""
+    echo -e "${red}IMPORTANT:${clear}"
     echo -e "It might be required to reboot the server for the proxy to start working (${textcolor}sudo reboot${clear})"
-    echo ""
     if [[ "${variant}" == "1" ]]
     then
+        echo ""
         echo -e "${textcolor}Client configs are available here:${clear}"
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
@@ -2464,14 +2466,14 @@ final_message_en() {
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Your username is ${textcolor}admin${clear}"
     else
+        echo "For this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
+        echo ""
         echo -e "${textcolor}Client config is available here:${clear}"
         echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
         echo ""
         echo -e "${textcolor}Subscription page:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Your username is ${textcolor}admin${clear}"
-        echo ""
-        echo -e "${red}IMPORTANT:${clear} for this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
     fi
 }
 
