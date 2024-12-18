@@ -648,7 +648,7 @@ enter_ssh_data_ru() {
         read username
         echo ""
         check_username_ru
-        echo "Введите пароль SSH для пользователя:"
+        echo "Введите пароль SSH для пользователя (рекомендуется сложный пароль):"
         read password
         echo ""
         check_password_ru
@@ -666,7 +666,7 @@ enter_ssh_data_en() {
         read username
         echo ""
         check_username_en
-        echo "Enter new SSH password:"
+        echo "Enter new SSH password (a complex password is recommended):"
         read password
         echo ""
         check_password_en
