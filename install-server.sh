@@ -1074,6 +1074,8 @@ generate_pass() {
     then
         subspath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
     fi
+
+    userkey=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 10)
 }
 
 server_config() {
@@ -1118,7 +1120,7 @@ cat > /etc/sing-box/config.json <<EOF
       "sniff": true,
       "users": [
         {
-          "name": "admin",
+          "name": "admin-${userkey}",
           "password": "${trjpass}"
         }
       ],
@@ -1139,7 +1141,7 @@ cat > /etc/sing-box/config.json <<EOF
       "sniff": true,
       "users": [
         {
-          "name": "admin",
+          "name": "admin-${userkey}",
           "uuid": "${uuid}"
         }
       ],
@@ -1306,9 +1308,9 @@ systemctl start sing-box.service
 
 client_config() {
 mkdir /var/www/${subspath}
-touch /var/www/${subspath}/admin-TRJ-CLIENT.json
+touch /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json
 
-cat > /var/www/${subspath}/admin-TRJ-CLIENT.json <<EOF
+cat > /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json <<EOF
 {
   "log": {
     "level": "fatal",
@@ -1880,17 +1882,17 @@ EOF
 
 if [[ "${transport}" == "2" ]]
 then
-    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/admin-TRJ-CLIENT.json)
-    echo "$(jq ".outbounds[${outboundnumber}].transport.type = \"httpupgrade\"" /var/www/${subspath}/admin-TRJ-CLIENT.json)" > /var/www/${subspath}/admin-TRJ-CLIENT.json
+    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnumber}].transport.type = \"httpupgrade\"" /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json)" > /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json
 fi
 
 if [[ "${variant}" == "1" ]]
 then
-    cp /var/www/${subspath}/admin-TRJ-CLIENT.json /var/www/${subspath}/admin-VLESS-CLIENT.json
-    sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/admin-VLESS-CLIENT.json
+    cp /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json /var/www/${subspath}/admin-${userkey}-VLESS-CLIENT.json
+    sed -i -e "s/$trjpass/$uuid/g" -e "s/$trojanpath/$vlesspath/g" -e 's/: "trojan"/: "vless"/g' -e 's/"password": /"uuid": /g' /var/www/${subspath}/admin-${userkey}-VLESS-CLIENT.json
 else
-    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/admin-TRJ-CLIENT.json)
-    echo "$(jq "del(.outbounds[${outboundnumber}].transport.type) | del(.outbounds[${outboundnumber}].transport.path)" /var/www/${subspath}/admin-TRJ-CLIENT.json)" > /var/www/${subspath}/admin-TRJ-CLIENT.json
+    outboundnumber=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json)
+    echo "$(jq "del(.outbounds[${outboundnumber}].transport.type) | del(.outbounds[${outboundnumber}].transport.path)" /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json)" > /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json
 fi
 }
 
@@ -2358,7 +2360,7 @@ add_sbmanager() {
     then
         cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
     else
-        cp /var/www/${subspath}/admin-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
+        cp /var/www/${subspath}/admin-${userkey}-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
     fi
 
     echo ""
@@ -2414,21 +2416,21 @@ final_message_ru() {
     then
         echo ""
         echo -e "${textcolor}Конфиги для клиента доступны по ссылкам:${clear}"
-        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
-        echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-${userkey}-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-${userkey}-VLESS-CLIENT.json"
         echo ""
         echo -e "${textcolor}Страница выдачи подписок пользователей:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
-        echo -e "Ваше имя пользователя - ${textcolor}admin${clear}"
+        echo -e "Ваше имя пользователя - ${textcolor}admin-${userkey}${clear}"
     else
         echo "Чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
         echo ""
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
-        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-${userkey}-TRJ-CLIENT.json"
         echo ""
         echo -e "${textcolor}Страница выдачи подписок пользователей:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
-        echo -e "Ваше имя пользователя - ${textcolor}admin${clear}"
+        echo -e "Ваше имя пользователя - ${textcolor}admin-${userkey}${clear}"
     fi
 }
 
@@ -2459,21 +2461,21 @@ final_message_en() {
     then
         echo ""
         echo -e "${textcolor}Client configs are available here:${clear}"
-        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
-        echo "https://${domain}/${subspath}/admin-VLESS-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-${userkey}-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-${userkey}-VLESS-CLIENT.json"
         echo ""
         echo -e "${textcolor}Subscription page:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
-        echo -e "Your username is ${textcolor}admin${clear}"
+        echo -e "Your username is ${textcolor}admin-${userkey}${clear}"
     else
         echo "For this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
         echo ""
         echo -e "${textcolor}Client config is available here:${clear}"
-        echo "https://${domain}/${subspath}/admin-TRJ-CLIENT.json"
+        echo "https://${domain}/${subspath}/admin-${userkey}-TRJ-CLIENT.json"
         echo ""
         echo -e "${textcolor}Subscription page:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
-        echo -e "Your username is ${textcolor}admin${clear}"
+        echo -e "Your username is ${textcolor}admin-${userkey}${clear}"
     fi
 }
 

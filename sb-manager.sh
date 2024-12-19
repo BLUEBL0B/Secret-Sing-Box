@@ -797,6 +797,39 @@ change_stack() {
     main_menu
 }
 
+exit_renew_cert() {
+    if [[ $certrenew == "x" ]] || [[ $certrenew == "х" ]]
+    then
+        echo ""
+        certrenew=""
+        main_menu
+    fi
+}
+
+renew_cert() {
+    echo -e "${red}ВНИМАНИЕ!${clear}"
+    echo "В скрипт встроено автоматическое обновление сертификата раз в 2 месяца, и ручное обновление рекомендуется только в случае сбоев"
+    echo "При обновлении сертификата более 5 раз в неделю можно достичь лимита Let's Encrypt, что потребует ожидания для следующего обновления"
+    echo ""
+    echo -e "Нажмите ${textcolor}Enter${clear}, чтобы обновить сертификат, или введите ${textcolor}x${clear}, чтобы выйти:"
+    read certrenew
+    exit_renew_cert
+
+    certbot renew --force-renewal
+
+    if [ $? -eq 0 ]
+    then
+        echo ""
+        echo "Сертификат успешно обновлён"
+    else
+        echo ""
+        echo -e "${red}Ошибка: сертификат не обновлён${clear}"
+    fi
+
+    echo ""
+    main_menu
+}
+
 disable_ipv6() {
     if ! grep -q "net.ipv6.conf.all.disable_ipv6 = 1" /etc/sysctl.conf
     then
@@ -851,8 +884,10 @@ main_menu() {
     echo "------------------------"
     echo "10 - Настроить/убрать цепочку из двух и более серверов"
     echo "------------------------"
-    echo "11 - Отключить IPv6 на сервере"
-    echo "12 - Не отключать IPv6 на сервере"
+    echo "11 - Обновить сертификат вручную"
+    echo "------------------------"
+    echo "12 - Отключить IPv6 на сервере"
+    echo "13 - Не отключать IPv6 на сервере"
     read option
     echo ""
 
@@ -888,9 +923,12 @@ main_menu() {
         chain_setup
         ;;
         11)
-        disable_ipv6
+        renew_cert
         ;;
         12)
+        disable_ipv6
+        ;;
+        13)
         enable_ipv6
         ;;
         *)

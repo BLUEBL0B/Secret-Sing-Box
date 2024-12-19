@@ -797,6 +797,39 @@ change_stack() {
     main_menu
 }
 
+exit_renew_cert() {
+    if [[ $certrenew == "x" ]] || [[ $certrenew == "х" ]]
+    then
+        echo ""
+        certrenew=""
+        main_menu
+    fi
+}
+
+renew_cert() {
+    echo -e "${red}ATTENTION!${clear}"
+    echo "The script has a built-in automatic certificate renewal every 2 months, and manual renewal is recommended only in case of failures"
+    echo "Renewing a certificate more than 5 times a week can result in reaching the Let's Encrypt limit, requiring you to wait before the next renewal"
+    echo ""
+    echo -e "Press ${textcolor}Enter${clear} to renew certificate or enter ${textcolor}x${clear} to exit:"
+    read certrenew
+    exit_renew_cert
+
+    certbot renew --force-renewal
+
+    if [ $? -eq 0 ]
+    then
+        echo ""
+        echo "Certificate has been renewed successfully"
+    else
+        echo ""
+        echo -e "${red}Error: certificate has not been renewed${clear}"
+    fi
+
+    echo ""
+    main_menu
+}
+
 disable_ipv6() {
     if ! grep -q "net.ipv6.conf.all.disable_ipv6 = 1" /etc/sysctl.conf
     then
@@ -851,8 +884,10 @@ main_menu() {
     echo "------------------------"
     echo "10 - Setup/remove a chain of two or more servers"
     echo "------------------------"
-    echo "11 - Disable IPv6 on the server"
-    echo "12 - Enable IPv6 on the server"
+    echo "11 - Renew certificate manually"
+    echo "------------------------"
+    echo "12 - Disable IPv6 on the server"
+    echo "13 - Enable IPv6 on the server"
     read option
     echo ""
 
@@ -888,9 +923,12 @@ main_menu() {
         chain_setup
         ;;
         11)
-        disable_ipv6
+        renew_cert
         ;;
         12)
+        disable_ipv6
+        ;;
+        13)
         enable_ipv6
         ;;
         *)
