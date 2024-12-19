@@ -28,6 +28,8 @@
  
 ### Использование:
 
+> Данный проект создан в образовательных и демонстрационных целях. Пожалуйста, убедитесь в законности ваших действий перед использованием.
+
 Для настройки сервера запустите эту команду:
 
 ```
@@ -71,6 +73,13 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-pc-linux.sh)
 ```
+
+### Вы можете поддержать проект:
+- USDT (BEP20): 0xe2FeA540a9F1f85C2bfA3e6949c722393B5d636A
+- USDT (ERC20): 0xe2FeA540a9F1f85C2bfA3e6949c722393B5d636A
+- Bitcoin (BIP84): bc1qhn2ghk3pcpsrr6l9ywfryvqfzvyx8gs2wnpz89
+- Litecoin (BIP84): ltc1q7quvcq3gtlwf2yuk370vhf2syad8ee4we9huj4
+- Toncoin: UQCWmIBsU-EZJSH3rhghbtSOtKQBmb5y74mkjbohpDWZ6l-H
 
 ### Звёзды по времени:
 [![Stargazers over time](https://starchart.cc/BLUEBL0B/Secret-Sing-Box.svg?variant=adaptive)](https://starchart.cc/BLUEBL0B/Secret-Sing-Box)
