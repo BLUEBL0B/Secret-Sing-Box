@@ -38,7 +38,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Затем просто введите необходимую информацию:
 
-![pic-1-ru](https://github.com/user-attachments/assets/8a80abf1-bb03-485f-8d52-f39aec901aa0)
+![pic-1-ru](https://github.com/user-attachments/assets/be187931-bba6-445e-8cf4-b7ff7bf2cbbc)
 
 В конце скрипт покажет ссылки на клиентские конфиги.
 
@@ -52,7 +52,7 @@ sbmanager
 
 Далее следуйте инструкциям:
 
-![pic-2-ru](https://github.com/user-attachments/assets/25179d7f-4576-4d32-ad63-6f7920d036d2)
+![pic-2-ru](https://github.com/user-attachments/assets/4b63c6d5-0268-4d57-91a6-558da77c3f2f)
 
 Пункты 5 и 6 синхронизируют настройки в клиентских конфигах всех пользователей, что позволяет не редактировать конфиг каждого пользователя отдельно.
 
