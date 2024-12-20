@@ -19,7 +19,7 @@ check_root() {
     if [[ $EUID -ne 0 ]]
     then
         echo ""
-        echo -e "${red}Error: this script should be run as root${clear}"
+        echo -e "${red}Error: this script should be run as root, use \"sudo -i\" command${clear}"
         echo ""
         exit 1
     fi
@@ -878,8 +878,9 @@ install_packages() {
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(grep "VERSION_CODENAME=" /etc/os-release | cut -d "=" -f 2) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
     apt-get update && apt-get install cloudflare-warp -y
-    wget https://pkg.cloudflareclient.com/pool/$(grep "VERSION_CODENAME=" /etc/os-release | cut -d "=" -f 2)/main/c/cloudflare-warp/cloudflare-warp_2024.6.497-1_amd64.deb
-    dpkg -i cloudflare-warp_2024.6.497-1_amd64.deb
+    #wget https://pkg.cloudflareclient.com/pool/$(grep "VERSION_CODENAME=" /etc/os-release | cut -d "=" -f 2)/main/c/cloudflare-warp/cloudflare-warp_2024.6.497-1_amd64.deb
+    #dpkg -i cloudflare-warp_2024.6.497-1_amd64.deb
+    #apt-mark hold cloudflare-warp
 
     if [ ! -d /etc/apt/keyrings ]
     then
@@ -913,6 +914,8 @@ install_packages() {
     then
         apt install haproxy -y
     fi
+
+    journalctl --vacuum-time=7days
 
     echo ""
 }
@@ -1045,7 +1048,6 @@ setup_warp() {
     systemctl daemon-reload
     systemctl restart warp-svc.service
     systemctl enable warp-svc.service
-    apt-mark hold cloudflare-warp
     echo ""
 }
 

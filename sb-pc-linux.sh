@@ -8,7 +8,7 @@ check_root() {
 	if [[ $EUID -ne 0 ]]
 	then
 		echo ""
-		echo -e "${red}Error: this script should be run as root${clear}"
+		echo -e "${red}Error: this script should be run as root, use \"sudo -i\" command${clear}"
 		echo ""
 		exit 1
 	fi
