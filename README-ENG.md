@@ -38,7 +38,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/1ac0340b-4400-481f-a84a-51027a406685)
+![pic-1-en](https://github.com/user-attachments/assets/cabaf8e3-8f93-4339-8aed-d1c72910cdf5)
 
 The script will show your client links in the end.
 
@@ -52,7 +52,7 @@ sbmanager
 
 Then follow the instructions:
 
-![pic-2-en](https://github.com/user-attachments/assets/a2ee3d75-0dcf-4dda-a7d7-30657a5b8a1e)
+![pic-2-en](https://github.com/user-attachments/assets/c027c6dd-85bf-447e-9a1d-d68182ea71ae)
 
 Options 5 and 6 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
