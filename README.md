@@ -5,7 +5,12 @@
 ### Прокси с использованием протоколов Trojan и VLESS и терминированием TLS на NGINX или HAProxy
 Данный скрипт предназначен для полной настройки защищённого прокси-сервера с ядром [Sing-Box](https://sing-box.sagernet.org) и маскировкой при помощи [NGINX](https://nginx.org/ru/) или [HAProxy](https://www.haproxy.org). Два варианта настройки на выбор:
 - Все запросы к прокси принимает NGINX, запросы передаются на Sing-Box только при наличии в них правильного пути (транспорт WebSocket или HTTPUpgrade)
+
+![nginx-ru](https://github.com/user-attachments/assets/1ae6d050-4325-4d47-a807-720525fe4955)
+
 - Все запросы к прокси принимает HAProxy, запросы передаются на Sing-Box только при наличии в них правильного пароля Trojan (транспорт TCP) — метод [FPPweb3](https://github.com/FPPweb3)
+
+![haproxy-ru](https://github.com/user-attachments/assets/91ceaa8e-4f77-4cac-8f8d-cf47db44d0f7)
 
 Оба варианта настройки делают невозможным обнаружение Sing-Box снаружи, что повышает уровень безопасности.
 
@@ -38,7 +43,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Затем просто введите необходимую информацию:
 
-![pic-1-ru](https://github.com/user-attachments/assets/be187931-bba6-445e-8cf4-b7ff7bf2cbbc)
+![pic-1-ru](https://github.com/user-attachments/assets/6b36ee5b-512a-4fe5-b8d8-305e911ca675)
 
 В конце скрипт покажет ссылки на клиентские конфиги.
 
