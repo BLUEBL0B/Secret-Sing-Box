@@ -90,7 +90,7 @@ validate_local_template() {
     then
         echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
         echo ""
-        echo -e "Нажмите ${textcolor}Enter${clear}, чтобы выйти, или введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии"
+        echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы выйти, или введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии"
         read resettemp
         if [[ "$resettemp" == "reset" ]]
         then
@@ -124,7 +124,7 @@ check_username_add() {
         then
             :
         fi
-        echo -e "Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+        echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
         read username
         [[ ! -z $username ]] && echo ""
     done
@@ -135,7 +135,7 @@ check_trjpass() {
     do
         echo -e "${red}Ошибка: этот пароль уже закреплён за другим пользователем${clear}"
         echo ""
-        echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+        echo -e "${textcolor}[?]${clear} Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
         read trjpass
         [[ ! -z $trjpass ]] && echo ""
     done
@@ -152,35 +152,35 @@ check_uuid() {
             echo -e "${red}Ошибка: этот UUID уже закреплён за другим пользователем${clear}"
         fi
         echo ""
-        echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+        echo -e "${textcolor}[?]${clear} Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
     done
 }
 
 enter_user_data_add_ws() {
-    echo -e "Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
     read username
     [[ ! -z $username ]] && echo ""
     check_username_add
     exit_username
-    echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+    echo -e "${textcolor}[?]${clear} Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
     check_trjpass
-    echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+    echo -e "${textcolor}[?]${clear} Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
     read uuid
     [[ ! -z $uuid ]] && echo ""
     check_uuid
 }
 
 enter_user_data_add_haproxy() {
-    echo -e "Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
     read username
     [[ ! -z $username ]] && echo ""
     check_username_add
     exit_username
-    echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+    echo -e "${textcolor}[?]${clear} Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
     check_trjpass
@@ -262,7 +262,7 @@ check_username_del() {
     do
         echo -e "${red}Ошибка: пользователь с таким именем не существует${clear}"
         echo ""
-        echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+        echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
         read username
         echo ""
         exit_username
@@ -270,7 +270,7 @@ check_username_del() {
 }
 
 enter_user_data_del() {
-    echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
     read username
     echo ""
     exit_username
@@ -316,7 +316,7 @@ sync_github_message() {
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Настройки в клиентских конфигах всех пользователей будут синхронизированы с последней версией на Github"
     echo ""
-    echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
+    echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
     read sync
 }
 
@@ -383,7 +383,7 @@ sync_local_message() {
     echo -e "Вы можете вручную отредактировать настройки в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
     echo "Настройки в этом файле будут применены к клиентским конфигам всех пользователей"
     echo ""
-    echo -e "Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
+    echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
     read sync
 }
 
@@ -499,7 +499,7 @@ check_warp_domain_add() {
     do
         echo -e "${red}Ошибка: этот домен/суффикс уже добавлен в WARP${clear}"
         echo ""
-        echo -e "Введите новый домен/суффикс для WARP или введите ${textcolor}x${clear}, чтобы закончить:"
+        echo -e "${textcolor}[?]${clear} Введите новый домен/суффикс для WARP или введите ${textcolor}x${clear}, чтобы закончить:"
         read newwarp
         echo ""
         exit_add_warp
@@ -511,7 +511,7 @@ check_warp_domain_del() {
     do
         echo -e "${red}Ошибка: этот домен/суффикс не добавлен в WARP${clear}"
         echo ""
-        echo -e "Введите домен/суффикс для удаления из WARP или введите ${textcolor}x${clear}, чтобы закончить:"
+        echo -e "${textcolor}[?]${clear} Введите домен/суффикс для удаления из WARP или введите ${textcolor}x${clear}, чтобы закончить:"
         read delwarp
         echo ""
         exit_del_warp
@@ -522,7 +522,7 @@ add_warp_domains() {
     warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     while [[ $newwarp != "x" ]] && [[ $newwarp != "х" ]]
     do
-        echo -e "Введите новый домен/суффикс для WARP или введите ${textcolor}x${clear}, чтобы закончить:"
+        echo -e "${textcolor}[?]${clear} Введите новый домен/суффикс для WARP или введите ${textcolor}x${clear}, чтобы закончить:"
         read newwarp
         echo ""
         check_warp_domain_add
@@ -538,7 +538,7 @@ delete_warp_domains() {
     warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     while [[ $delwarp != "x" ]] && [[ $delwarp != "х" ]]
     do
-        echo -e "Введите домен/суффикс для удаления из WARP или введите ${textcolor}x${clear}, чтобы закончить:"
+        echo -e "${textcolor}[?]${clear} Введите домен/суффикс для удаления из WARP или введите ${textcolor}x${clear}, чтобы закончить:"
         read delwarp
         echo ""
         exit_del_warp
@@ -568,7 +568,7 @@ check_nextlink() {
         echo ""
         while [[ -z $nextlink ]]
         do
-            echo -e "Введите ссылку на клиентский конфиг со следующего сервера в цепочке или введите ${textcolor}x${clear}, чтобы выйти:"
+            echo -e "${textcolor}[?]${clear} Введите ссылку на клиентский конфиг со следующего сервера в цепочке или введите ${textcolor}x${clear}, чтобы выйти:"
             read nextlink
             echo ""
             exit_enter_nextlink
@@ -628,7 +628,7 @@ chain_end() {
 chain_middle() {
     while [[ -z $nextlink ]]
     do
-        echo -e "Введите ссылку на клиентский конфиг со следующего сервера в цепочке или введите ${textcolor}x${clear}, чтобы выйти:"
+        echo -e "${textcolor}[?]${clear} Введите ссылку на клиентский конфиг со следующего сервера в цепочке или введите ${textcolor}x${clear}, чтобы выйти:"
         read nextlink
         echo ""
     done
@@ -691,7 +691,7 @@ chain_middle() {
 }
 
 chain_setup() {
-    echo -e "${textcolor}Выберите положение сервера цепочке:${clear}"
+    echo -e "${textcolor}[?]${clear} Выберите положение сервера цепочке:"
     echo "0 - Выйти"
     if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
     then
@@ -708,7 +708,7 @@ chain_setup() {
     do
         echo -e "${red}Ошибка: этот сервер уже настроен как конечный в цепочке или единственный${clear}"
         echo ""
-        echo -e "${textcolor}Выберите положение сервера цепочке:${clear}"
+        echo -e "${textcolor}[?]${clear} Выберите положение сервера цепочке:"
         echo "0 - Выйти"
         echo "1 - Настроить этот сервер как конечный в цепочке или единственный                     [Выбрано]"
         echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер"
@@ -729,13 +729,13 @@ chain_setup() {
 }
 
 change_stack() {
-    echo -e "Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
     read username
     echo ""
     exit_username
     check_username_del
 
-    echo -e "${textcolor}Выберите \"stack\" для пользователя ${username}:${clear}"
+    echo -e "${textcolor}[?]${clear} Выберите \"stack\" для пользователя ${username}:"
     echo "0 - Выйти"
     if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
     then
@@ -811,7 +811,7 @@ renew_cert() {
     echo "В скрипт встроено автоматическое обновление сертификата раз в 2 месяца, и ручное обновление рекомендуется только в случае сбоев"
     echo "При обновлении сертификата более 5 раз в неделю можно достичь лимита Let's Encrypt, что потребует ожидания для следующего обновления"
     echo ""
-    echo -e "Нажмите ${textcolor}Enter${clear}, чтобы обновить сертификат, или введите ${textcolor}x${clear}, чтобы выйти:"
+    echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы обновить сертификат, или введите ${textcolor}x${clear}, чтобы выйти:"
     read certrenew
     exit_renew_cert
 

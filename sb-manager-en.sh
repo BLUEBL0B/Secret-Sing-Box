@@ -90,7 +90,7 @@ validate_local_template() {
     then
         echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
         echo ""
-        echo -e "Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
+        echo -e "${textcolor}[?]${clear} Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
         read resettemp
         if [[ "$resettemp" == "reset" ]]
         then
@@ -124,7 +124,7 @@ check_username_add() {
         then
             :
         fi
-        echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
         read username
         [[ ! -z $username ]] && echo ""
     done
@@ -135,7 +135,7 @@ check_trjpass() {
     do
         echo -e "${red}Error: this password is already assigned to another user${clear}"
         echo ""
-        echo "Enter the password for Trojan or leave this empty to generate a random password:"
+        echo -e "${textcolor}[?]${clear} Enter the password for Trojan or leave this empty to generate a random password:"
         read trjpass
         [[ ! -z $trjpass ]] && echo ""
     done
@@ -152,35 +152,35 @@ check_uuid() {
             echo -e "${red}Error: this UUID is already assigned to another user${clear}"
         fi
         echo ""
-        echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
+        echo -e "${textcolor}[?]${clear} Enter the UUID for VLESS or leave this empty to generate a random UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
     done
 }
 
 enter_user_data_add_ws() {
-    echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
+    echo -e "${textcolor}[?]${clear} Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
     read username
     [[ ! -z $username ]] && echo ""
     check_username_add
     exit_username
-    echo "Enter the password for Trojan or leave this empty to generate a random password:"
+    echo -e "${textcolor}[?]${clear} Enter the password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
     check_trjpass
-    echo "Enter the UUID for VLESS or leave this empty to generate a random UUID:"
+    echo -e "${textcolor}[?]${clear} Enter the UUID for VLESS or leave this empty to generate a random UUID:"
     read uuid
     [[ ! -z $uuid ]] && echo ""
     check_uuid
 }
 
 enter_user_data_add_haproxy() {
-    echo -e "Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
+    echo -e "${textcolor}[?]${clear} Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
     read username
     [[ ! -z $username ]] && echo ""
     check_username_add
     exit_username
-    echo "Enter the password for Trojan or leave this empty to generate a random password:"
+    echo -e "${textcolor}[?]${clear} Enter the password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
     check_trjpass
@@ -262,7 +262,7 @@ check_username_del() {
     do
         echo -e "${red}Error: a user with this name does not exist${clear}"
         echo ""
-        echo -e "Enter the name of the user or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
         read username
         echo ""
         exit_username
@@ -270,7 +270,7 @@ check_username_del() {
 }
 
 enter_user_data_del() {
-    echo -e "Enter the name of the user or enter ${textcolor}x${clear} to exit:"
+    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
     read username
     echo ""
     exit_username
@@ -316,7 +316,7 @@ sync_github_message() {
     echo -e "${red}ATTENTION!${clear}"
     echo "The settings in client configs of all users will be synchronized with the latest version on Github (for Russia)"
     echo ""
-    echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}x${clear} to exit:"
+    echo -e "${textcolor}[?]${clear} Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}x${clear} to exit:"
     read sync
 }
 
@@ -383,7 +383,7 @@ sync_local_message() {
     echo -e "You can manually edit the settings in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
     echo "The settings in this file will be applied to client configs of all users"
     echo ""
-    echo -e "Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}x${clear} to exit:"
+    echo -e "${textcolor}[?]${clear} Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}x${clear} to exit:"
     read sync
 }
 
@@ -499,7 +499,7 @@ check_warp_domain_add() {
     do
         echo -e "${red}Error: this domain/suffix is already added to WARP${clear}"
         echo ""
-        echo -e "Enter a new domain/suffix for WARP routing or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter a new domain/suffix for WARP routing or enter ${textcolor}x${clear} to exit:"
         read newwarp
         echo ""
         exit_add_warp
@@ -511,7 +511,7 @@ check_warp_domain_del() {
     do
         echo -e "${red}Error: this domain/suffix is not added to WARP routing${clear}"
         echo ""
-        echo -e "Enter a domain/suffix to delete from WARP routing or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter a domain/suffix to delete from WARP routing or enter ${textcolor}x${clear} to exit:"
         read delwarp
         echo ""
         exit_del_warp
@@ -522,7 +522,7 @@ add_warp_domains() {
     warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     while [[ $newwarp != "x" ]] && [[ $newwarp != "х" ]]
     do
-        echo -e "Enter a new domain/suffix for WARP routing or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter a new domain/suffix for WARP routing or enter ${textcolor}x${clear} to exit:"
         read newwarp
         echo ""
         check_warp_domain_add
@@ -538,7 +538,7 @@ delete_warp_domains() {
     warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     while [[ $delwarp != "x" ]] && [[ $delwarp != "х" ]]
     do
-        echo -e "Enter a domain/suffix to delete from WARP routing or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter a domain/suffix to delete from WARP routing or enter ${textcolor}x${clear} to exit:"
         read delwarp
         echo ""
         exit_del_warp
@@ -568,7 +568,7 @@ check_nextlink() {
         echo ""
         while [[ -z $nextlink ]]
         do
-            echo -e "Enter the link to client config from the next server in the chain or enter ${textcolor}x${clear} to exit:"
+            echo -e "${textcolor}[?]${clear} Enter the link to client config from the next server in the chain or enter ${textcolor}x${clear} to exit:"
             read nextlink
             echo ""
             exit_enter_nextlink
@@ -628,7 +628,7 @@ chain_end() {
 chain_middle() {
     while [[ -z $nextlink ]]
     do
-        echo -e "Enter the link to client config from the next server in the chain or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter the link to client config from the next server in the chain or enter ${textcolor}x${clear} to exit:"
         read nextlink
         echo ""
     done
@@ -691,7 +691,7 @@ chain_middle() {
 }
 
 chain_setup() {
-    echo -e "${textcolor}Select the position of the server in the chain:${clear}"
+    echo -e "${textcolor}[?]${clear} Select the position of the server in the chain:"
     echo "0 - Exit"
     if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
     then
@@ -708,7 +708,7 @@ chain_setup() {
     do
         echo -e "${red}Error: this server is already configured as the end of the chain or the only one${clear}"
         echo ""
-        echo -e "${textcolor}Select the position of the server in the chain:${clear}"
+        echo -e "${textcolor}[?]${clear} Select the position of the server in the chain:"
         echo "0 - Exit"
         echo "1 - Configure this server as the end of the chain or the only one                  [Selected]"
         echo "2 - Configure this server as intermediate in the chain or change the next server"
@@ -729,13 +729,13 @@ chain_setup() {
 }
 
 change_stack() {
-    echo -e "Enter the name of the user or enter ${textcolor}x${clear} to exit:"
+    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
     read username
     echo ""
     exit_username
     check_username_del
 
-    echo -e "${textcolor}Select \"stack\" value for user ${username}:${clear}"
+    echo -e "${textcolor}[?]${clear} Select \"stack\" value for user ${username}:"
     echo "0 - Exit"
     if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
     then
@@ -811,7 +811,7 @@ renew_cert() {
     echo "The script has a built-in automatic certificate renewal every 2 months, and manual renewal is recommended only in case of failures"
     echo "Renewing a certificate more than 5 times a week can result in reaching the Let's Encrypt limit, requiring you to wait before the next renewal"
     echo ""
-    echo -e "Press ${textcolor}Enter${clear} to renew certificate or enter ${textcolor}x${clear} to exit:"
+    echo -e "${textcolor}[?]${clear} Press ${textcolor}Enter${clear} to renew certificate or enter ${textcolor}x${clear} to exit:"
     read certrenew
     exit_renew_cert
 

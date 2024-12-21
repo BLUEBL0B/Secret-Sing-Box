@@ -26,11 +26,11 @@ enter_language() {
 enter_data_ru() {
 	while [[ -z $link ]]
 	do
-		echo "Введите ссылку на ваш клиентский конфиг:"
+		echo -e "${textcolor}[?]${clear} Введите ссылку на ваш клиентский конфиг:"
 		read link
 		echo ""
 	done
-	echo "Введите новую команду для этого прокси (и запомните её):"
+	echo -e "${textcolor}[?]${clear} Введите новую команду для этого прокси (и запомните её):"
 	read newcomm
 	echo ""
 	while [ -f /usr/local/bin/${newcomm} ] || [[ -z $newcomm ]]
@@ -43,7 +43,7 @@ enter_data_ru() {
 		then
 			:
 		fi
-		echo "Введите новую команду для этого прокси (и запомните её):"
+		echo -e "${textcolor}[?]${clear} Введите новую команду для этого прокси (и запомните её):"
 		read newcomm
 		echo ""
 	done
@@ -122,11 +122,11 @@ message_ru() {
 enter_data_en() {
 	while [[ -z $link ]]
 	do
-		echo "Enter your client config link:"
+		echo -e "${textcolor}[?]${clear} Enter your client config link:"
 		read link
 		echo ""
 	done
-	echo "Enter the new command for this proxy (and remember it):"
+	echo -e "${textcolor}[?]${clear} Enter the new command for this proxy (and remember it):"
 	read newcomm
 	echo ""
 	while [ -f /usr/local/bin/${newcomm} ] || [[ -z $newcomm ]]
@@ -139,7 +139,7 @@ enter_data_en() {
 		then
 			:
 		fi
-		echo "Enter the new command for this proxy (and remember it):"
+		echo -e "${textcolor}[?]${clear} Enter the new command for this proxy (and remember it):"
 		read newcomm
 		echo ""
 	done

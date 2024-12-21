@@ -39,13 +39,13 @@ check_if_updated() {
     if [[ "${language}" == "1" ]]
     then
         echo ""
-        echo "Вы точно обновили систему и перезагрузили сервер перед запуском скрипта?"
+        echo -e "${textcolor}[?]${clear} Вы точно обновили систему и перезагрузили сервер перед запуском скрипта?"
         echo "1 - Обновить и перезагрузить"
         echo "2 - Продолжить (система была обновлена и перезагружена)"
         read systemupdated
     else
         echo ""
-        echo "Are you sure you have updated the system and rebooted the server before running the script?"
+        echo -e "${textcolor}[?]${clear} Are you sure you have updated the system and rebooted the server before running the script?"
         echo "1 - Update and reboot"
         echo "2 - Continue (the system has been updated and rebooted)"
         read systemupdated
@@ -217,7 +217,7 @@ check_ssh_port_ru() {
             echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
         fi
         echo ""
-        echo "Введите новый номер порта SSH или 22 (не рекомендуется):"
+        echo -e "${textcolor}[?]${clear} Введите новый номер порта SSH или 22 (не рекомендуется):"
         read sshp
         echo ""
     done
@@ -237,7 +237,7 @@ check_ssh_port_en() {
             echo -e "${red}Error: port number can't be greater than 65535${clear}"
         fi
         echo ""
-        echo "Enter new SSH port number or 22 (not recommended):"
+        echo -e "${textcolor}[?]${clear} Enter new SSH port number or 22 (not recommended):"
         read sshp
         echo ""
     done
@@ -254,7 +254,7 @@ check_username_ru() {
         then
             :
         fi
-        echo "Введите имя нового пользователя или root (не рекомендуется):"
+        echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или root (не рекомендуется):"
         read username
         echo ""
     done
@@ -271,7 +271,7 @@ check_username_en() {
         then
             :
         fi
-        echo "Enter your username or root (not recommended):"
+        echo -e "${textcolor}[?]${clear} Enter your username or root (not recommended):"
         read username
         echo ""
     done
@@ -288,7 +288,7 @@ check_password_ru() {
         then
             :
         fi
-        echo "Введите пароль SSH для пользователя:"
+        echo -e "${textcolor}[?]${clear} Введите пароль SSH для пользователя:"
         read password
         echo ""
     done
@@ -305,7 +305,7 @@ check_password_en() {
         then
             :
         fi
-        echo "Enter new SSH password:"
+        echo -e "${textcolor}[?]${clear} Enter new SSH password:"
         read password
         echo ""
     done
@@ -336,20 +336,20 @@ check_cf_token_ru() {
         echo ""
         while [[ -z $domain ]]
         do
-            echo "Введите ваш домен:"
+            echo -e "${textcolor}[?]${clear} Введите ваш домен:"
             read domain
             echo ""
         done
         crop_domain
         while [[ -z $email ]]
         do
-            echo "Введите вашу почту, зарегистрированную на Cloudflare:"
+            echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
             read email
             echo ""
         done
         while [[ -z $cftoken ]]
         do
-            echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+            echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
             read cftoken
             echo ""
         done
@@ -375,20 +375,20 @@ check_cf_token_en() {
         echo ""
         while [[ -z $domain ]]
         do
-            echo "Enter your domain name:"
+            echo -e "${textcolor}[?]${clear} Enter your domain name:"
             read domain
             echo ""
         done
         crop_domain
         while [[ -z $email ]]
         do
-            echo "Enter your email registered on Cloudflare:"
+            echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
             read email
             echo ""
         done
         while [[ -z $cftoken ]]
         do
-            echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+            echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
             read cftoken
             echo ""
         done
@@ -405,7 +405,7 @@ check_uuid_ru() {
     do
         echo -e "${red}Ошибка: введённое значение не является UUID${clear}"
         echo ""
-        echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+        echo -e "${textcolor}[?]${clear} Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
     done
@@ -416,7 +416,7 @@ check_uuid_en() {
     do
         echo -e "${red}Error: this is not an UUID${clear}"
         echo ""
-        echo "Enter your UUID for VLESS or leave this empty to generate a random UUID:"
+        echo -e "${textcolor}[?]${clear} Enter your UUID for VLESS or leave this empty to generate a random UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
     done
@@ -427,7 +427,7 @@ check_vless_path_ru() {
     do
         echo -e "${red}Ошибка: пути для Trojan и VLESS не должны совпадать${clear}"
         echo ""
-        echo "Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
+        echo -e "${textcolor}[?]${clear} Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
         read vlesspath
         [[ ! -z $vlesspath ]] && echo ""
         crop_vless_path
@@ -439,7 +439,7 @@ check_vless_path_en() {
     do
         echo -e "${red}Error: paths for Trojan and VLESS must be different${clear}"
         echo ""
-        echo "Enter your path for VLESS or leave this empty to generate a random path:"
+        echo -e "${textcolor}[?]${clear} Enter your path for VLESS or leave this empty to generate a random path:"
         read vlesspath
         [[ ! -z $vlesspath ]] && echo ""
         crop_vless_path
@@ -451,7 +451,7 @@ check_subscription_path_ru() {
     do
         echo -e "${red}Ошибка: пути для Trojan, VLESS и подписки должны быть разными${clear}"
         echo ""
-        echo "Введите путь для подписки или оставьте пустым для генерации случайного пути:"
+        echo -e "${textcolor}[?]${clear} Введите путь для подписки или оставьте пустым для генерации случайного пути:"
         read subspath
         [[ ! -z $subspath ]] && echo ""
         crop_subscription_path
@@ -463,7 +463,7 @@ check_subscription_path_en() {
     do
         echo -e "${red}Error: paths for Trojan, VLESS and subscription must be different${clear}"
         echo ""
-        echo "Enter your subscription path or leave this empty to generate a random path:"
+        echo -e "${textcolor}[?]${clear} Enter your subscription path or leave this empty to generate a random path:"
         read subspath
         [[ ! -z $subspath ]] && echo ""
         crop_subscription_path
@@ -480,7 +480,7 @@ check_redirect_domain_ru() {
             echo -e "${red}Ошибка: домен введён неправильно или не имеет HTTPS${clear}"
             echo ""
         fi
-        echo "Введите домен, на который будет идти перенаправление:"
+        echo -e "${textcolor}[?]${clear} Введите домен, на который будет идти перенаправление:"
         read redirect
         echo ""
         crop_redirect_domain
@@ -497,7 +497,7 @@ check_redirect_domain_en() {
             echo -e "${red}Error: this domain is invalid or does not have HTTPS${clear}"
             echo ""
         fi
-        echo "Enter the domain to which requests will be redirected:"
+        echo -e "${textcolor}[?]${clear} Enter the domain to which requests will be redirected:"
         read redirect
         echo ""
         crop_redirect_domain
@@ -509,7 +509,7 @@ check_sitedir_ru() {
     do
         echo -e "${red}Ошибка: папка c введённым названием не существует в /root${clear}"
         echo ""
-        echo "Введите название папки с файлами вашего сайта, загруженной в /root:"
+        echo -e "${textcolor}[?]${clear} Введите название папки с файлами вашего сайта, загруженной в /root:"
         read sitedir
         echo ""
     done
@@ -520,7 +520,7 @@ check_sitedir_en() {
     do
         echo -e "${red}Error: this folder doesn't exist in the /root directory${clear}"
         echo ""
-        echo "Enter the name of the folder with your website contents uploaded to /root:"
+        echo -e "${textcolor}[?]${clear} Enter the name of the folder with your website contents uploaded to /root:"
         read sitedir
         echo ""
     done
@@ -531,7 +531,7 @@ check_index_ru() {
     do
         echo -e "${red}Ошибка: файл c введённым названием не существует в /root/${sitedir}${clear}"
         echo ""
-        echo "Введите название index файла вашего сайта:"
+        echo -e "${textcolor}[?]${clear} Введите название index файла вашего сайта:"
         read index
         echo ""
     done
@@ -542,7 +542,7 @@ check_index_en() {
     do
         echo -e "${red}Error: this file doesn't exist in the /root/${sitedir} directory${clear}"
         echo ""
-        echo "Enter the name of the index file of your website:"
+        echo -e "${textcolor}[?]${clear} Enter the name of the index file of your website:"
         read index
         echo ""
     done
@@ -568,9 +568,9 @@ nginx_redirect() {
     do
         if [[ "${language}" == "1" ]]
         then
-            echo "Введите домен, на который будет идти перенаправление:"
+            echo -e "${textcolor}[?]${clear} Введите домен, на который будет идти перенаправление:"
         else
-            echo "Enter the domain to which requests will be redirected:"
+            echo -e "${textcolor}[?]${clear} Enter the domain to which requests will be redirected:"
         fi
         read redirect
         echo ""
@@ -590,11 +590,11 @@ nginx_site_ru() {
     comment2=""
     comment3="#"
     redirect="${domain}"
-    echo "Введите название папки с файлами вашего сайта, загруженной в /root:"
+    echo -e "${textcolor}[?]${clear} Введите название папки с файлами вашего сайта, загруженной в /root:"
     read sitedir
     echo ""
     check_sitedir_ru
-    echo "Введите название index файла вашего сайта:"
+    echo -e "${textcolor}[?]${clear} Введите название index файла вашего сайта:"
     read index
     echo ""
     check_index_ru
@@ -605,11 +605,11 @@ nginx_site_en() {
     comment2=""
     comment3="#"
     redirect="${domain}"
-    echo "Enter the name of the folder with your website contents uploaded to /root:"
+    echo -e "${textcolor}[?]${clear} Enter the name of the folder with your website contents uploaded to /root:"
     read sitedir
     echo ""
     check_sitedir_en
-    echo "Enter the name of the index file of your website:"
+    echo -e "${textcolor}[?]${clear} Enter the name of the index file of your website:"
     read index
     echo ""
     check_index_en
@@ -640,15 +640,15 @@ nginx_options() {
 enter_ssh_data_ru() {
     if [[ "${sshufw}" != "2" ]]
     then
-        echo "Введите новый номер порта SSH или 22 (рекомендуется номер более 1024):"
+        echo -e "${textcolor}[?]${clear} Введите новый номер порта SSH или 22 (рекомендуется номер более 1024):"
         read sshp
         echo ""
         check_ssh_port_ru
-        echo "Введите имя нового пользователя или root (рекомендуется не root):"
+        echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или root (рекомендуется не root):"
         read username
         echo ""
         check_username_ru
-        echo "Введите пароль SSH для пользователя (рекомендуется сложный пароль):"
+        echo -e "${textcolor}[?]${clear} Введите пароль SSH для пользователя (рекомендуется сложный пароль):"
         read password
         echo ""
         check_password_ru
@@ -658,15 +658,15 @@ enter_ssh_data_ru() {
 enter_ssh_data_en() {
     if [[ "${sshufw}" != "2" ]]
     then
-        echo "Enter new SSH port number or 22 (number above 1024 is recommended):"
+        echo -e "${textcolor}[?]${clear} Enter new SSH port number or 22 (number above 1024 is recommended):"
         read sshp
         echo ""
         check_ssh_port_en
-        echo "Enter your username or root (non-root user is recommended):"
+        echo -e "${textcolor}[?]${clear} Enter your username or root (non-root user is recommended):"
         read username
         echo ""
         check_username_en
-        echo "Enter new SSH password (a complex password is recommended):"
+        echo -e "${textcolor}[?]${clear} Enter new SSH password (a complex password is recommended):"
         read password
         echo ""
         check_password_en
@@ -677,64 +677,64 @@ enter_data_ru() {
     echo ""
     while [[ -z $domain ]]
     do
-        echo "Введите ваш домен:"
+        echo -e "${textcolor}[?]${clear} Введите ваш домен:"
         read domain
         echo ""
     done
     crop_domain
     while [[ -z $email ]]
     do
-        echo "Введите вашу почту, зарегистрированную на Cloudflare:"
+        echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
         read email
         echo ""
     done
     while [[ -z $cftoken ]]
     do
-        echo "Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+        echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
         read cftoken
         echo ""
     done
     check_cf_token_ru
-    echo "Выберите вариант настройки прокси:"
+    echo -e "${textcolor}[?]${clear} Выберите вариант настройки прокси:"
     echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
     echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
     read variant
     echo ""
     if [[ "${variant}" == "1" ]]
     then
-        echo "Выберите транспорт:"
+        echo -e "${textcolor}[?]${clear} Выберите транспорт:"
         echo "1 - WebSocket"
         echo "2 - HTTPUpgrade"
         read transport
         echo ""
     fi
-    echo "Выберите вариант настройки NGINX/HAProxy:"
+    echo -e "${textcolor}[?]${clear} Выберите вариант настройки NGINX/HAProxy:"
     echo "1 - Будет спрашивать логин и пароль вместо сайта"
     echo "2 - Будет перенаправлять на другой домен"
     echo "3 - Свой сайт (при наличии)"
     read option;
     echo ""
     nginx_options
-    echo "Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+    echo -e "${textcolor}[?]${clear} Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
     if [[ "${variant}" == "1" ]]
     then
-        echo "Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
+        echo -e "${textcolor}[?]${clear} Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
         read trojanpath
         [[ ! -z $trojanpath ]] && echo ""
         crop_trojan_path
-        echo "Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
+        echo -e "${textcolor}[?]${clear} Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
         check_uuid_ru
-        echo "Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
+        echo -e "${textcolor}[?]${clear} Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
         read vlesspath
         [[ ! -z $vlesspath ]] && echo ""
         crop_vless_path
         check_vless_path_ru
     fi
-    echo "Введите путь для подписки или оставьте пустым для генерации случайного пути:"
+    echo -e "${textcolor}[?]${clear} Введите путь для подписки или оставьте пустым для генерации случайного пути:"
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
@@ -742,7 +742,7 @@ enter_data_ru() {
     then
         check_subscription_path_ru
     fi
-    echo "Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
+    echo -e "${textcolor}[?]${clear} Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
     echo "1 - Да (в случае нестандартных настроек у хостера или ошибки при вводе данных можно потерять доступ к серверу)"
     echo "2 - Нет"
     read sshufw
@@ -754,64 +754,64 @@ enter_data_en() {
     echo ""
     while [[ -z $domain ]]
     do
-        echo "Enter your domain name:"
+        echo -e "${textcolor}[?]${clear} Enter your domain name:"
         read domain
         echo ""
     done
     crop_domain
     while [[ -z $email ]]
     do
-        echo "Enter your email registered on Cloudflare:"
+        echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
         read email
         echo ""
     done
     while [[ -z $cftoken ]]
     do
-        echo "Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+        echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
         read cftoken
         echo ""
     done
     check_cf_token_en
-    echo "Select a proxy setup option:"
+    echo -e "${textcolor}[?]${clear} Select a proxy setup option:"
     echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
     echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
     read variant
     echo ""
     if [[ "${variant}" == "1" ]]
     then
-        echo "Select transport:"
+        echo -e "${textcolor}[?]${clear} Select transport:"
         echo "1 - WebSocket"
         echo "2 - HTTPUpgrade"
         read transport
         echo ""
     fi
-    echo "Select NGINX/HAProxy setup option:"
+    echo -e "${textcolor}[?]${clear} Select NGINX/HAProxy setup option:"
     echo "1 - Will show a login popup asking for username and password"
     echo "2 - Will redirect to another domain"
     echo "3 - Your own website (if you have one)"
     read option;
     echo ""
     nginx_options
-    echo "Enter your password for Trojan or leave this empty to generate a random password:"
+    echo -e "${textcolor}[?]${clear} Enter your password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
     if [[ "${variant}" == "1" ]]
     then
-        echo "Enter your path for Trojan or leave this empty to generate a random path:"
+        echo -e "${textcolor}[?]${clear} Enter your path for Trojan or leave this empty to generate a random path:"
         read trojanpath
         [[ ! -z $trojanpath ]] && echo ""
         crop_trojan_path
-        echo "Enter your UUID for VLESS or leave this empty to generate a random UUID:"
+        echo -e "${textcolor}[?]${clear} Enter your UUID for VLESS or leave this empty to generate a random UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
         check_uuid_en
-        echo "Enter your path for VLESS or leave this empty to generate a random path:"
+        echo -e "${textcolor}[?]${clear} Enter your path for VLESS or leave this empty to generate a random path:"
         read vlesspath
         [[ ! -z $vlesspath ]] && echo ""
         crop_vless_path
         check_vless_path_en
     fi
-    echo "Enter your subscription path or leave this empty to generate a random path:"
+    echo -e "${textcolor}[?]${clear} Enter your subscription path or leave this empty to generate a random path:"
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
@@ -819,7 +819,7 @@ enter_data_en() {
     then
         check_subscription_path_en
     fi
-    echo "Do you need security setup (SSH, UFW and unattended-upgrades)?"
+    echo -e "${textcolor}[?]${clear} Do you need security setup (SSH, UFW and unattended-upgrades)?"
     echo "1 - Yes (in case of hoster's non-standard settings or a mistake while entering data, access to the server might be lost)"
     echo "2 - No"
     read sshufw
