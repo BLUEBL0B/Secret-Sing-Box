@@ -5,7 +5,12 @@
 ### Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
 This script is designed to fully configure a secure proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. Two setup methods:
 - All requests to the proxy are processed by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket or HTTPUpgrade transport)
+
+![nginx-en](https://github.com/user-attachments/assets/07d3b247-17bc-4fe5-a8fa-58bee3a626e2)
+
 - All requests to the proxy are processed by HAProxy, the requests are passed to Sing-Box only if they contain the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
+
+![haproxy-en](https://github.com/user-attachments/assets/5f82c33d-0da1-475a-b16b-82f68c8dfd69)
 
 Both setup methods make it impossible to detect Sing-Box from the outside, which improves security.
 
@@ -38,7 +43,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/cabaf8e3-8f93-4339-8aed-d1c72910cdf5)
+![pic-1-en](https://github.com/user-attachments/assets/5bb6d739-c9bc-4b45-bc39-0e124bdb3de4)
 
 The script will show your client links in the end.
 
