@@ -6,11 +6,11 @@
 This script is designed to fully configure a secure proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. Two setup methods:
 - All requests to the proxy are processed by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket or HTTPUpgrade transport)
 
-![nginx-en](https://github.com/user-attachments/assets/07d3b247-17bc-4fe5-a8fa-58bee3a626e2)
+![nginx-en](https://github.com/user-attachments/assets/655ad0e1-6640-4e9f-89bc-ba53ff780a66)
 
 - All requests to the proxy are processed by HAProxy, the requests are passed to Sing-Box only if they contain the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
 
-![haproxy-en](https://github.com/user-attachments/assets/5f82c33d-0da1-475a-b16b-82f68c8dfd69)
+![haproxy-en](https://github.com/user-attachments/assets/d895527a-1303-4c99-9832-39899a16fc26)
 
 Both setup methods make it impossible to detect Sing-Box from the outside, which improves security.
 
