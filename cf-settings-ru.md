@@ -22,7 +22,7 @@
 >
 > Вместо «sub» придумайте свой поддомен, и в скрипте введите его вместо домена (например, sub.example.com).
 > 
-> Для первого варианта настройки может потребоваться отключение ECH в аккаунте Cloudflare.
+> Для первого варианта настройки может потребоваться отключение ECH в аккаунте Cloudflare, либо переключение DNS записей на «DNS only».
 
 ### Получение API токена Cloudflare
 Overview > Get your API token > Create Token > Edit zone DNS (Use template)
