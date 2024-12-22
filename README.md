@@ -6,11 +6,11 @@
 Данный скрипт предназначен для полной настройки защищённого прокси-сервера с ядром [Sing-Box](https://sing-box.sagernet.org) и маскировкой при помощи [NGINX](https://nginx.org/ru/) или [HAProxy](https://www.haproxy.org). Два варианта настройки на выбор:
 - Все запросы к прокси принимает NGINX, запросы передаются на Sing-Box только при наличии в них правильного пути (транспорт WebSocket или HTTPUpgrade)
 
-![nginx-ru](https://github.com/user-attachments/assets/6bb25bc4-bb49-4117-8b32-d638cb13f680)
+![nginx-ru](https://github.com/user-attachments/assets/ac95ed9f-0d70-4ea9-993f-23633a6715c4)
 
 - Все запросы к прокси принимает HAProxy, запросы передаются на Sing-Box только при наличии в них правильного пароля Trojan (транспорт TCP) — метод [FPPweb3](https://github.com/FPPweb3)
 
-![haproxy-ru](https://github.com/user-attachments/assets/d6cc49f9-2ce9-45d7-9a0c-a2cf9861a268)
+![haproxy-ru](https://github.com/user-attachments/assets/66cc155c-b4cc-4030-940b-688ccb2895fd)
 
 Оба варианта настройки делают невозможным обнаружение Sing-Box снаружи, что повышает уровень безопасности.
 
