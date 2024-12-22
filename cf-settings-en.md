@@ -20,7 +20,9 @@ Example of DNS records for the setup option with TLS termination on HAProxy and 
 >
 > A | sub | 98.76.54.32
 >
-> Instead of «sub», specify your subdomain and enter it in the script instead of your domain (e. g. sub.example.com)
+> Instead of «sub», specify your subdomain and enter it in the script instead of your domain (e. g. sub.example.com).
+>
+> The first setup method may require disabling ECH in your Cloudflare account.
 
 ### Getting Cloudflare API token
 Overview > Get your API token > Create Token > Edit zone DNS (Use template)
