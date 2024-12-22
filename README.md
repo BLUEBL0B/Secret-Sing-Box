@@ -8,7 +8,7 @@
 
 ![nginx-ru](https://github.com/user-attachments/assets/ac95ed9f-0d70-4ea9-993f-23633a6715c4)
 
-- Все запросы к прокси принимает HAProxy, запросы передаются на Sing-Box только при наличии в них правильного пароля Trojan (транспорт TCP) — метод [FPPweb3](https://github.com/FPPweb3)
+- Все запросы к прокси принимает HAProxy, пароли Trojan считываются из первых 56 байт запроса с помощью скрипта на Lua, запросы передаются на Sing-Box только при наличии в них правильного пароля Trojan (транспорт TCP) — метод [FPPweb3](https://github.com/FPPweb3)
 
 ![haproxy-ru](https://github.com/user-attachments/assets/66cc155c-b4cc-4030-940b-688ccb2895fd)
 
