@@ -1,0 +1,567 @@
+{
+  "log": {
+    "level": "fatal",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-remote",
+        "address": "tls://1.1.1.1",
+        "client_subnet": "SERVER-IP"
+      },
+      {
+        "tag": "dns-local",
+        "address": "tls://1.1.1.1"
+      },
+      {
+        "tag": "dns-block",
+        "address": "rcode://success"
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "category-ads-all"
+        ],
+        "server": "dns-block",
+        "disable_cache": true
+      },
+      {
+        "rule_set": [
+          "telegram"
+        ],
+        "server": "dns-remote"
+      },
+      {
+        "domain_suffix": [
+          ".ru",
+          ".su",
+          ".ru.com",
+          ".ru.net",
+          "DOMAIN",
+          "wikipedia.org"
+        ],
+        "domain_keyword": [
+          "xn--",
+          "researchgate",
+          "springer",
+          "nextcloud",
+          "skype",
+          "wiki",
+          "kaspersky",
+          "stepik",
+          "likee",
+          "snapchat",
+          "yappy",
+          "pikabu",
+          "okko",
+          "wink",
+          "kion",
+          "viber",
+          "roblox",
+          "ozon",
+          "wildberries",
+          "aliexpress"
+        ],
+        "rule_set": [
+          "geoip-ru",
+          "gov-ru",
+          "yandex",
+          "vk",
+          "mailru",
+          "zoom",
+          "reddit",
+          "twitch",
+          "tumblr",
+          "4chan",
+          "pinterest",
+          "deviantart",
+          "duckduckgo",
+          "yahoo",
+          "mozilla",
+          "category-android-app-download",
+          "aptoide",
+          "samsung",
+          "huawei",
+          "apple",
+          "microsoft",
+          "nvidia",
+          "xiaomi",
+          "hp",
+          "asus",
+          "lenovo",
+          "lg",
+          "oracle",
+          "adobe",
+          "blender",
+          "drweb",
+          "gitlab",
+          "debian",
+          "canonical",
+          "python",
+          "doi",
+          "elsevier",
+          "sciencedirect",
+          "clarivate",
+          "sci-hub",
+          "duolingo",
+          "aljazeera",
+          "torrent-clients"
+        ],
+        "server": "dns-local"
+      },
+      {
+        "inbound": [
+          "tun-in"
+        ],
+        "server": "dns-remote"
+      }
+    ],
+    "final": "dns-local"
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "tun0",
+      "stack": "system",
+      "address": "172.19.0.1/28",
+      "auto_route": true,
+      "strict_route": true,
+      "sniff": true,
+      "sniff_override_destination": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    },
+    {
+      "type": "trojan",
+      "tag": "proxy",
+      "server": "DOMAIN",
+      "server_port": 443,
+      "password": "TROJAN-PASSWORD",
+      "tls": {
+        "enabled": true,
+        "server_name": "DOMAIN",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "randomized"
+        }
+      },
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/TROJAN-PATH"
+      }
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "protocol": "quic",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": [
+          "category-ads-all"
+        ],
+        "outbound": "block"
+      },
+      {
+        "rule_set": [
+          "telegram"
+        ],
+        "outbound": "proxy"
+      },
+      {
+        "domain_suffix": [
+          ".ru",
+          ".su",
+          ".ru.com",
+          ".ru.net",
+          "DOMAIN",
+          "wikipedia.org"
+        ],
+        "domain_keyword": [
+          "xn--",
+          "researchgate",
+          "springer",
+          "nextcloud",
+          "skype",
+          "wiki",
+          "kaspersky",
+          "stepik",
+          "likee",
+          "snapchat",
+          "yappy",
+          "pikabu",
+          "okko",
+          "wink",
+          "kion",
+          "viber",
+          "roblox",
+          "ozon",
+          "wildberries",
+          "aliexpress"
+        ],
+        "ip_cidr": [
+          "SERVER-IP"
+        ],
+        "rule_set": [
+          "geoip-ru",
+          "gov-ru",
+          "yandex",
+          "vk",
+          "mailru",
+          "zoom",
+          "reddit",
+          "twitch",
+          "tumblr",
+          "4chan",
+          "pinterest",
+          "deviantart",
+          "duckduckgo",
+          "yahoo",
+          "mozilla",
+          "category-android-app-download",
+          "aptoide",
+          "samsung",
+          "huawei",
+          "apple",
+          "microsoft",
+          "nvidia",
+          "xiaomi",
+          "hp",
+          "asus",
+          "lenovo",
+          "lg",
+          "oracle",
+          "adobe",
+          "blender",
+          "drweb",
+          "gitlab",
+          "debian",
+          "canonical",
+          "python",
+          "doi",
+          "elsevier",
+          "sciencedirect",
+          "clarivate",
+          "sci-hub",
+          "duolingo",
+          "aljazeera",
+          "torrent-clients"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "inbound": [
+          "tun-in"
+        ],
+        "outbound": "proxy"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geoip-ru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geoip-ru.srs"
+      },
+      {
+        "tag": "gov-ru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-category-gov-ru.srs"
+      },
+      {
+        "tag": "yandex",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-yandex.srs"
+      },
+      {
+        "tag": "telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-telegram.srs"
+      },
+      {
+        "tag": "vk",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-vk.srs"
+      },
+      {
+        "tag": "mailru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-mailru.srs"
+      },
+      {
+        "tag": "zoom",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-zoom.srs"
+      },
+      {
+        "tag": "reddit",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-reddit.srs"
+      },
+      {
+        "tag": "twitch",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-twitch.srs"
+      },
+      {
+        "tag": "tumblr",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-tumblr.srs"
+      },
+      {
+        "tag": "4chan",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-4chan.srs"
+      },
+      {
+        "tag": "pinterest",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-pinterest.srs"
+      },
+      {
+        "tag": "deviantart",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-deviantart.srs"
+      },
+      {
+        "tag": "duckduckgo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-duckduckgo.srs"
+      },
+      {
+        "tag": "yahoo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-yahoo.srs"
+      },
+      {
+        "tag": "mozilla",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-mozilla.srs"
+      },
+      {
+        "tag": "category-android-app-download",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-category-android-app-download.srs"
+      },
+      {
+        "tag": "aptoide",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-aptoide.srs"
+      },
+      {
+        "tag": "samsung",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-samsung.srs"
+      },
+      {
+        "tag": "huawei",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-huawei.srs"
+      },
+      {
+        "tag": "apple",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-apple.srs"
+      },
+      {
+        "tag": "microsoft",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-microsoft.srs"
+      },
+      {
+        "tag": "nvidia",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-nvidia.srs"
+      },
+      {
+        "tag": "xiaomi",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-xiaomi.srs"
+      },
+      {
+        "tag": "hp",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-hp.srs"
+      },
+      {
+        "tag": "asus",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-asus.srs"
+      },
+      {
+        "tag": "lenovo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-lenovo.srs"
+      },
+      {
+        "tag": "lg",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-lg.srs"
+      },
+      {
+        "tag": "oracle",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-oracle.srs"
+      },
+      {
+        "tag": "adobe",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-adobe.srs"
+      },
+      {
+        "tag": "blender",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-blender.srs"
+      },
+      {
+        "tag": "drweb",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-drweb.srs"
+      },
+      {
+        "tag": "gitlab",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-gitlab.srs"
+      },
+      {
+        "tag": "debian",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-debian.srs"
+      },
+      {
+        "tag": "canonical",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-canonical.srs"
+      },
+      {
+        "tag": "python",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-python.srs"
+      },
+      {
+        "tag": "doi",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-doi.srs"
+      },
+      {
+        "tag": "elsevier",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-elsevier.srs"
+      },
+      {
+        "tag": "sciencedirect",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-sciencedirect.srs"
+      },
+      {
+        "tag": "clarivate",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-clarivate.srs"
+      },
+      {
+        "tag": "sci-hub",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-sci-hub.srs"
+      },
+      {
+        "tag": "duolingo",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-duolingo.srs"
+      },
+      {
+        "tag": "aljazeera",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-aljazeera.srs"
+      },
+      {
+        "tag": "category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-category-ads-all.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "torrent-clients",
+        "format": "source",
+        "url": "https://DOMAIN/RULESETPATH/torrent-clients.json"
+      }
+    ],
+    "auto_detect_interface": true,
+    "override_android_vpn": true
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true
+    }
+  }
+}
