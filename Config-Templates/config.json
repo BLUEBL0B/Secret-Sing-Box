@@ -138,39 +138,39 @@
     "rule_set": [
       {
         "tag": "geoip-ru",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geoip-ru.srs"
+        "path": "/var/www/RULESETPATH/geoip-ru.srs"
       },
       {
         "tag": "gov-ru",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-category-gov-ru.srs"
+        "path": "/var/www/RULESETPATH/geosite-category-gov-ru.srs"
       },
       {
         "tag": "google",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-google.srs"
+        "path": "/var/www/RULESETPATH/geosite-google.srs"
       },
       {
         "tag": "openai",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-openai.srs"
+        "path": "/var/www/RULESETPATH/geosite-openai.srs"
       },
       {
         "tag": "telegram",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-telegram.srs"
+        "path": "/var/www/RULESETPATH/geosite-telegram.srs"
       },
       {
         "tag": "category-ads-all",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-category-ads-all.srs"
+        "path": "/var/www/RULESETPATH/geosite-category-ads-all.srs"
       }
     ]
   },
