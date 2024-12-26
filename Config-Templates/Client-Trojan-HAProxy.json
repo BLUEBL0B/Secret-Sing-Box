@@ -283,6 +283,12 @@
     ],
     "rule_set": [
       {
+        "type": "remote",
+        "tag": "torrent-clients",
+        "format": "source",
+        "url": "https://DOMAIN/RULESETPATH/torrent-clients.json"
+      },
+      {
         "tag": "geoip-ru",
         "type": "remote",
         "format": "binary",
@@ -545,12 +551,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://DOMAIN/RULESETPATH/geosite-category-ads-all.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "torrent-clients",
-        "format": "source",
-        "url": "https://DOMAIN/RULESETPATH/torrent-clients.json"
       }
     ],
     "auto_detect_interface": true,

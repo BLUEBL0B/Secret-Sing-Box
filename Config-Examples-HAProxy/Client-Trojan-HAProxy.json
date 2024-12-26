@@ -283,6 +283,12 @@
     ],
     "rule_set": [
       {
+        "type": "remote",
+        "tag": "torrent-clients",
+        "format": "source",
+        "url": "https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json"
+      },
+      {
         "tag": "geoip-ru",
         "type": "remote",
         "format": "binary",
@@ -316,7 +322,7 @@
         "tag": "mailru",
         "type": "remote",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-mailru.srs"
+        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-mailru.srs"
       },
       {
         "tag": "zoom",
@@ -545,12 +551,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-ads-all.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "torrent-clients",
-        "format": "source",
-        "url": "https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json"
       }
     ],
     "auto_detect_interface": true,
