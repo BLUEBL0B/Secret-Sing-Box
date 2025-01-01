@@ -182,6 +182,13 @@ crop_redirect_domain() {
     fi
 }
 
+crop_site_link() {
+    if [[ "$sitelink" == "https://"* ]]
+    then
+        sitelink=${sitelink#"https://"}
+    fi
+}
+
 crop_trojan_path() {
     if [[ "$trojanpath" == "/"* ]]
     then
@@ -200,6 +207,25 @@ crop_subscription_path() {
     if [[ "$subspath" == "/"* ]]
     then
         subspath=${subspath#"/"}
+    fi
+}
+
+crop_rulesetpath() {
+    if [[ "$rulesetpath" == "/"* ]]
+    then
+        rulesetpath=${rulesetpath#"/"}
+    fi
+}
+
+edit_index() {
+    if [[ "$index" != "/"* ]]
+    then
+        index="/${index}"
+    fi
+
+    if [[ "$index" == *"/" ]]
+    then
+        index=${index%"/"}
     fi
 }
 
@@ -470,6 +496,30 @@ check_subscription_path_en() {
     done
 }
 
+check_rulesetpath_ru() {
+    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ]) && [ ! -z "$rulesetpath" ]
+    do
+        echo -e "${red}Ошибка: пути для Trojan, VLESS, подписки и наборов правил должны быть разными${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Введите путь для наборов правил (rule sets) или оставьте пустым для генерации случайного пути:"
+        read rulesetpath
+        [[ ! -z $rulesetpath ]] && echo ""
+        crop_rulesetpath
+    done
+}
+
+check_rulesetpath_en() {
+    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ]) && [ ! -z "$rulesetpath" ]
+    do
+        echo -e "${red}Error: paths for Trojan, VLESS, subscription and rule sets must be different${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Enter your path for rule sets or leave this empty to generate a random path:"
+        read rulesetpath
+        [[ ! -z $rulesetpath ]] && echo ""
+        crop_rulesetpath
+    done
+}
+
 check_redirect_domain_ru() {
     while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${redirect}/)" == "000" ]] || [[ -z $redirect ]]
     do
@@ -504,47 +554,61 @@ check_redirect_domain_en() {
     done
 }
 
-check_sitedir_ru() {
-    while [ ! -d /root/${sitedir} ] || [ -z "$sitedir" ]
-    do
-        echo -e "${red}Ошибка: папка c введённым названием не существует в /root${clear}"
-        echo ""
-        echo -e "${textcolor}[?]${clear} Введите название папки с файлами вашего сайта, загруженной в /root:"
-        read sitedir
-        echo ""
-    done
-}
-
-check_sitedir_en() {
-    while [ ! -d /root/${sitedir} ] || [ -z "$sitedir" ]
-    do
-        echo -e "${red}Error: this folder doesn't exist in the /root directory${clear}"
-        echo ""
-        echo -e "${textcolor}[?]${clear} Enter the name of the folder with your website contents uploaded to /root:"
-        read sitedir
-        echo ""
-    done
-}
-
 check_index_ru() {
-    while [ ! -f /root/${sitedir}/${index} ] || [ -z "$index" ]
+    while [ ! -f /root${index} ] || [ -z "$index" ]
     do
-        echo -e "${red}Ошибка: файл c введённым названием не существует в /root/${sitedir}${clear}"
+        echo -e "${red}Ошибка: файл /root${index} не существует${clear}"
         echo ""
-        echo -e "${textcolor}[?]${clear} Введите название index файла вашего сайта:"
+        echo -e "${textcolor}[?]${clear} Введите путь до index файла внутри папки вашего сайта (например, /site_folder/index.html):"
         read index
         echo ""
+        edit_index
     done
 }
 
 check_index_en() {
-    while [ ! -f /root/${sitedir}/${index} ] || [ -z "$index" ]
+    while [ ! -f /root${index} ] || [ -z "$index" ]
     do
-        echo -e "${red}Error: this file doesn't exist in the /root/${sitedir} directory${clear}"
+        echo -e "${red}Error: file /root${index} doesn't exist${clear}"
         echo ""
-        echo -e "${textcolor}[?]${clear} Enter the name of the index file of your website:"
+        echo -e "${textcolor}[?]${clear} Enter the path to the index file inside the folder of your website (e. g., /site_folder/index.html):"
         read index
         echo ""
+        edit_index
+    done
+}
+
+check_site_link_ru() {
+    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]]
+    do
+        if [[ -z $sitelink ]]
+        then
+            :
+        else
+            echo -e "${red}Ошибка: ссылка введена неправильно или сайт не имеет HTTPS${clear}"
+            echo ""
+        fi
+        echo -e "${textcolor}[?]${clear} Введите ссылку на главную страницу выбранного сайта:"
+        read sitelink
+        echo ""
+        crop_site_link
+    done
+}
+
+check_site_link_en() {
+    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]]
+    do
+        if [[ -z $sitelink ]]
+        then
+            :
+        else
+            echo -e "${red}Error: this link is invalid or the site does not have HTTPS${clear}"
+            echo ""
+        fi
+        echo -e "${textcolor}[?]${clear} Enter the link to the main page of the selected website:"
+        read sitelink
+        echo ""
+        crop_site_link
     done
 }
 
@@ -564,63 +628,73 @@ nginx_redirect() {
     sitedir="html"
     index="index.html index.htm"
 
-    while [[ -z $redirect ]]
-    do
-        if [[ "${language}" == "1" ]]
-        then
-            echo -e "${textcolor}[?]${clear} Введите домен, на который будет идти перенаправление:"
-        else
-            echo -e "${textcolor}[?]${clear} Enter the domain to which requests will be redirected:"
-        fi
-        read redirect
-        echo ""
-    done
-    crop_redirect_domain
-
     if [[ "${language}" == "1" ]]
     then
+        echo -e "${textcolor}[?]${clear} Введите домен, на который будет идти перенаправление:"
+        read redirect
+        echo ""
+        crop_redirect_domain
         check_redirect_domain_ru
     else
+        echo -e "${textcolor}[?]${clear} Enter the domain to which requests will be redirected:"
+        read redirect
+        echo ""
+        crop_redirect_domain
         check_redirect_domain_en
     fi
 }
 
-nginx_site_ru() {
+nginx_copy_site() {
     comment1=""
     comment2=""
     comment3="#"
     redirect="${domain}"
-    echo -e "${textcolor}[?]${clear} Введите название папки с файлами вашего сайта, загруженной в /root:"
-    read sitedir
-    echo ""
-    check_sitedir_ru
-    echo -e "${textcolor}[?]${clear} Введите название index файла вашего сайта:"
-    read index
-    echo ""
-    check_index_ru
-}
 
-nginx_site_en() {
-    comment1=""
-    comment2=""
-    comment3="#"
-    redirect="${domain}"
-    echo -e "${textcolor}[?]${clear} Enter the name of the folder with your website contents uploaded to /root:"
-    read sitedir
-    echo ""
-    check_sitedir_en
-    echo -e "${textcolor}[?]${clear} Enter the name of the index file of your website:"
-    read index
-    echo ""
-    check_index_en
+    if [[ "${language}" == "1" ]]
+    then
+        echo -e "${red}ВНИМАНИЕ!${clear}"
+        echo "Некоторые сайты могут содержать большие файлы или большое число страниц, которые могут занять много места на диске"
+        echo "Функционал некоторых сайтов может быть частично утрачен"
+        echo "Вы выбираете какой-либо сайт на свой страх и риск"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Введите ссылку на главную страницу выбранного сайта:"
+        read sitelink
+        echo ""
+        crop_site_link
+        check_site_link_ru
+    else
+        echo -e "${red}ATTENTION!${clear}"
+        echo "Some websites might contain large files or large number of pages, which may take a lot of disk space"
+        echo "Some websites may partially lose their functionality"
+        echo "You choose the website at your own risk"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Enter the link to the main page of the selected website:"
+        read sitelink
+        echo ""
+        crop_site_link
+        check_site_link_en
+    fi
 }
 
 nginx_site() {
+    comment1=""
+    comment2=""
+    comment3="#"
+    redirect="${domain}"
+
     if [[ "${language}" == "1" ]]
     then
-        nginx_site_ru
+        echo -e "${textcolor}[?]${clear} Введите путь до index файла внутри папки вашего сайта (например, /site_folder/index.html):"
+        read index
+        echo ""
+        edit_index
+        check_index_ru
     else
-        nginx_site_en
+        echo -e "${textcolor}[?]${clear} Enter the path to the index file inside the folder of your website (e. g., /site_folder/index.html):"
+        read index
+        echo ""
+        edit_index
+        check_index_en
     fi
 }
 
@@ -630,6 +704,9 @@ nginx_options() {
         nginx_redirect
         ;;
         3)
+        nginx_copy_site
+        ;;
+        4)
         nginx_site
         ;;
         *)
@@ -711,7 +788,8 @@ enter_data_ru() {
     echo -e "${textcolor}[?]${clear} Выберите вариант настройки NGINX/HAProxy:"
     echo "1 - Будет спрашивать логин и пароль вместо сайта"
     echo "2 - Будет перенаправлять на другой домен"
-    echo "3 - Свой сайт (при наличии)"
+    echo "3 - Скопировать чужой сайт на свой сервер, тестовая опция"
+    echo "4 - Свой сайт (при наличии), тестовая опция"
     read option;
     echo ""
     nginx_options
@@ -738,10 +816,12 @@ enter_data_ru() {
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
-    if [[ "${variant}" == "1" ]]
-    then
-        check_subscription_path_ru
-    fi
+    check_subscription_path_ru
+    echo -e "${textcolor}[?]${clear} Введите путь для наборов правил (rule sets) или оставьте пустым для генерации случайного пути:"
+    read rulesetpath
+    [[ ! -z $rulesetpath ]] && echo ""
+    crop_rulesetpath
+    check_rulesetpath_ru
     echo -e "${textcolor}[?]${clear} Нужна ли настройка безопасности (SSH, UFW и unattended-upgrades)?"
     echo "1 - Да (в случае нестандартных настроек у хостера или ошибки при вводе данных можно потерять доступ к серверу)"
     echo "2 - Нет"
@@ -788,7 +868,8 @@ enter_data_en() {
     echo -e "${textcolor}[?]${clear} Select NGINX/HAProxy setup option:"
     echo "1 - Will show a login popup asking for username and password"
     echo "2 - Will redirect to another domain"
-    echo "3 - Your own website (if you have one)"
+    echo "3 - Copy someone else's website to your server, experimental option"
+    echo "4 - Your own website (if you have one), experimental option"
     read option;
     echo ""
     nginx_options
@@ -815,10 +896,12 @@ enter_data_en() {
     read subspath
     [[ ! -z $subspath ]] && echo ""
     crop_subscription_path
-    if [[ "${variant}" == "1" ]]
-    then
-        check_subscription_path_en
-    fi
+    check_subscription_path_en
+    echo -e "${textcolor}[?]${clear} Enter your path for rule sets or leave this empty to generate a random path:"
+    read rulesetpath
+    [[ ! -z $rulesetpath ]] && echo ""
+    crop_rulesetpath
+    check_rulesetpath_en
     echo -e "${textcolor}[?]${clear} Do you need security setup (SSH, UFW and unattended-upgrades)?"
     echo "1 - Yes (in case of hoster's non-standard settings or a mistake while entering data, access to the server might be lost)"
     echo "2 - No"
@@ -856,7 +939,7 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo wget certbot python3-certbot-dns-cloudflare cron gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
+    apt install sudo coreutils wget certbot python3-certbot-dns-cloudflare cron gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
 
     if grep -q "bullseye" /etc/os-release || grep -q "bookworm" /etc/os-release
     then
@@ -1077,10 +1160,44 @@ generate_pass() {
         subspath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
     fi
 
+    if [ -z "$rulesetpath" ]
+    then
+        rulesetpath=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
+    fi
+
     userkey=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 9)
 }
 
+download_rule_sets() {
+    mkdir /var/www/${rulesetpath}
+
+    wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json
+    wget -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geoip/raw/rule-set/geoip-ru.srs
+
+    for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json) - 1))
+    do
+        ruleset_link=$(jq -r ".route.rule_set[${i}].url" /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json)
+        ruleset=${ruleset_link#"https://${domain}/${rulesetpath}/"}
+        wget -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geosite/raw/rule-set/${ruleset}
+    done
+
+    for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /etc/sing-box/config.json) - 1))
+    do
+        ruleset_link=$(jq -r ".route.rule_set[${i}].path" /etc/sing-box/config.json)
+        ruleset=${ruleset_link#"/var/www/${rulesetpath}/"}
+        if [ ! -f ${ruleset_link} ]
+        then
+            wget -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geosite/raw/rule-set/${ruleset}
+        fi
+    done
+
+    chmod -R 755 /var/www/${rulesetpath}
+}
+
 server_config() {
+systemctl stop sing-box.service
+systemctl disable sing-box.service
+
 cat > /etc/sing-box/config.json <<EOF
 {
   "log": {
@@ -1246,39 +1363,39 @@ cat > /etc/sing-box/config.json <<EOF
     "rule_set": [
       {
         "tag": "geoip-ru",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-ru.srs"
+        "path": "/var/www/${rulesetpath}/geoip-ru.srs"
       },
       {
         "tag": "gov-ru",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-gov-ru.srs"
+        "path": "/var/www/${rulesetpath}/geosite-category-gov-ru.srs"
       },
       {
         "tag": "google",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-google.srs"
+        "path": "/var/www/${rulesetpath}/geosite-google.srs"
       },
       {
         "tag": "openai",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-openai.srs"
+        "path": "/var/www/${rulesetpath}/geosite-openai.srs"
       },
       {
         "tag": "telegram",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-telegram.srs"
+        "path": "/var/www/${rulesetpath}/geosite-telegram.srs"
       },
       {
         "tag": "category-ads-all",
-        "type": "remote",
+        "type": "local",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-ads-all.srs"
+        "path": "/var/www/${rulesetpath}/geosite-category-ads-all.srs"
       }
     ]
   },
@@ -1303,6 +1420,8 @@ then
     inboundnumbertr=$(jq '[.inbounds[].tag] | index("trojan-in")' /etc/sing-box/config.json)
     echo "$(jq "del(.inbounds[${inboundnumbertr}].transport.type) | del(.inbounds[${inboundnumbertr}].transport.path) | del(.inbounds[${inboundnumbervl}])" /etc/sing-box/config.json)" > /etc/sing-box/config.json
 fi
+
+download_rule_sets
 
 systemctl enable sing-box.service
 systemctl start sing-box.service
@@ -1601,274 +1720,274 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
     ],
     "rule_set": [
       {
+        "type": "remote",
+        "tag": "torrent-clients",
+        "format": "source",
+        "url": "https://${domain}/${rulesetpath}/torrent-clients.json"
+      },
+      {
         "tag": "geoip-ru",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geoip/raw/rule-set/geoip-ru.srs"
+        "url": "https://${domain}/${rulesetpath}/geoip-ru.srs"
       },
       {
         "tag": "gov-ru",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-gov-ru.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-category-gov-ru.srs"
       },
       {
         "tag": "yandex",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-yandex.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-yandex.srs"
       },
       {
         "tag": "telegram",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-telegram.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-telegram.srs"
       },
       {
         "tag": "vk",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-vk.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-vk.srs"
       },
       {
         "tag": "mailru",
         "type": "remote",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-mailru.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-mailru.srs"
       },
       {
         "tag": "zoom",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-zoom.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-zoom.srs"
       },
       {
         "tag": "reddit",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-reddit.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-reddit.srs"
       },
       {
         "tag": "twitch",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-twitch.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-twitch.srs"
       },
       {
         "tag": "tumblr",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-tumblr.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-tumblr.srs"
       },
       {
         "tag": "4chan",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-4chan.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-4chan.srs"
       },
       {
         "tag": "pinterest",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-pinterest.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-pinterest.srs"
       },
       {
         "tag": "deviantart",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-deviantart.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-deviantart.srs"
       },
       {
         "tag": "duckduckgo",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-duckduckgo.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-duckduckgo.srs"
       },
       {
         "tag": "yahoo",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-yahoo.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-yahoo.srs"
       },
       {
         "tag": "mozilla",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-mozilla.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-mozilla.srs"
       },
       {
         "tag": "category-android-app-download",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-android-app-download.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-category-android-app-download.srs"
       },
       {
         "tag": "aptoide",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-aptoide.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-aptoide.srs"
       },
       {
         "tag": "samsung",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-samsung.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-samsung.srs"
       },
       {
         "tag": "huawei",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-huawei.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-huawei.srs"
       },
       {
         "tag": "apple",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-apple.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-apple.srs"
       },
       {
         "tag": "microsoft",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-microsoft.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-microsoft.srs"
       },
       {
         "tag": "nvidia",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-nvidia.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-nvidia.srs"
       },
       {
         "tag": "xiaomi",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-xiaomi.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-xiaomi.srs"
       },
       {
         "tag": "hp",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-hp.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-hp.srs"
       },
       {
         "tag": "asus",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-asus.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-asus.srs"
       },
       {
         "tag": "lenovo",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-lenovo.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-lenovo.srs"
       },
       {
         "tag": "lg",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-lg.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-lg.srs"
       },
       {
         "tag": "oracle",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-oracle.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-oracle.srs"
       },
       {
         "tag": "adobe",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-adobe.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-adobe.srs"
       },
       {
         "tag": "blender",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-blender.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-blender.srs"
       },
       {
         "tag": "drweb",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-drweb.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-drweb.srs"
       },
       {
         "tag": "gitlab",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-gitlab.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-gitlab.srs"
       },
       {
         "tag": "debian",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-debian.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-debian.srs"
       },
       {
         "tag": "canonical",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-canonical.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-canonical.srs"
       },
       {
         "tag": "python",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-python.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-python.srs"
       },
       {
         "tag": "doi",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-doi.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-doi.srs"
       },
       {
         "tag": "elsevier",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-elsevier.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-elsevier.srs"
       },
       {
         "tag": "sciencedirect",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-sciencedirect.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-sciencedirect.srs"
       },
       {
         "tag": "clarivate",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-clarivate.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-clarivate.srs"
       },
       {
         "tag": "sci-hub",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-sci-hub.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-sci-hub.srs"
       },
       {
         "tag": "duolingo",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-duolingo.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-duolingo.srs"
       },
       {
         "tag": "aljazeera",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-aljazeera.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-aljazeera.srs"
       },
       {
         "tag": "category-ads-all",
         "type": "remote",
         "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-category-ads-all.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "torrent-clients",
-        "format": "source",
-        "url": "https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json"
+        "url": "https://${domain}/${rulesetpath}/geosite-category-ads-all.srs"
       }
     ],
     "auto_detect_interface": true,
@@ -1901,20 +2020,60 @@ fi
 setup_sing_box() {
     echo -e "${textcolor_light}Setting up Sing-Box...${clear}"
     generate_pass
-    server_config
     client_config
+    server_config
     echo ""
 }
 
 for_nginx_options() {
-    if [[ "$option" == "3" ]]
-    then
-        mv /root/${sitedir} /var/www
-    fi
-
-    if [[ "$option" != "2" ]] && [[ "$option" != "3" ]]
+    if [[ "${variant}" == "1" ]] && [[ "$option" != "2" ]] && [[ "$option" != "3" ]] && [[ "$option" != "4" ]]
     then
         touch /etc/nginx/.htpasswd
+    fi
+
+    if [[ "$option" == "3" ]]
+    then
+        wget -P /var/www --mirror --convert-links --adjust-extension --page-requisites --no-parent https://${sitelink}
+
+        mkdir ./testdir
+        wget -q -P ./testdir https://${sitelink}
+        index=$(ls ./testdir)
+        rm -rf ./testdir
+
+        if [[ "$sitelink" =~ "/" ]]
+        then
+            sitedir=$(echo "${sitelink}" | cut -d "/" -f 1)
+        else
+            sitedir="${sitelink}"
+        fi
+
+        chmod -R 755 /var/www/${sitedir}
+        filelist=$(find /var/www/${sitedir} -name ${index})
+        slashnum=1000
+
+        for k in $(seq 1 $(echo "$filelist" | wc -l))
+        do
+            testfile=$(echo "$filelist" | sed -n "${k}p")
+            if [ $(echo "${testfile}" | tr -cd '/' | wc -c) -lt ${slashnum} ]
+            then
+                resultfile="${testfile}"
+                slashnum=$(echo "${testfile}" | tr -cd '/' | wc -c)
+            fi
+        done
+
+        sitedir=${resultfile#"/var/www/"}
+        sitedir=${sitedir%"/${index}"}
+        echo ""
+    fi
+
+    if [[ "$option" == "4" ]]
+    then
+        sitedir=$(echo "${index}" | cut -d "/" -f 2)
+        mv /root/${sitedir} /var/www
+        chmod -R 755 /var/www/${sitedir}
+        sitedir=${index#"/"}
+        index=$(echo "${index}" | rev | cut -d "/" -f 1 | rev)
+        sitedir=${sitedir%"/${index}"}
     fi
 }
 
@@ -2040,7 +2199,7 @@ http {
         ${comment3}location / {
             ${comment2}${comment3}root /var/www/html;
             ${comment2}${comment3}index index.html index.htm;
-            ${comment2}${comment3}auth_basic "Login Required";
+            ${comment2}${comment3}auth_basic "Restricted Content";
             ${comment2}${comment3}auth_basic_user_file /etc/nginx/.htpasswd;
             ${comment1}${comment3}return 301 https://${redirect}\$request_uri;
         ${comment3}}
@@ -2049,6 +2208,12 @@ http {
         location ~ ^/${subspath} {
             default_type application/json;
             root /var/www;
+        }
+
+        # Rule sets
+        location /${rulesetpath}/ {
+            alias /var/www/${rulesetpath}/;
+            add_header Content-disposition "attachment";
         }
 
         # Reverse proxy
@@ -2188,6 +2353,12 @@ http {
             root /var/www;
         }
 
+        # Rule sets
+        location /${rulesetpath}/ {
+            alias /var/www/${rulesetpath}/;
+            add_header Content-disposition "attachment";
+        }
+
         # gzip
         gzip            on;
         gzip_vary       on;
@@ -2297,7 +2468,7 @@ frontend haproxy-tls
         tcp-request content reject if host_ip
         tcp-request inspect-delay 5s
         tcp-request content accept if { req_ssl_hello_type 1 }
-        ${comment3}use_backend http-sub if { path /${subspath} } || { path_beg /${subspath}/ }
+        ${comment3}use_backend http-sub if { path /${subspath} } || { path_beg /${subspath}/ } || { path /${rulesetpath} } || { path_beg /${rulesetpath}/ }
         use_backend %[lua.trojan_auth]
         default_backend http
 
@@ -2341,21 +2512,21 @@ add_sbmanager() {
 
     if [[ "${language}" == "1" ]]
     then
-        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager.sh
+        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager.sh
     else
-        curl -s -o /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager-en.sh
+        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager-en.sh
     fi
 
     chmod +x /usr/local/bin/sbmanager
 
     if [[ "${variant}" == "1" ]] && [[ "${transport}" != "2" ]]
     then
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-WS/Client-Trojan-WS.json
+        wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-WS.json
     elif [[ "${variant}" == "1" ]] && [[ "${transport}" == "2" ]]
     then
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HTTPUpgrade/Client-Trojan-HTTPUpgrade.json
+        wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HTTPUpgrade.json
     else
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
+        wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HAProxy.json
     fi
 
     if [ -f /var/www/${subspath}/template.json ] && [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
@@ -2364,8 +2535,6 @@ add_sbmanager() {
     else
         cp /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
     fi
-
-    echo ""
 }
 
 add_sub_page() {
@@ -2373,22 +2542,20 @@ add_sub_page() {
 
     if [[ "${variant}" == "1" ]] && [[ "${language}" == "1" ]]
     then
-        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru.html
+        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru.html
     elif [[ "${variant}" == "1" ]] && [[ "${language}" != "1" ]]
     then
-        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en.html
+        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en.html
     elif [[ "${variant}" != "1" ]] && [[ "${language}" == "1" ]]
     then
-        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru-hapr.html
+        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru-hapr.html
     else
-        curl -s -o /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en-hapr.html
+        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en-hapr.html
     fi
 
     sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
 
-    curl -s -o /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/background.jpg
-
-    echo ""
+    wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/background.jpg
 }
 
 final_message_ru() {

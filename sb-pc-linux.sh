@@ -95,7 +95,7 @@ create_proxy_command_ru() {
 	    echo ""
 	    exit 1
 	fi
-	curl -s -o /etc/sing-box/config.json ${link}
+	wget -q -O /etc/sing-box/config.json ${link}
 	systemctl start sing-box.service
 	echo ""
 	echo "Sing-Box запущен"
@@ -191,7 +191,7 @@ create_proxy_command_en() {
 	    echo ""
 	    exit 1
 	fi
-	curl -s -o /etc/sing-box/config.json ${link}
+	wget -q -O /etc/sing-box/config.json ${link}
 	systemctl start sing-box.service
 	echo ""
 	echo "Started Sing-Box"

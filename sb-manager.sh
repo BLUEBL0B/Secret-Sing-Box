@@ -17,12 +17,12 @@ check_root() {
 templates() {
     if [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "ws" ]]
     then
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-WS/Client-Trojan-WS.json
+        wget -q -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-WS.json
     elif [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "httpupgrade" ]]
     then
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HTTPUpgrade/Client-Trojan-HTTPUpgrade.json
+        wget -q -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HTTPUpgrade.json
     else
-        curl -s -o /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/Client-Trojan-HAProxy.json
+        wget -q -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HAProxy.json
     fi
 
     if [ ! -f /var/www/${subspath}/template-loc.json ]
@@ -69,10 +69,31 @@ get_data() {
     subspath=${subspath#*"location ~ ^/"}
     subspath=${subspath%" {"*}
 
+    rulesetpath=$(grep "alias /var/www/" /etc/nginx/nginx.conf | head -n 1)
+    rulesetpath=${rulesetpath#*"alias /var/www/"}
+    rulesetpath=${rulesetpath%"/;"*}
+
     templates
 
     tempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template.json)
     tempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template.json)
+
+    temprulesetpath=$(jq -r ".route.rule_set[-1].url" /var/www/${subspath}/template.json)
+    temprulesetpath=${temprulesetpath#*"https://${tempdomain}/"}
+    temprulesetpath=${temprulesetpath%"/"*}
+
+    loctempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
+    loctempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template-loc.json)
+
+    if [ -z ${loctempip} ]
+    then
+        loctempip=$(jq -r '.route.rules[] | select(has("ip_cidr")) | .ip_cidr[0]' /var/www/${subspath}/template-loc.json)
+    fi
+
+    loctemprulesetpath=$(jq -r ".route.rule_set[-1].url" /var/www/${subspath}/template-loc.json)
+    loctemprulesetpath=${loctemprulesetpath#*"https://${loctempdomain}/"}
+    loctemprulesetpath=${loctemprulesetpath%"/"*}
+
     echo ""
 }
 
@@ -229,14 +250,14 @@ add_to_client_conf() {
     else
         echo "$(jq ".outbounds[${outboundnum}].password = \"${trjpass}\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
     fi
-    sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" /var/www/${subspath}/${username}-TRJ-CLIENT.json
+    sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" /var/www/${subspath}/${username}-TRJ-CLIENT.json
 
     if [ ! -f /etc/haproxy/auth.lua ]
     then
         cp /var/www/${subspath}/template-loc.json /var/www/${subspath}/${username}-VLESS-CLIENT.json
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
         echo "$(jq ".outbounds[${outboundnum}].password = \"${uuid}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-        sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" /var/www/${subspath}/${username}-VLESS-CLIENT.json
+        sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" /var/www/${subspath}/${username}-VLESS-CLIENT.json
     fi
 
     echo -e "Пользователь ${textcolor}${username}${clear} добавлен:"
@@ -368,10 +389,20 @@ sync_client_configs_github() {
         else
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
-        sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" ${file}
+        sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" -e "s/$temprulesetpath/$rulesetpath/g" ${file}
         cred=""
         inboundnum=""
         outboundnum=""
+    done
+
+    for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /var/www/${subspath}/template.json) - 1))
+    do
+        ruleset_link=$(jq -r ".route.rule_set[${i}].url" /var/www/${subspath}/template.json)
+        ruleset=${ruleset_link#"https://${tempdomain}/${temprulesetpath}/"}
+        if [ ! -f /var/www/${rulesetpath}/${ruleset} ]
+        then
+            wget -q -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geosite/raw/rule-set/${ruleset}
+        fi
     done
 
     echo "Синхронизация настроек завершена"
@@ -388,9 +419,6 @@ sync_local_message() {
 }
 
 sync_client_configs_local() {
-    loctempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
-    loctempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template-loc.json)
-
     for file in /var/www/${subspath}/*-CLIENT.json
     do
         get_pass
@@ -407,11 +435,24 @@ sync_client_configs_local() {
         else
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
-        sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" ${file}
+        sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" ${file}
         cred=""
         inboundnum=""
         outboundnum=""
     done
+
+    if [[ $(jq ".route.rule_set | length" /var/www/${subspath}/template-loc.json) =~ ^[0-9]+$ ]] && [[ $(jq ".route.rule_set | length" /var/www/${subspath}/template-loc.json) != "0" ]]
+    then
+        for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /var/www/${subspath}/template-loc.json) - 1))
+        do
+            ruleset_link=$(jq -r ".route.rule_set[${i}].url" /var/www/${subspath}/template-loc.json)
+            ruleset=${ruleset_link#"https://${loctempdomain}/${loctemprulesetpath}/"}
+            if [ ! -f /var/www/${rulesetpath}/${ruleset} ]
+            then
+                wget -q -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geosite/raw/rule-set/${ruleset}
+            fi
+        done
+    fi
 
     echo "Синхронизация настроек завершена"
     echo ""
@@ -578,7 +619,7 @@ check_nextlink() {
 }
 
 chain_end() {
-    config_temp=$(curl -s https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Examples-HAProxy/config.json)
+    config_temp=$(curl -s https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/config.json)
 
     if [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
     then
@@ -616,6 +657,8 @@ chain_end() {
         openai_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="openai")')
         echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${openai_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
     fi
+
+    sed -i -e "s/$temprulesetpath/$rulesetpath/g" /etc/sing-box/config.json
 
     systemctl reload sing-box.service
 
@@ -814,6 +857,41 @@ renew_cert() {
     echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы обновить сертификат, или введите ${textcolor}x${clear}, чтобы выйти:"
     read certrenew
     exit_renew_cert
+
+    if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
+    then
+        while [[ -z $email ]]
+        do
+            echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
+            read email
+            echo ""
+        done
+
+        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+
+        if [ $? -eq 0 ]
+        then
+            echo ""
+            echo "Сертификат успешно выпущен"
+        else
+            echo ""
+            echo -e "${red}Ошибка: сертификат не выпущен${clear}"
+        fi
+
+        if [ ! -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ] && ! grep -q "renew_hook =" /etc/letsencrypt/renewal/${domain}.conf
+        then
+            echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+            systemctl reload nginx.service
+        elif [ -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ] && ! grep -q "renew_hook =" /etc/letsencrypt/renewal/${domain}.conf
+        then
+            echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+            systemctl reload haproxy.service
+        fi
+
+        email=""
+        echo ""
+        main_menu
+    fi
 
     certbot renew --force-renewal
 
