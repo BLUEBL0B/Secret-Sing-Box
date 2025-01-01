@@ -579,13 +579,13 @@ check_index_en() {
 }
 
 check_site_link_ru() {
-    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]]
+    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
     do
         if [[ -z $sitelink ]]
         then
             :
         else
-            echo -e "${red}Ошибка: ссылка введена неправильно или сайт не имеет HTTPS${clear}"
+            echo -e "${red}Ошибка: сайт недоступен по данной ссылке или не имеет HTTPS${clear}"
             echo ""
         fi
         echo -e "${textcolor}[?]${clear} Введите ссылку на главную страницу выбранного сайта:"
@@ -596,13 +596,13 @@ check_site_link_ru() {
 }
 
 check_site_link_en() {
-    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]]
+    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
     do
         if [[ -z $sitelink ]]
         then
             :
         else
-            echo -e "${red}Error: this link is invalid or the site does not have HTTPS${clear}"
+            echo -e "${red}Error: the website is not available or does not have HTTPS${clear}"
             echo ""
         fi
         echo -e "${textcolor}[?]${clear} Enter the link to the main page of the selected website:"
