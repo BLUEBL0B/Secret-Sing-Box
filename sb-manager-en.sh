@@ -664,11 +664,11 @@ chain_end() {
 
     echo "Settings changed"
     echo ""
-
     main_menu
 }
 
 chain_middle() {
+    nextlink=""
     while [[ -z $nextlink ]]
     do
         echo -e "${textcolor}[?]${clear} Enter the link to client config from the next server in the chain or enter ${textcolor}x${clear} to exit:"
@@ -726,10 +726,8 @@ chain_middle() {
 
     systemctl reload sing-box.service
 
-    nextlink=""
     echo "Settings changed"
     echo ""
-
     main_menu
 }
 
@@ -836,7 +834,6 @@ change_stack() {
     inboundnum=""
     echo "The \"stack\" value changed, update the config on the client app to apply new settings"
     echo ""
-
     main_menu
 }
 
@@ -860,6 +857,7 @@ renew_cert() {
 
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
+        email=""
         while [[ -z $email ]]
         do
             echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
@@ -888,7 +886,6 @@ renew_cert() {
             systemctl reload haproxy.service
         fi
 
-        email=""
         echo ""
         main_menu
     fi
@@ -903,6 +900,168 @@ renew_cert() {
         echo ""
         echo -e "${red}Error: certificate has not been renewed${clear}"
     fi
+
+    echo ""
+    main_menu
+}
+
+exit_change_domain() {
+    if [[ $domain == "x" ]] || [[ $domain == "х" ]]
+    then
+        domain="${old_domain}"
+        main_menu
+    fi
+}
+
+crop_domain() {
+    if [[ "$domain" == "https://"* ]]
+    then
+        domain=${domain#"https://"}
+    fi
+
+    if [[ "$domain" == "http://"* ]]
+    then
+        domain=${domain#"http://"}
+    fi
+
+    if [[ "$domain" == "www."* ]]
+    then
+        domain=${domain#"www."}
+    fi
+
+    if [[ "$domain" =~ "/" ]]
+    then
+        domain=$(echo "${domain}" | cut -d "/" -f 1)
+    fi
+}
+
+get_test_response() {
+    testdomain=$(echo "${domain}" | rev | cut -d '.' -f 1-2 | rev)
+
+    if [[ "$cftoken" =~ [A-Z] ]]
+    then
+        test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${cftoken}" --header "Content-Type: application/json")
+    else
+        test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "X-Auth-Key: ${cftoken}" --header "X-Auth-Email: ${email}" --header "Content-Type: application/json")
+    fi
+}
+
+check_cf_token() {
+    echo "Checking domain name, API token/key and email..."
+    get_test_response
+
+    while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
+    do
+        domain=""
+        email=""
+        cftoken=""
+        echo ""
+        echo -e "${red}Error: invalid domain name, API token/key or email${clear}"
+        echo ""
+        while [[ -z $domain ]]
+        do
+            echo -e "${textcolor}[?]${clear} Enter your domain name or enter ${textcolor}x${clear} to exit:"
+            read domain
+            echo ""
+        done
+        exit_change_domain
+        crop_domain
+        while [[ -z $email ]]
+        do
+            echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
+            read email
+            echo ""
+        done
+        while [[ -z $cftoken ]]
+        do
+            echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+            read cftoken
+            echo ""
+        done
+        echo "Checking domain name, API token/key and email..."
+        get_test_response
+    done
+
+    echo "Success!"
+    echo ""
+}
+
+change_domain() {
+    old_domain="${domain}"
+    domain=""
+    email=""
+    cftoken=""
+    echo -e "${red}ATTENTION!${clear}"
+    echo "Don't forget to create an A record for the new domain and change the domain in client config links"
+    echo ""
+
+    while [[ -z $domain ]]
+    do
+        echo -e "${textcolor}[?]${clear} Enter your domain name or enter ${textcolor}x${clear} to exit:"
+        read domain
+        echo ""
+    done
+    exit_change_domain
+    crop_domain
+    while [[ -z $email ]]
+    do
+        echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
+        read email
+        echo ""
+    done
+    while [[ -z $cftoken ]]
+    do
+        echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+        read cftoken
+        echo ""
+    done
+    check_cf_token
+
+    if [[ "$cftoken" =~ [A-Z] ]]
+    then
+        echo "dns_cloudflare_api_token = ${cftoken}" > /etc/letsencrypt/cloudflare.credentials
+    else
+        echo "dns_cloudflare_email = ${email}" > /etc/letsencrypt/cloudflare.credentials
+        echo "dns_cloudflare_api_key = ${cftoken}" >> /etc/letsencrypt/cloudflare.credentials
+    fi
+
+    if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
+    then
+        echo -e "${textcolor}Requesting a certificate...${clear}"
+        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+
+        if [ $? -ne 0 ]
+        then
+            sleep 3
+            echo ""
+            echo -e "${textcolor}Requesting a certificate: 2nd attempt...${clear}"
+            certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+        fi
+    else
+        echo -e "Found a certificate for the domain ${textcolor}${domain}${clear}"
+    fi
+
+    if [ ! -f /etc/haproxy/auth.lua ]
+    then
+        echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        sed -i -e "s/$old_domain/$domain/g" /etc/nginx/nginx.conf
+        systemctl reload nginx.service
+    else
+        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
+        sed -i -e "s/$old_domain/$domain/g" /etc/haproxy/haproxy.cfg
+        systemctl reload haproxy.service
+    fi
+
+    for file in /var/www/${subspath}/*-CLIENT.json
+    do
+        sed -i -e "s/$old_domain/$domain/g" ${file}
+    done
+
+    sed -i -e "s/$old_domain/$domain/g" /var/www/${subspath}/sub.html
+
+    echo ""
+    echo -e "Domain ${textcolor}${old_domain}${clear} changed to ${textcolor}${domain}${clear}"
 
     echo ""
     main_menu
@@ -927,7 +1086,6 @@ disable_ipv6() {
     echo -e "${textcolor}IPv6 is disabled:${clear}"
     sysctl -p
     echo ""
-
     main_menu
 }
 
@@ -939,7 +1097,6 @@ enable_ipv6() {
     echo -e "${textcolor}IPv6 is not disabled:${clear}"
     sysctl -p
     echo ""
-
     main_menu
 }
 
@@ -963,9 +1120,10 @@ main_menu() {
     echo "10 - Setup/remove a chain of two or more servers"
     echo "------------------------"
     echo "11 - Renew certificate manually"
+    echo "12 - Change domain"
     echo "------------------------"
-    echo "12 - Disable IPv6 on the server"
-    echo "13 - Enable IPv6 on the server"
+    echo "13 - Disable IPv6 on the server"
+    echo "14 - Enable IPv6 on the server"
     read option
     echo ""
 
@@ -1004,9 +1162,12 @@ main_menu() {
         renew_cert
         ;;
         12)
-        disable_ipv6
+        change_domain
         ;;
         13)
+        disable_ipv6
+        ;;
+        14)
         enable_ipv6
         ;;
         *)

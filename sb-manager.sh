@@ -664,11 +664,11 @@ chain_end() {
 
     echo "Изменение настроек завершено"
     echo ""
-
     main_menu
 }
 
 chain_middle() {
+    nextlink=""
     while [[ -z $nextlink ]]
     do
         echo -e "${textcolor}[?]${clear} Введите ссылку на клиентский конфиг со следующего сервера в цепочке или введите ${textcolor}x${clear}, чтобы выйти:"
@@ -726,10 +726,8 @@ chain_middle() {
 
     systemctl reload sing-box.service
 
-    nextlink=""
     echo "Изменение настроек завершено"
     echo ""
-
     main_menu
 }
 
@@ -836,7 +834,6 @@ change_stack() {
     inboundnum=""
     echo "Изменение \"stack\" завершено, для применения новых настроек обновите конфиг на клиенте"
     echo ""
-
     main_menu
 }
 
@@ -860,6 +857,7 @@ renew_cert() {
 
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
+        email=""
         while [[ -z $email ]]
         do
             echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
@@ -888,7 +886,6 @@ renew_cert() {
             systemctl reload haproxy.service
         fi
 
-        email=""
         echo ""
         main_menu
     fi
@@ -903,6 +900,168 @@ renew_cert() {
         echo ""
         echo -e "${red}Ошибка: сертификат не обновлён${clear}"
     fi
+
+    echo ""
+    main_menu
+}
+
+exit_change_domain() {
+    if [[ $domain == "x" ]] || [[ $domain == "х" ]]
+    then
+        domain="${old_domain}"
+        main_menu
+    fi
+}
+
+crop_domain() {
+    if [[ "$domain" == "https://"* ]]
+    then
+        domain=${domain#"https://"}
+    fi
+
+    if [[ "$domain" == "http://"* ]]
+    then
+        domain=${domain#"http://"}
+    fi
+
+    if [[ "$domain" == "www."* ]]
+    then
+        domain=${domain#"www."}
+    fi
+
+    if [[ "$domain" =~ "/" ]]
+    then
+        domain=$(echo "${domain}" | cut -d "/" -f 1)
+    fi
+}
+
+get_test_response() {
+    testdomain=$(echo "${domain}" | rev | cut -d '.' -f 1-2 | rev)
+
+    if [[ "$cftoken" =~ [A-Z] ]]
+    then
+        test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "Authorization: Bearer ${cftoken}" --header "Content-Type: application/json")
+    else
+        test_response=$(curl --silent --request GET --url https://api.cloudflare.com/client/v4/zones --header "X-Auth-Key: ${cftoken}" --header "X-Auth-Email: ${email}" --header "Content-Type: application/json")
+    fi
+}
+
+check_cf_token() {
+    echo "Проверка домена, API токена/ключа и почты..."
+    get_test_response
+
+    while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
+    do
+        domain=""
+        email=""
+        cftoken=""
+        echo ""
+        echo -e "${red}Ошибка: неправильно введён домен, API токен/ключ или почта${clear}"
+        echo ""
+        while [[ -z $domain ]]
+        do
+            echo -e "${textcolor}[?]${clear} Введите новый домен или введите ${textcolor}x${clear}, чтобы выйти:"
+            read domain
+            echo ""
+        done
+        exit_change_domain
+        crop_domain
+        while [[ -z $email ]]
+        do
+            echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
+            read email
+            echo ""
+        done
+        while [[ -z $cftoken ]]
+        do
+            echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+            read cftoken
+            echo ""
+        done
+        echo "Проверка домена, API токена/ключа и почты..."
+        get_test_response
+    done
+
+    echo "Успешно!"
+    echo ""
+}
+
+change_domain() {
+    old_domain="${domain}"
+    domain=""
+    email=""
+    cftoken=""
+    echo -e "${red}ВНИМАНИЕ!${clear}"
+    echo "Не забудьте создать А запись для нового домена и заменить домен в ссылках для клиентов"
+    echo ""
+
+    while [[ -z $domain ]]
+    do
+        echo -e "${textcolor}[?]${clear} Введите новый домен или введите ${textcolor}x${clear}, чтобы выйти:"
+        read domain
+        echo ""
+    done
+    exit_change_domain
+    crop_domain
+    while [[ -z $email ]]
+    do
+        echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
+        read email
+        echo ""
+    done
+    while [[ -z $cftoken ]]
+    do
+        echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+        read cftoken
+        echo ""
+    done
+    check_cf_token
+
+    if [[ "$cftoken" =~ [A-Z] ]]
+    then
+        echo "dns_cloudflare_api_token = ${cftoken}" > /etc/letsencrypt/cloudflare.credentials
+    else
+        echo "dns_cloudflare_email = ${email}" > /etc/letsencrypt/cloudflare.credentials
+        echo "dns_cloudflare_api_key = ${cftoken}" >> /etc/letsencrypt/cloudflare.credentials
+    fi
+
+    if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
+    then
+        echo -e "${textcolor}Получение сертификата...${clear}"
+        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+
+        if [ $? -ne 0 ]
+        then
+            sleep 3
+            echo ""
+            echo -e "${textcolor}Получение сертификата: 2-я попытка...${clear}"
+            certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+        fi
+    else
+        echo -e "Сертификат на домен ${textcolor}${domain}${clear} уже имеется"
+    fi
+
+    if [ ! -f /etc/haproxy/auth.lua ]
+    then
+        echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        sed -i -e "s/$old_domain/$domain/g" /etc/nginx/nginx.conf
+        systemctl reload nginx.service
+    else
+        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
+        sed -i -e "s/$old_domain/$domain/g" /etc/haproxy/haproxy.cfg
+        systemctl reload haproxy.service
+    fi
+
+    for file in /var/www/${subspath}/*-CLIENT.json
+    do
+        sed -i -e "s/$old_domain/$domain/g" ${file}
+    done
+
+    sed -i -e "s/$old_domain/$domain/g" /var/www/${subspath}/sub.html
+
+    echo ""
+    echo -e "Домен ${textcolor}${old_domain}${clear} заменён на ${textcolor}${domain}${clear}"
 
     echo ""
     main_menu
@@ -927,7 +1086,6 @@ disable_ipv6() {
     echo -e "${textcolor}IPv6 отключён:${clear}"
     sysctl -p
     echo ""
-
     main_menu
 }
 
@@ -939,7 +1097,6 @@ enable_ipv6() {
     echo -e "${textcolor}IPv6 не отключён:${clear}"
     sysctl -p
     echo ""
-
     main_menu
 }
 
@@ -963,9 +1120,10 @@ main_menu() {
     echo "10 - Настроить/убрать цепочку из двух и более серверов"
     echo "------------------------"
     echo "11 - Обновить сертификат вручную"
+    echo "12 - Сменить домен"
     echo "------------------------"
-    echo "12 - Отключить IPv6 на сервере"
-    echo "13 - Не отключать IPv6 на сервере"
+    echo "13 - Отключить IPv6 на сервере"
+    echo "14 - Не отключать IPv6 на сервере"
     read option
     echo ""
 
@@ -1004,9 +1162,12 @@ main_menu() {
         renew_cert
         ;;
         12)
-        disable_ipv6
+        change_domain
         ;;
         13)
+        disable_ipv6
+        ;;
+        14)
         enable_ipv6
         ;;
         *)
