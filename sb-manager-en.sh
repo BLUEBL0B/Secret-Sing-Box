@@ -865,6 +865,7 @@ renew_cert() {
             echo ""
         done
 
+        echo -e "${textcolor}Requesting a certificate...${clear}"
         certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
         if [ $? -eq 0 ]
@@ -883,6 +884,7 @@ renew_cert() {
         elif [ -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ] && ! grep -q "renew_hook =" /etc/letsencrypt/renewal/${domain}.conf
         then
             echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl restart haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+            cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
             systemctl reload haproxy.service
         fi
 
