@@ -16,13 +16,13 @@
 ![dns-2](https://github.com/user-attachments/assets/a0be45a5-2013-48b7-a3f9-565a396b33bb)
 
 > [!IMPORTANT]
+> Для первого варианта настройки может потребоваться [отключение ECH](https://habr.com/ru/articles/856602/) в аккаунте Cloudflare или переключение DNS записей на «DNS only».
+> 
 > Если уже есть А запись на этот домен, созданная для других целей, то нужно создать А запись на поддомен:
 >
 > A | sub | 98.76.54.32
 >
 > Вместо «sub» придумайте свой поддомен, и в скрипте введите его вместо домена (например, sub.example.com).
-> 
-> Для первого варианта настройки может потребоваться отключение ECH в аккаунте Cloudflare, либо переключение DNS записей на «DNS only».
 
 ### Получение API токена Cloudflare
 Overview > Get your API token > Create Token > Edit zone DNS (Use template)
