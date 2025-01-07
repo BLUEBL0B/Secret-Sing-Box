@@ -15,7 +15,7 @@ This script is designed to fully configure a secure proxy server with [Sing-Box]
 Both setup methods make it impossible to detect Sing-Box from the outside, which improves security.
 
 > [!IMPORTANT]
-> Recommended OS: Debian 11/12 or Ubuntu 22.04/24.04. You will also need your own domain linked to your Cloudflare account ([How to set it up?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/cf-settings-en.md)). Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
+> Recommended OS: Debian 11/12 or Ubuntu 22.04/24.04. You will also need an IPv4 on the server and your own domain linked to your Cloudflare account ([How to set it up?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/cf-settings-en.md)). Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 >
 > This project is created for educational and demonstration purposes. Please make sure that your actions are legal before using it.
 
@@ -25,13 +25,14 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 ### Includes:
 1) Sing-Box server setup
 2) NGINX or HAProxy reverse proxy and website setup on port 443
-3) Security setup (optional)
-4) Cloudflare SSL certificates with auto renewal
-5) WARP setup
-6) Enable BBR
-7) Client Sing-Box configs with routing rules for Russia
-8) Automated management of user config files
-9) Optional setup of proxy chains of two or more servers
+3) Multiplexing to optimise connections
+4) Security setup (optional)
+5) Cloudflare TLS certificates with auto renewal
+6) WARP setup
+7) Enable BBR
+8) Client Sing-Box configs with routing rules for Russia
+9) Automated management of user config files
+10) Optional setup of proxy chains of two or more servers
  
 ### Usage:
 
@@ -43,7 +44,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/5bb6d739-c9bc-4b45-bc39-0e124bdb3de4)
+![pic-1-en](https://github.com/user-attachments/assets/fbebc90c-d445-4dfe-afd0-063e8f0e1c68)
 
 The script will show your client links in the end.
 
@@ -57,7 +58,7 @@ sbmanager
 
 Then follow the instructions:
 
-![pic-2-en](https://github.com/user-attachments/assets/c027c6dd-85bf-447e-9a1d-d68182ea71ae)
+![pic-2-en](https://github.com/user-attachments/assets/47334fd3-b451-48dc-bb2b-9075d1d8fb4c)
 
 Options 5 and 6 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately.
 
