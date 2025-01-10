@@ -7,17 +7,13 @@ Next, change the following settings in your Cloudflare account:
 3) SSL/TLS > Edge Certificates > TLS 1.3 > Enable
 
 ### DNS Settings
-Example of DNS records for the setup option with TLS termination on NGINX and WebSocket or HTTPUpgrade transport (1 method):
-
-![dns-1](https://github.com/user-attachments/assets/461f07c7-94e1-47c2-967e-5fa36b50509f)
-
-Example of DNS records for the setup option with TLS termination on HAProxy and backend selection based on Trojan passwords (2 method):
+Example of DNS records:
 
 ![dns-2](https://github.com/user-attachments/assets/a0be45a5-2013-48b7-a3f9-565a396b33bb)
 
+For the setup option with TLS termination on NGINX and WebSocket or HTTPUpgrade transport, you can enable proxying of both records (this may require to disable ECH).
+
 > [!IMPORTANT]
-> The first setup method may require disabling ECH in your Cloudflare account or switching DNS records to "DNS only".
-> 
 > If you already have an A record for this domain created for other purposes, then also create an A record for subdomain:
 >
 > A | sub | 98.76.54.32
