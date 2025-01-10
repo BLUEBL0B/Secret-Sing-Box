@@ -1103,7 +1103,7 @@ certificates() {
         certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
     fi
 
-    { crontab -l; echo "0 5 1 */2 * certbot -q renew --force-renewal"; } | crontab -
+    { crontab -l; echo "0 2 1 */2 * certbot -q renew --force-renewal"; } | crontab -
 
     if [[ "${variant}" == "1" ]]
     then
@@ -1192,6 +1192,10 @@ download_rule_sets() {
     done
 
     chmod -R 755 /var/www/${rulesetpath}
+
+    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/ruleset-update.sh
+    chmod +x /usr/local/bin/rsupdate
+    { crontab -l; echo "10 2 * * * rsupdate"; } | crontab -
 }
 
 server_config() {

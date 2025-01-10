@@ -29,3 +29,5 @@ if [ $? -eq 0 ]
 then
     mv -f /var/www/${rulesetpath}/geoip-ru.srs.1 /var/www/${rulesetpath}/geoip-ru.srs
 fi
+
+chmod -R 755 /var/www/${rulesetpath}
