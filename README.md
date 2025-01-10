@@ -1,9 +1,10 @@
-# Secret Sing-Box
+# Secret Sing-Box (SSB)
 
 [**English version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md)
 
 ### Прокси с использованием протоколов Trojan и VLESS и терминированием TLS на NGINX или HAProxy
-Данный скрипт предназначен для полной настройки защищённого прокси-сервера с ядром [Sing-Box](https://sing-box.sagernet.org) и маскировкой при помощи [NGINX](https://nginx.org/ru/) или [HAProxy](https://www.haproxy.org). Два варианта настройки на выбор:
+Данный скрипт предназначен для полной и простой настройки защищённого прокси-сервера с ядром [Sing-Box](https://sing-box.sagernet.org) и маскировкой при помощи [NGINX](https://nginx.org/ru/) или [HAProxy](https://www.haproxy.org). Два варианта настройки на выбор:
+
 - Все запросы к прокси принимает NGINX, запросы передаются на Sing-Box только при наличии в них правильного пути (транспорт WebSocket или HTTPUpgrade)
 
 ![nginx-ru](https://github.com/user-attachments/assets/ac95ed9f-0d70-4ea9-993f-23633a6715c4)
@@ -34,9 +35,9 @@
 9) Автоматизированное управление конфигами пользователей
 10) Возможность настройки цепочек из двух и более серверов
  
-### Использование:
+### Настройка сервера:
 
-Для настройки сервера запустите эту команду:
+Запустите эту команду на сервере:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/install-server.sh)
