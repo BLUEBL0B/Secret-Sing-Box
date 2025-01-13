@@ -14,15 +14,25 @@ check_root() {
     fi
 }
 
+replace_template() {
+    if [ $? -eq 0 ]
+    then
+        mv -f /var/www/${subspath}/template.json.1 /var/www/${subspath}/template.json
+    fi
+}
+
 templates() {
     if [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "ws" ]]
     then
-        wget -q -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-WS.json
+        wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-WS.json
+        replace_template
     elif [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "httpupgrade" ]]
     then
-        wget -q -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HTTPUpgrade.json
+        wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HTTPUpgrade.json
+        replace_template
     else
-        wget -q -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HAProxy.json
+        wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HAProxy.json
+        replace_template
     fi
 
     if [ ! -f /var/www/${subspath}/template-loc.json ]
@@ -81,18 +91,6 @@ get_data() {
     temprulesetpath=$(jq -r ".route.rule_set[-1].url" /var/www/${subspath}/template.json)
     temprulesetpath=${temprulesetpath#*"https://${tempdomain}/"}
     temprulesetpath=${temprulesetpath%"/"*}
-
-    loctempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
-    loctempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template-loc.json)
-
-    if [ -z ${loctempip} ]
-    then
-        loctempip=$(jq -r '.route.rules[] | select(has("ip_cidr")) | .ip_cidr[0]' /var/www/${subspath}/template-loc.json)
-    fi
-
-    loctemprulesetpath=$(jq -r ".route.rule_set[-1].url" /var/www/${subspath}/template-loc.json)
-    loctemprulesetpath=${loctemprulesetpath#*"https://${loctempdomain}/"}
-    loctemprulesetpath=${loctemprulesetpath%"/"*}
 
     echo ""
 }
@@ -242,7 +240,7 @@ add_to_server_conf() {
 }
 
 add_to_client_conf() {
-    cp /var/www/${subspath}/template-loc.json /var/www/${subspath}/${username}-TRJ-CLIENT.json
+    cp /var/www/${subspath}/template.json /var/www/${subspath}/${username}-TRJ-CLIENT.json
     outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
     if [ ! -f /etc/haproxy/auth.lua ]
     then
@@ -250,14 +248,14 @@ add_to_client_conf() {
     else
         echo "$(jq ".outbounds[${outboundnum}].password = \"${trjpass}\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
     fi
-    sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" /var/www/${subspath}/${username}-TRJ-CLIENT.json
+    sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" -e "s/$temprulesetpath/$rulesetpath/g" /var/www/${subspath}/${username}-TRJ-CLIENT.json
 
     if [ ! -f /etc/haproxy/auth.lua ]
     then
-        cp /var/www/${subspath}/template-loc.json /var/www/${subspath}/${username}-VLESS-CLIENT.json
+        cp /var/www/${subspath}/template.json /var/www/${subspath}/${username}-VLESS-CLIENT.json
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
         echo "$(jq ".outbounds[${outboundnum}].password = \"${uuid}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-        sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" /var/www/${subspath}/${username}-VLESS-CLIENT.json
+        sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" -e "s/$temprulesetpath/$rulesetpath/g" /var/www/${subspath}/${username}-VLESS-CLIENT.json
     fi
 
     echo -e "Added user ${textcolor}${username}${clear}:"
@@ -419,6 +417,18 @@ sync_local_message() {
 }
 
 sync_client_configs_local() {
+    loctempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template-loc.json)
+    loctempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template-loc.json)
+
+    if [ -z ${loctempip} ]
+    then
+        loctempip=$(jq -r '.route.rules[] | select(has("ip_cidr")) | .ip_cidr[0]' /var/www/${subspath}/template-loc.json)
+    fi
+
+    loctemprulesetpath=$(jq -r ".route.rule_set[-1].url" /var/www/${subspath}/template-loc.json)
+    loctemprulesetpath=${loctemprulesetpath#*"https://${loctempdomain}/"}
+    loctemprulesetpath=${loctemprulesetpath%"/"*}
+
     for file in /var/www/${subspath}/*-CLIENT.json
     do
         get_pass
@@ -471,7 +481,7 @@ show_users() {
 }
 
 add_users() {
-    validate_local_template
+    validate_template
     while [[ $username != "x" ]] && [[ $username != "х" ]]
     do
         enter_user_data_add
