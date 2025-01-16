@@ -1097,6 +1097,12 @@ disable_ipv6() {
 
     echo -e "${textcolor}IPv6 отключён:${clear}"
     sysctl -p
+
+    if [[ -z $(crontab -l | grep "@reboot sysctl -p") ]]
+    then
+        { crontab -l; echo "@reboot sysctl -p"; } | crontab -
+    fi
+
     echo ""
     main_menu
 }
@@ -1108,6 +1114,12 @@ enable_ipv6() {
 
     echo -e "${textcolor}IPv6 не отключён:${clear}"
     sysctl -p
+
+    if [[ ! -z $(crontab -l | grep "@reboot sysctl -p") ]]
+    then
+        crontab -l | sed "/@reboot sysctl -p/d" | crontab -
+    fi
+
     echo ""
     main_menu
 }
