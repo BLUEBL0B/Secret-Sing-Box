@@ -1100,6 +1100,9 @@ certificates() {
     then
         sleep 3
         echo ""
+        rm -rf /etc/letsencrypt/live/${domain} &> /dev/null
+        rm -rf /etc/letsencrypt/archive/${domain} &> /dev/null
+        rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
         echo -e "${textcolor_light}Requesting a certificate: 2nd attempt...${clear}"
         certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
     fi

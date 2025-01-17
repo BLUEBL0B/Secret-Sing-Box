@@ -856,6 +856,46 @@ exit_renew_cert() {
     fi
 }
 
+reissue_cert() {
+    email=""
+    while [[ -z $email ]]
+    do
+        echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
+        read email
+        echo ""
+    done
+
+    rm -rf /etc/letsencrypt/live/${domain} &> /dev/null
+    rm -rf /etc/letsencrypt/archive/${domain} &> /dev/null
+    rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
+
+    echo -e "${textcolor}Requesting a certificate...${clear}"
+    certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+
+    if [ $? -eq 0 ]
+    then
+        echo ""
+        echo "Certificate has been issued successfully"
+    else
+        echo ""
+        echo -e "${red}Error: certificate has not been issued${clear}"
+    fi
+
+    if [ ! -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ]
+    then
+        echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        systemctl start nginx.service
+    elif [ -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ]
+    then
+        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
+        systemctl start haproxy.service
+    fi
+
+    echo ""
+    main_menu
+}
+
 renew_cert() {
     echo -e "${red}ATTENTION!${clear}"
     echo "The script has a built-in automatic certificate renewal every 2 months, and manual renewal is recommended only in case of failures"
@@ -867,39 +907,7 @@ renew_cert() {
 
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
-        email=""
-        while [[ -z $email ]]
-        do
-            echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
-            read email
-            echo ""
-        done
-
-        echo -e "${textcolor}Requesting a certificate...${clear}"
-        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
-
-        if [ $? -eq 0 ]
-        then
-            echo ""
-            echo "Certificate has been issued successfully"
-        else
-            echo ""
-            echo -e "${red}Error: certificate has not been issued${clear}"
-        fi
-
-        if [ ! -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ] && ! grep -q "renew_hook =" /etc/letsencrypt/renewal/${domain}.conf
-        then
-            echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
-            systemctl reload nginx.service
-        elif [ -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ] && ! grep -q "renew_hook =" /etc/letsencrypt/renewal/${domain}.conf
-        then
-            echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
-            cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
-            systemctl reload haproxy.service
-        fi
-
-        echo ""
-        main_menu
+        reissue_cert
     fi
 
     certbot renew --force-renewal
@@ -1046,6 +1054,9 @@ change_domain() {
         then
             sleep 3
             echo ""
+            rm -rf /etc/letsencrypt/live/${domain} &> /dev/null
+            rm -rf /etc/letsencrypt/archive/${domain} &> /dev/null
+            rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
             echo -e "${textcolor}Requesting a certificate: 2nd attempt...${clear}"
             certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
         fi
