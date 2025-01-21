@@ -1199,7 +1199,7 @@ download_rule_sets() {
 
     wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/ruleset-update.sh
     chmod +x /usr/local/bin/rsupdate
-    { crontab -l; echo "10 2 * * * rsupdate"; } | crontab -
+    { crontab -l; echo "10 2 * * * /usr/local/bin/rsupdate"; } | crontab -
 }
 
 server_config() {
