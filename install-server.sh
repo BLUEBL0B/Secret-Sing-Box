@@ -1197,7 +1197,7 @@ download_rule_sets() {
 
     chmod -R 755 /var/www/${rulesetpath}
 
-    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/ruleset-update.sh
+    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/ruleset-update.sh
     chmod +x /usr/local/bin/rsupdate
     { crontab -l; echo "10 2 * * * /usr/local/bin/rsupdate"; } | crontab -
 }
@@ -2520,9 +2520,9 @@ add_sbmanager() {
 
     if [[ "${language}" == "1" ]]
     then
-        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager.sh
+        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-ru.sh
     else
-        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-manager-en.sh
+        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-en.sh
     fi
 
     chmod +x /usr/local/bin/sbmanager
