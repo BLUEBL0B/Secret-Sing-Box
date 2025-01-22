@@ -40,7 +40,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 Run this command on the server:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/install-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/install-server.sh)
 ```
 
 Then just enter the necessary information:
@@ -78,7 +78,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 
 [Linux:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md#client-setup) run the command below and follow the instructions. Or use [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest) client app.
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/sb-pc-linux.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-pc-linux.sh)
 ```
 
 ### You can support the project if it's helpful to you:
