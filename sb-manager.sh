@@ -133,11 +133,15 @@ exit_username() {
 }
 
 check_username_add() {
-    while [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]] || [ -z "$username" ]
+    while [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]] || [[ $username =~ " " ]] || [[ $username =~ '$' ]] || [ -z "$username" ]
     do
         if [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]]
         then
             echo -e "${red}Ошибка: пользователь с таким именем уже существует${clear}"
+            echo ""
+        elif [[ $username =~ " " ]] || [[ $username =~ '$' ]]
+        then
+            echo -e "${red}Ошибка: имя пользователя не должно содержать пробелы и \$${clear}"
             echo ""
         elif [ -z "$username" ]
         then

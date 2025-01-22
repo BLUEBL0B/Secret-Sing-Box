@@ -243,7 +243,7 @@ check_ssh_port_ru() {
             echo -e "${red}Ошибка: номер порта не может быть больше 65535${clear}"
         fi
         echo ""
-        echo -e "${textcolor}[?]${clear} Введите новый номер порта SSH или 22 (не рекомендуется):"
+        echo -e "${textcolor}[?]${clear} Введите новый номер порта SSH или 22 (рекомендуется номер более 1024):"
         read sshp
         echo ""
     done
@@ -263,7 +263,7 @@ check_ssh_port_en() {
             echo -e "${red}Error: port number can't be greater than 65535${clear}"
         fi
         echo ""
-        echo -e "${textcolor}[?]${clear} Enter new SSH port number or 22 (not recommended):"
+        echo -e "${textcolor}[?]${clear} Enter new SSH port number or 22 (number above 1024 is recommended):"
         read sshp
         echo ""
     done
@@ -280,7 +280,7 @@ check_username_ru() {
         then
             :
         fi
-        echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или root (не рекомендуется):"
+        echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или root (рекомендуется не root):"
         read username
         echo ""
     done
@@ -297,7 +297,7 @@ check_username_en() {
         then
             :
         fi
-        echo -e "${textcolor}[?]${clear} Enter your username or root (not recommended):"
+        echo -e "${textcolor}[?]${clear} Enter your username or root (non-root user is recommended):"
         read username
         echo ""
     done
@@ -314,7 +314,7 @@ check_password_ru() {
         then
             :
         fi
-        echo -e "${textcolor}[?]${clear} Введите пароль SSH для пользователя:"
+        echo -e "${textcolor}[?]${clear} Введите пароль SSH для пользователя (рекомендуется сложный пароль):"
         read password
         echo ""
     done
@@ -331,7 +331,7 @@ check_password_en() {
         then
             :
         fi
-        echo -e "${textcolor}[?]${clear} Enter new SSH password:"
+        echo -e "${textcolor}[?]${clear} Enter new SSH password (a complex password is recommended):"
         read password
         echo ""
     done
