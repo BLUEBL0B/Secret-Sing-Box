@@ -8,7 +8,7 @@ check_root() {
     if [[ $EUID -ne 0 ]]
     then
         echo ""
-        echo -e "${red}Error: this command should be run as root, use \"sudo -i\" command${clear}"
+        echo -e "${red}Ошибка: эту команду нужно запускать от имени root, сначала введите команду \"sudo -i\"${clear}"
         echo ""
         exit 1
     fi
