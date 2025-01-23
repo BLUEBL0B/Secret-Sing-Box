@@ -550,10 +550,15 @@ exit_del_warp() {
 }
 
 check_warp_domain_add() {
-    while [[ -n $(jq '.route.rules[] | select(.outbound=="warp") | .domain_suffix[]' /etc/sing-box/config.json | grep "\"${newwarp}\"") ]]
+    while [[ -n $(jq '.route.rules[] | select(.outbound=="warp") | .domain_suffix[]' /etc/sing-box/config.json | grep "\"${newwarp}\"") ]] || [ -z "$newwarp" ]
     do
-        echo -e "${red}Ошибка: этот домен/суффикс уже добавлен в WARP${clear}"
-        echo ""
+        if [ -z "$newwarp" ]
+        then
+            :
+        else
+            echo -e "${red}Ошибка: этот домен/суффикс уже добавлен в WARP${clear}"
+            echo ""
+        fi
         echo -e "${textcolor}[?]${clear} Введите новый домен/суффикс для WARP или введите ${textcolor}x${clear}, чтобы закончить:"
         read newwarp
         echo ""
@@ -562,7 +567,7 @@ check_warp_domain_add() {
 }
 
 check_warp_domain_del() {
-    while [[ -z $(jq '.route.rules[] | select(.outbound=="warp") | .domain_suffix[]' /etc/sing-box/config.json | grep "\"${delwarp}\"") ]]
+    while [[ -z $(jq '.route.rules[] | select(.outbound=="warp") | .domain_suffix[]' /etc/sing-box/config.json | grep "\"${delwarp}\"") ]] || [ -z "$delwarp" ]
     do
         echo -e "${red}Ошибка: этот домен/суффикс не добавлен в WARP${clear}"
         echo ""
