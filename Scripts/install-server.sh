@@ -2609,6 +2609,11 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Ваше имя пользователя - ${textcolor}1${userkey}${clear}"
     fi
+    if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
+    then
+        echo ""
+        echo -e "${red}Ошибка: сертификат не выпущен, введите команду \"sbmanager\" и выберите пункт 11${clear}"
+    fi
 }
 
 final_message_en() {
@@ -2653,6 +2658,11 @@ final_message_en() {
         echo -e "${textcolor}Subscription page:${clear}"
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Your username is ${textcolor}1${userkey}${clear}"
+    fi
+    if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
+    then
+        echo ""
+        echo -e "${red}Error: certificate has not been issued, enter \"sbmanager\" command and select option 11${clear}"
     fi
 }
 
