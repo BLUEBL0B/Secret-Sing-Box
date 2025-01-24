@@ -37,7 +37,7 @@
  
 ### Настройка сервера:
 
-Запустите эту команду на сервере:
+Для настройки сервера запустите эту команду:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/install-server.sh)
@@ -47,7 +47,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 ![pic-1-ru](https://github.com/user-attachments/assets/6699b83e-f347-41df-bfce-47613936cad1)
 
-В конце скрипт покажет ссылки на клиентские конфиги.
+В конце скрипт покажет ссылки на клиентские конфиги, рекомендуется их сохранить.
 
 -----
 
@@ -78,7 +78,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 
 [Linux:](https://github.com/BLUEBL0B/Secret-Sing-Box/tree/main?tab=readme-ov-file#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2) запустите команду ниже и следуйте инструкциям. Или используйте клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest).
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-pc-linux.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-pc-linux-ru.sh)
 ```
 
 ### Вы можете поддержать проект, если он полезен для вас:
