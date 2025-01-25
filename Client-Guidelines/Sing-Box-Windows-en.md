@@ -12,6 +12,8 @@ winget install sing-box
 
 You can close the terminal after the installation is complete
 
+If you are getting an error telling that winget is absent, then follow the instructions below
+
 -----
 
 ### Install Sing-Box (for Windows versions without winget)
