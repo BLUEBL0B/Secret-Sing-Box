@@ -1,9 +1,9 @@
 ### Install Sing-Box:
-https://play.google.com/store/apps/details?id=io.nekohasekai.sfa
+Android: https://play.google.com/store/apps/details?id=io.nekohasekai.sfa
 
-https://github.com/SagerNet/sing-box/releases
+iOS: https://apps.apple.com/us/app/sing-box-vt/id6673731168
 
-https://apps.apple.com/us/app/sing-box-vt/id6673731168
+All OS: https://github.com/SagerNet/sing-box/releases
 
 -----
 
