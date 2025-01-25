@@ -15,7 +15,7 @@ winget install sing-box
 
 -----
 
-### Устанавливаем Sing-Box (более старые версии Windows)
+### Устанавливаем Sing-Box (версии Windows без winget)
 
 Скачиваем Sing-Box для Windows из официальной репозитории:
 
@@ -42,7 +42,7 @@ sing-box run -c C:\1-sbconfig\VLESS-CLIENT.json
 
 Ссылку в предпоследней строчке меняем на свою
 
-Для более старых версий Windows заменяем последнюю строчку таким образом и меняем путь к sing-box.exe на свой:
+Для версий Windows, где нет winget, заменяем последнюю строчку таким образом и меняем путь к sing-box.exe на свой:
 
 ```
 C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\VLESS-CLIENT.json
