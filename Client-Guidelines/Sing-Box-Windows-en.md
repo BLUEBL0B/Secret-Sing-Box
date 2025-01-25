@@ -10,7 +10,7 @@ Then enter the command:
 winget install sing-box
 ```
 
-You can close the terminal after the installation is complete
+You can close the terminal after the installation is complete (Sing-Box can also be updated with the same command)
 
 If you are getting an error telling that winget is absent, then follow the instructions below
 
