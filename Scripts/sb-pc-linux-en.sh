@@ -155,7 +155,7 @@ add_proxies() {
 		if [[ \$EUID -ne 0 ]]
 		then
 		    echo ""
-		    echo -e "\${red}Error: this command should be run as root, use sudo -i command\${clear}"
+		    echo -e "\${red}Error: this command should be run with sudo or as root\${clear}"
 		    echo ""
 		    exit 1
 		fi

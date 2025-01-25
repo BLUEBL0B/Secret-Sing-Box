@@ -155,7 +155,7 @@ add_proxies() {
 		if [[ \$EUID -ne 0 ]]
 		then
 		    echo ""
-		    echo -e "\${red}Ошибка: эту команду нужно запускать от имени root, сначала введите команду sudo -i\${clear}"
+		    echo -e "\${red}Ошибка: эту команду нужно запускать с sudo или от имени root\${clear}"
 		    echo ""
 		    exit 1
 		fi
