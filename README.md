@@ -7,11 +7,11 @@
 
 - Все запросы к прокси принимает NGINX, запросы передаются на Sing-Box только при наличии в них правильного пути (транспорт WebSocket или HTTPUpgrade)
 
-![nginx-ru](https://github.com/user-attachments/assets/ac95ed9f-0d70-4ea9-993f-23633a6715c4)
+![nginx-ru](https://github.com/user-attachments/assets/ed0a702c-07d3-4d07-a24f-66a3180141f4)
 
 - Все запросы к прокси принимает HAProxy, пароли Trojan считываются из первых 56 байт запроса с помощью скрипта на Lua, запросы передаются на Sing-Box только при наличии в них правильного пароля Trojan (транспорт TCP) — метод [FPPweb3](https://github.com/FPPweb3)
 
-![haproxy-ru](https://github.com/user-attachments/assets/66cc155c-b4cc-4030-940b-688ccb2895fd)
+![haproxy-ru](https://github.com/user-attachments/assets/ffa801e9-4328-4262-ae87-beb15b0687f6)
 
 Оба варианта настройки делают невозможным обнаружение Sing-Box снаружи, что повышает уровень безопасности.
 
@@ -75,7 +75,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 > [!IMPORTANT]
 > На некоторых устройствах может не работать "stack": "system" в настройках tun-интерфейса в клиентских конфигах. В таких случаях рекомендуется заменить его на "gvisor" с помощью пункта 4 в sbmanager.
 
-[Android и iOS:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.md) инструкция дана для Android, на iOS интерфейс отличается, но настройки аналогичны.
+[Android и iOS:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-ru.md) инструкция дана для Android, на iOS интерфейс приложения отличается, но настройки аналогичны.
 
 [Windows:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-ru.md) рекомендован данный способ, так как он обеспечивает более полные настройки маршрутизации, но можно также вставить ссылку в клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest).
 
