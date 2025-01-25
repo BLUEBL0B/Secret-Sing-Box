@@ -14,6 +14,16 @@ check_root() {
 	fi
 }
 
+check_sbmanager() {
+    if [[ -f /usr/local/bin/sbmanager ]] && [[ ! -f /usr/local/bin/proxylist ]]
+    then
+        echo ""
+        echo -e "${red}Error: this script should be run on the client device, not on the server${clear}"
+        echo ""
+        exit 1
+    fi
+}
+
 install_sing_box() {
 	if [[ ! -f /usr/local/bin/proxylist ]]
 	then
@@ -227,5 +237,6 @@ main_menu() {
 }
 
 check_root
+check_sbmanager
 install_sing_box
 main_menu
