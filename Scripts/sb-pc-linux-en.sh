@@ -15,13 +15,13 @@ check_root() {
 }
 
 check_sbmanager() {
-    if [[ -f /usr/local/bin/sbmanager ]] && [[ ! -f /usr/local/bin/proxylist ]]
-    then
-        echo ""
-        echo -e "${red}Error: this script should be run on the client device, not on the server${clear}"
-        echo ""
-        exit 1
-    fi
+	if [[ -f /usr/local/bin/sbmanager ]] && [[ ! -f /usr/local/bin/proxylist ]]
+	then
+		echo ""
+		echo -e "${red}Error: this script should be run on the client device, not on the server${clear}"
+		echo ""
+		exit 1
+	fi
 }
 
 install_sing_box() {
@@ -215,9 +215,9 @@ main_menu() {
 	echo ""
 	echo -e "${textcolor}Select an option:${clear}"
 	echo "0 - Exit"
-    echo "1 - Show the list of proxies"
-    echo "2 - Add a new proxy"
-    echo "3 - Delete a proxy"
+	echo "1 - Show the list of proxies"
+	echo "2 - Add a new proxy"
+	echo "3 - Delete a proxy"
 	read option
 	echo ""
 

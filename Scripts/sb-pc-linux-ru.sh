@@ -15,13 +15,13 @@ check_root() {
 }
 
 check_sbmanager() {
-    if [[ -f /usr/local/bin/sbmanager ]] && [[ ! -f /usr/local/bin/proxylist ]]
-    then
-        echo ""
-        echo -e "${red}Ошибка: этот скрипт нужно запускать на клиенте, а не на сервере${clear}"
-        echo ""
-        exit 1
-    fi
+	if [[ -f /usr/local/bin/sbmanager ]] && [[ ! -f /usr/local/bin/proxylist ]]
+	then
+		echo ""
+		echo -e "${red}Ошибка: этот скрипт нужно запускать на клиенте, а не на сервере${clear}"
+		echo ""
+		exit 1
+	fi
 }
 
 install_sing_box() {
