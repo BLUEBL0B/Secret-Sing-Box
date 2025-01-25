@@ -1,5 +1,5 @@
 
-### Устанавливаем Sing-Box (Windows 10 and 11)
+### Устанавливаем Sing-Box (Windows 10 и 11)
 
 Жмём Win + X, после этого открываем командную строку с правами аминистратора:
 
@@ -15,7 +15,7 @@ winget install sing-box
 
 -----
 
-### Устанавливаем Sing-Box (версии Windows без winget)
+### Устанавливаем Sing-Box (для версий Windows без winget)
 
 Скачиваем Sing-Box для Windows из официальной репозитории:
 
