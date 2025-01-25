@@ -14,7 +14,7 @@ You can close the terminal after the installation is complete
 
 -----
 
-### Install Sing-Box (for older Windows versions)
+### Install Sing-Box (for Windows versions without winget)
 
 Download Sing-Box for Windows from the official repository:
 
@@ -41,7 +41,7 @@ sing-box run -c C:\1-sbconfig\VLESS-CLIENT.json
 
 Change the link in the 9th line to yours
 
-For older Windows versions replace the last line like this and replace the path to sing-box.exe to your actual path:
+For Windows versions without winget replace the last line like this and replace the path to sing-box.exe to your actual path:
 
 ```
 C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\VLESS-CLIENT.json
