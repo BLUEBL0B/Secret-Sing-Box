@@ -7,11 +7,11 @@ This script is designed to fully and easily configure a secure proxy server with
 
 - All requests to the proxy are received by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket or HTTPUpgrade transport)
 
-![nginx-en](https://github.com/user-attachments/assets/655ad0e1-6640-4e9f-89bc-ba53ff780a66)
+![nginx-en](https://github.com/user-attachments/assets/712075b6-1c93-482f-9297-0f20cc06fc2f)
 
 - All requests to the proxy are received by HAProxy, then Trojan passwords are read from the first 56 bytes of the request by using a Lua script, the requests are passed to Sing-Box only if they contain the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
 
-![haproxy-en](https://github.com/user-attachments/assets/d895527a-1303-4c99-9832-39899a16fc26)
+![haproxy-en](https://github.com/user-attachments/assets/b3eb970d-7856-4bdd-83ad-112b5019e7b5)
 
 Both setup methods make it impossible to detect Sing-Box from the outside, which improves security.
 
@@ -75,7 +75,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 > [!IMPORTANT]
 > On some devices, "stack": "system" in tun interface settings in client configs might not work. In such cases, it is recommended to replace it with "gvisor" by using option 4 in sbmanager.
 
-[Android and iOS:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.md) the guide is given for Android, the interface is different in iOS, but it has similar settings.
+[Android and iOS:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Android-iOS-en.md) the guide is given for Android, the app interface is different on iOS, but it has similar settings.
 
 [Windows:](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Client-Guidelines/Sing-Box-Windows-en.md) this method is recommended due to more complete routing settings, but you can also import the link to [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest) client app.
 
