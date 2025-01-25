@@ -38,8 +38,8 @@ echo.
 echo Press Ctrl + C to disconnect
 echo.
 if not exist "C:\1-sbconfig\" mkdir C:\1-sbconfig
-curl --silent https://domain.com/secret175subscr1pt10n/1-me-VLESS-CLIENT.json -o C:\1-sbconfig\VLESS-CLIENT.json
-sing-box run -c C:\1-sbconfig\VLESS-CLIENT.json
+curl --silent https://domain.com/secret175subscr1pt10n/1-me-VLESS-CLIENT.json -o C:\1-sbconfig\client.json
+sing-box run -c C:\1-sbconfig\client.json
 ```
 
 Ссылку в предпоследней строчке меняем на свою
@@ -47,7 +47,7 @@ sing-box run -c C:\1-sbconfig\VLESS-CLIENT.json
 Для версий Windows, где нет winget, заменяем последнюю строчку таким образом и меняем путь к sing-box.exe на свой:
 
 ```
-C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\VLESS-CLIENT.json
+C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 ```
 
 -----
