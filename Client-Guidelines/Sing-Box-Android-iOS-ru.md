@@ -3,7 +3,7 @@ Android: https://play.google.com/store/apps/details?id=io.nekohasekai.sfa
 
 iOS: https://apps.apple.com/us/app/sing-box-vt/id6673731168
 
-Все ОС: https://github.com/SagerNet/sing-box/releases
+Все ОС: https://github.com/SagerNet/sing-box/releases/latest
 
 -----
 
