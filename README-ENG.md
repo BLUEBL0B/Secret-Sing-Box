@@ -37,7 +37,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
  
 ### Server setup:
 
-Run this command to setup the server:
+To setup the server, run this command on it:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/install-server.sh)
