@@ -10,19 +10,19 @@
 winget install sing-box
 ```
 
-После окончания установки командную строку можно закрыть (в дальнейшем можно обновлять Sing-Box той же командой)
+После окончания установки командную строку можно закрыть (в дальнейшем можно обновлять Sing-Box той же командой).
 
-Если на этом этапе возникла ошибка, предупреждающая об отсутствии winget, то следуйте инструкциям ниже
+Если на этом этапе возникла ошибка, предупреждающая об отсутствии winget, то следуйте инструкциям ниже.
 
 -----
 
 ### Устанавливаем Sing-Box (для версий Windows без winget)
 
-Скачиваем Sing-Box для Windows из официальной репозитории:
+Скачиваем Sing-Box для Windows из официального репозитория:
 
 https://github.com/SagerNet/sing-box/releases/latest
 
-Далее извлекаем sing-box.exe из архива
+Далее извлекаем sing-box.exe из архива.
 
 -----
 
@@ -37,11 +37,11 @@ echo.
 echo Press Ctrl + C to disconnect
 echo.
 if not exist "C:\1-sbconfig\" mkdir C:\1-sbconfig
-curl --silent https://domain.com/secret175subscr1pt10n/1-me-VLESS-CLIENT.json -o C:\1-sbconfig\client.json
+curl --silent -o C:\1-sbconfig\client.json https://domain.com/secret175subscr1pt10n/1-me-VLESS-CLIENT.json
 sing-box run -c C:\1-sbconfig\client.json
 ```
 
-Ссылку в предпоследней строчке меняем на свою
+Ссылку в предпоследней строчке меняем на свою.
 
 Для версий Windows, где нет winget, заменяем последнюю строчку таким образом и меняем путь к sing-box.exe на свой:
 
@@ -53,7 +53,7 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 ### Создаём ярлык для этого .cmd или .bat файла
 
-Далее настраиваем ярлык, чтобы запускать его с правами администратора
+Далее настраиваем ярлык, чтобы запускать его с правами администратора.
 
 ![w2](https://github.com/user-attachments/assets/22d79731-f46d-4d1a-868c-36b45a9e4d36)
 
@@ -61,12 +61,12 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 ![w4](https://github.com/user-attachments/assets/d35d5648-e593-4ab5-9afb-f8e8a2201f41)
 
-Везде жмём OK
+Везде жмём OK.
 
 -----
 
 ### Для подключения к прокси просто жмём на ярлык
 
-Не нужно закрывать появившееся окно, пока ПК подключён к прокси
+Не нужно закрывать появившееся окно, пока ПК подключён к прокси.
 
-Чтобы отключиться, жмём на окно командной строки, а далее Ctrl + C
+Чтобы отключиться, жмём на окно командной строки, а далее Ctrl + C.
