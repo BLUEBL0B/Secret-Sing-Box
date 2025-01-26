@@ -10,9 +10,9 @@ Then enter the command:
 winget install sing-box
 ```
 
-You can close the terminal after the installation is complete (Sing-Box can also be updated with the same command)
+You can close the terminal after the installation is complete (Sing-Box can also be updated with the same command).
 
-If you are getting an error telling that winget is absent, then follow the instructions below
+If you are getting an error telling that winget is absent, then follow the instructions below.
 
 -----
 
@@ -22,7 +22,7 @@ Download Sing-Box for Windows from the official repository:
 
 https://github.com/SagerNet/sing-box/releases/latest
 
-Then extract sing-box.exe from the archive
+Then extract sing-box.exe from the archive.
 
 -----
 
@@ -37,11 +37,11 @@ echo.
 echo Press Ctrl + C to disconnect
 echo.
 if not exist "C:\1-sbconfig\" mkdir C:\1-sbconfig
-curl --silent https://domain.com/secret175subscr1pt10n/1-me-VLESS-CLIENT.json -o C:\1-sbconfig\client.json
+curl --silent -o C:\1-sbconfig\client.json https://domain.com/secret175subscr1pt10n/1-me-VLESS-CLIENT.json
 sing-box run -c C:\1-sbconfig\client.json
 ```
 
-Change the link in the 9th line to yours
+Change the link in the 9th line to yours.
 
 For Windows versions without winget replace the last line like this and replace the path to sing-box.exe to your actual path:
 
@@ -53,7 +53,7 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 ### Create a shortcut for this .cmd or .bat file
 
-Then change the settings of the shortcut to run it as admin:
+Then change the settings of the shortcut to run it as admin.
 
 ![w2](https://github.com/user-attachments/assets/22d79731-f46d-4d1a-868c-36b45a9e4d36)
 
@@ -61,12 +61,12 @@ Then change the settings of the shortcut to run it as admin:
 
 ![w4](https://github.com/user-attachments/assets/d35d5648-e593-4ab5-9afb-f8e8a2201f41)
 
-Then press OK
+Then press OK.
 
 -----
 
 ### Click on the shortcut to connect to the server
 
-Do not close the terminal window while connected to proxy
+Do not close the terminal window while connected to proxy.
 
-To disconnect, click on the terminal window and then press Ctrl + C
+To disconnect, click on the terminal window and then press Ctrl + C.
