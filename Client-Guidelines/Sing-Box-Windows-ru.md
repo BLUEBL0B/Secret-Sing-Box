@@ -20,7 +20,7 @@ winget install sing-box
 
 Скачиваем Sing-Box для Windows из официальной репозитории:
 
-https://github.com/SagerNet/sing-box/releases
+https://github.com/SagerNet/sing-box/releases/latest
 
 Далее извлекаем sing-box.exe из архива
 
