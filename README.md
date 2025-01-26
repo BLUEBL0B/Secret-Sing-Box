@@ -37,7 +37,7 @@
  
 ### Настройка сервера:
 
-Для настройки сервера запустите эту команду:
+Для настройки сервера запустите на нём эту команду:
 
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/install-server.sh)
