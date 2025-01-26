@@ -20,7 +20,7 @@ If you are getting an error telling that winget is absent, then follow the instr
 
 Download Sing-Box for Windows from the official repository:
 
-https://github.com/SagerNet/sing-box/releases
+https://github.com/SagerNet/sing-box/releases/latest
 
 Then extract sing-box.exe from the archive
 
