@@ -6,6 +6,22 @@
     <title>SSB</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
+        function getParameterByName(name) {
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        function fillNameInput() {
+            var name = getParameterByName('name');
+            if (name) {
+                document.getElementById('nameInput').value = name;
+            }
+        }
+
         function openTrojanUrl() {
             var name = document.getElementById("nameInput").value.trim();
             var baseUrl = "sing-box://import-remote-profile/?url=https://DOMAIN/SUBSCRIPTION-PATH/";
@@ -19,6 +35,8 @@
             var fullUrl = baseUrl + encodeURIComponent(name) + "-VLESS-CLIENT.json";
             window.open(fullUrl);
         }
+
+        document.addEventListener("DOMContentLoaded", fillNameInput);
     </script>
     <style>
         body {
