@@ -17,11 +17,11 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 
 > [!IMPORTANT]
 > Recommended OS for the server: Debian 11/12 or Ubuntu 22.04/24.04. Just 512 MB of RAM, 5 GB of disk space and 1 processor core are sufficient. You will also need an IPv4 on the server and your own domain linked to your Cloudflare account ([How to set it up?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/cf-settings-en.md)). Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
->
-> This project is created for educational and demonstration purposes. Please make sure that your actions are legal before using it.
 
 > [!NOTE]
 > With routing rules for Russia. Open ports on the server: 443 and SSH.
+>
+> This project is created for educational and demonstration purposes. Please make sure that your actions are legal before using it.
  
 ### Includes:
 1) Sing-Box server setup
