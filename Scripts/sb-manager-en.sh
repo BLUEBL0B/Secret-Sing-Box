@@ -549,6 +549,23 @@ exit_del_warp() {
     fi
 }
 
+crop_newwarp() {
+    if [[ "$newwarp" == "https://"* ]]
+    then
+        newwarp=${newwarp#"https://"}
+    fi
+
+    if [[ "$newwarp" == "http://"* ]]
+    then
+        newwarp=${newwarp#"http://"}
+    fi
+
+    if [[ "$newwarp" =~ "/" ]]
+    then
+        newwarp=$(echo "${newwarp}" | cut -d "/" -f 1)
+    fi
+}
+
 check_warp_domain_add() {
     while [[ -n $(jq '.route.rules[] | select(.outbound=="warp") | .domain_suffix[]' /etc/sing-box/config.json | grep "\"${newwarp}\"") ]] || [ -z "$newwarp" ]
     do
@@ -563,6 +580,7 @@ check_warp_domain_add() {
         read newwarp
         echo ""
         exit_add_warp
+        crop_newwarp
     done
 }
 
@@ -585,6 +603,7 @@ add_warp_domains() {
         echo -e "${textcolor}[?]${clear} Enter a new domain/suffix for WARP routing or enter ${textcolor}x${clear} to exit:"
         read newwarp
         echo ""
+        crop_newwarp
         check_warp_domain_add
         exit_add_warp
         echo "$(jq ".route.rules[${warpnum}].domain_suffix[.route.rules[${warpnum}].domain_suffix | length]? += \"${newwarp}\"" /etc/sing-box/config.json)" > /etc/sing-box/config.json
