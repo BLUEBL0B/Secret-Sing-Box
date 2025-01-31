@@ -88,6 +88,11 @@ get_data() {
     tempip=$(jq -r '.dns.servers[] | select(has("client_subnet")) | .client_subnet' /var/www/${subspath}/template.json)
     tempdomain=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/template.json)
 
+    if [ -z ${tempip} ]
+    then
+        tempip=$(jq -r '.route.rules[] | select(has("ip_cidr")) | .ip_cidr[0]' /var/www/${subspath}/template.json)
+    fi
+
     temprulesetpath=$(jq -r ".route.rule_set[-1].url" /var/www/${subspath}/template.json)
     temprulesetpath=${temprulesetpath#*"https://${tempdomain}/"}
     temprulesetpath=${temprulesetpath%"/"*}
