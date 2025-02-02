@@ -786,8 +786,8 @@ enter_data_ru() {
         echo ""
     fi
     echo -e "${textcolor}[?]${clear} Выберите вариант настройки NGINX/HAProxy:"
-    echo "1 - Будет спрашивать логин и пароль вместо сайта"
-    echo "2 - Будет перенаправлять на другой домен"
+    echo "1 - Будет спрашивать логин и пароль вместо сайта, 401 Unauthorized"
+    echo "2 - Будет перенаправлять на другой домен, 301 Moved Permanently"
     echo "3 - Скопировать чужой сайт на свой сервер, тестовая опция"
     echo "4 - Свой сайт (при наличии), тестовая опция"
     read option;
@@ -866,8 +866,8 @@ enter_data_en() {
         echo ""
     fi
     echo -e "${textcolor}[?]${clear} Select NGINX/HAProxy setup option:"
-    echo "1 - Will show a login popup asking for username and password"
-    echo "2 - Will redirect to another domain"
+    echo "1 - Will show a login popup asking for username and password, 401 Unauthorized"
+    echo "2 - Will redirect to another domain, 301 Moved Permanently"
     echo "3 - Copy someone else's website to your server, experimental option"
     echo "4 - Your own website (if you have one), experimental option"
     read option;
