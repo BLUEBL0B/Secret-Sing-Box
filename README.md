@@ -45,7 +45,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Затем просто введите необходимую информацию:
 
-![pic-1-ru](https://github.com/user-attachments/assets/6699b83e-f347-41df-bfce-47613936cad1)
+![pic-1-ru](https://github.com/user-attachments/assets/cc3ebd50-5fd2-4e8f-b327-0a7bd5ef0945)
 
 В конце скрипт покажет ссылки на клиентские конфиги, рекомендуется их сохранить.
 
