@@ -45,7 +45,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/fbebc90c-d445-4dfe-afd0-063e8f0e1c68)
+![pic-1-en](https://github.com/user-attachments/assets/b12bb3af-75e8-4a67-bd3d-faebe75f7f6d)
 
 The script will show your client links in the end, it's recommended to save them.
 
