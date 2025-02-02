@@ -2609,6 +2609,8 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Ваше имя пользователя - ${textcolor}1${userkey}${clear}"
     fi
+    echo ""
+    echo -e "Для вывода дополнительных настроек используйте команду ${textcolor}sbmanager${clear}"
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
         echo ""
@@ -2659,6 +2661,8 @@ final_message_en() {
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Your username is ${textcolor}1${userkey}${clear}"
     fi
+    echo ""
+    echo -e "To display additional settings, run ${textcolor}sbmanager${clear} command"
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
         echo ""
