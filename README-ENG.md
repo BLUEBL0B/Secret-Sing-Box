@@ -59,7 +59,7 @@ sbmanager
 
 Then follow the instructions:
 
-![pic-2-en](https://github.com/user-attachments/assets/47334fd3-b451-48dc-bb2b-9075d1d8fb4c)
+![pic-2-en](https://github.com/user-attachments/assets/bed437c9-9fec-46a5-9445-285241c1e064)
 
 Options 5 and 6 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately. If new rule sets are added to the configs by using option 6, they will be automatically downloaded on the server if they are from [SagerNet](https://github.com/SagerNet/sing-geosite/tree/rule-set).
 
