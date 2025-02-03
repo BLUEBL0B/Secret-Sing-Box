@@ -1193,6 +1193,10 @@ show_paths() {
     sitedir=$(grep "/var/www/" /etc/nginx/nginx.conf | head -n 1)
     sitedir=${sitedir#*"/var/www/"}
     sitedir=${sitedir%";"*}
+    if [[ "$sitedir" =~ "/" ]]
+    then
+        sitedir=$(echo "${sitedir}" | cut -d "/" -f 1)
+    fi
     if [ -d /var/www/${sitedir} ]
     then
         echo "Site directory                       /var/www/${sitedir}/"
