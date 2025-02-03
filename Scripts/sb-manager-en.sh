@@ -2,6 +2,7 @@
 
 textcolor='\033[1;34m'
 red='\033[1;31m'
+grey='\033[1;30m'
 clear='\033[0m'
 
 check_root() {
@@ -1177,6 +1178,11 @@ enable_ipv6() {
 }
 
 show_paths() {
+    echo -e "${textcolor}Subscription page:${clear}"
+    echo -e "https://${domain}/${subspath}/sub.html${grey}?name=$(ls -A1 /var/www/${subspath} | grep "CLIENT.json" | sed "s/-TRJ-CLIENT\.json//g" | sed "s/-VLESS-CLIENT\.json//g" | uniq | tail -n 1)${clear}"
+    echo "Grey text shows an example of autofilling the username field"
+    echo ""
+
     echo -e "${textcolor}Configuration of the services:${clear}"
     echo "Sing-Box config                      /etc/sing-box/config.json"
     echo "NGINX config                         /etc/nginx/nginx.conf"
@@ -1212,6 +1218,7 @@ show_paths() {
     echo -e "${textcolor}Scripts:${clear}"
     echo "Sbmanager (this script)              /usr/local/bin/sbmanager"
     echo "Rule set renewal script              /usr/local/bin/rsupdate"
+    echo ""
     echo ""
     exit 0
 }

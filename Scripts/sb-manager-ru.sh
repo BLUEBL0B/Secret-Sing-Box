@@ -2,6 +2,7 @@
 
 textcolor='\033[1;34m'
 red='\033[1;31m'
+grey='\033[1;30m'
 clear='\033[0m'
 
 check_root() {
@@ -1177,6 +1178,11 @@ enable_ipv6() {
 }
 
 show_paths() {
+    echo -e "${textcolor}Страница выдачи подписок пользователей:${clear}"
+    echo -e "https://${domain}/${subspath}/sub.html${grey}?name=$(ls -A1 /var/www/${subspath} | grep "CLIENT.json" | sed "s/-TRJ-CLIENT\.json//g" | sed "s/-VLESS-CLIENT\.json//g" | uniq | tail -n 1)${clear}"
+    echo "Серым показан пример автозаполнения поля с именем пользователя"
+    echo ""
+
     echo -e "${textcolor}Конфигурация сервисов:${clear}"
     echo "Конфиг Sing-Box                        /etc/sing-box/config.json"
     echo "Конфиг NGINX                           /etc/nginx/nginx.conf"
@@ -1212,6 +1218,7 @@ show_paths() {
     echo -e "${textcolor}Скрипты:${clear}"
     echo "Sbmanager (этот скрипт)                /usr/local/bin/sbmanager"
     echo "Скрипт, обновляющий наборы правил      /usr/local/bin/rsupdate"
+    echo ""
     echo ""
     exit 0
 }
