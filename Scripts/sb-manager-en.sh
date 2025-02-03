@@ -1176,6 +1176,42 @@ enable_ipv6() {
     main_menu
 }
 
+show_paths() {
+    echo -e "${textcolor}Configuration of the services:${clear}"
+    echo "Sing-Box config                      /etc/sing-box/config.json"
+    echo "NGINX config                         /etc/nginx/nginx.conf"
+    if [ -f /etc/haproxy/haproxy.cfg ]
+    then
+        echo "HAProxy config                       /etc/haproxy/haproxy.cfg"
+        echo "Trojan password reading script       /etc/haproxy/auth.lua"
+    fi
+    echo ""
+
+    echo -e "${textcolor}Content delivered by NGINX:${clear}"
+    echo "Subscription directory               /var/www/${subspath}/"
+    echo "Rule set directory                   /var/www/${rulesetpath}/"
+    sitedir=$(grep "/var/www/" /etc/nginx/nginx.conf | head -n 1)
+    sitedir=${sitedir#*"/var/www/"}
+    sitedir=${sitedir%";"*}
+    if [ -d /var/www/${sitedir} ]
+    then
+        echo "Site directory                       /var/www/${sitedir}/"
+    fi
+    echo ""
+
+    echo -e "${textcolor}Certificates and accessory files:${clear}"
+    echo "Certificate directory                /etc/letsencrypt/live/${domain}/"
+    echo "Certificate renewal config           /etc/letsencrypt/renewal/${domain}.conf"
+    echo "File with Cloudflare API token/key   /etc/letsencrypt/cloudflare.credentials"
+    echo ""
+
+    echo -e "${textcolor}Scripts:${clear}"
+    echo "Sbmanager (this script)              /usr/local/bin/sbmanager"
+    echo "Rule set renewal script              /usr/local/bin/rsupdate"
+    echo ""
+    exit 0
+}
+
 main_menu() {
     echo ""
     echo -e "${textcolor}Select an option:${clear}"
@@ -1200,6 +1236,8 @@ main_menu() {
     echo "------------------------"
     echo "13 - Disable IPv6 on the server"
     echo "14 - Enable IPv6 on the server"
+    echo "------------------------"
+    echo "15 - Show paths to configs and other important files"
     read option
     echo ""
 
@@ -1245,6 +1283,9 @@ main_menu() {
         ;;
         14)
         enable_ipv6
+        ;;
+        15)
+        show_paths
         ;;
         *)
         exit 0

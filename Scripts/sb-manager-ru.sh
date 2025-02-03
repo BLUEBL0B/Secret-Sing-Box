@@ -1176,6 +1176,42 @@ enable_ipv6() {
     main_menu
 }
 
+show_paths() {
+    echo -e "${textcolor}Конфигурация сервисов:${clear}"
+    echo "Конфиг Sing-Box                        /etc/sing-box/config.json"
+    echo "Конфиг NGINX                           /etc/nginx/nginx.conf"
+    if [ -f /etc/haproxy/haproxy.cfg ]
+    then
+        echo "Конфиг HAProxy                         /etc/haproxy/haproxy.cfg"
+        echo "Скрипт, считывающий пароли Trojan      /etc/haproxy/auth.lua"
+    fi
+    echo ""
+
+    echo -e "${textcolor}Контент, доставляемый с помощью NGINX:${clear}"
+    echo "Директория подписки                    /var/www/${subspath}/"
+    echo "Директория c наборами правил           /var/www/${rulesetpath}/"
+    sitedir=$(grep "/var/www/" /etc/nginx/nginx.conf | head -n 1)
+    sitedir=${sitedir#*"/var/www/"}
+    sitedir=${sitedir%";"*}
+    if [ -d /var/www/${sitedir} ]
+    then
+        echo "Директория cайта                       /var/www/${sitedir}/"
+    fi
+    echo ""
+
+    echo -e "${textcolor}Сертификаты и вспомогательные файлы:${clear}"
+    echo "Директория с сертификатами             /etc/letsencrypt/live/${domain}/"
+    echo "Конфиг обновления сертификатов         /etc/letsencrypt/renewal/${domain}.conf"
+    echo "Файл с API токеном/ключом Cloudflare   /etc/letsencrypt/cloudflare.credentials"
+    echo ""
+
+    echo -e "${textcolor}Скрипты:${clear}"
+    echo "Sbmanager (этот скрипт)                /usr/local/bin/sbmanager"
+    echo "Скрипт, обновляющий наборы правил      /usr/local/bin/rsupdate"
+    echo ""
+    exit 0
+}
+
 main_menu() {
     echo ""
     echo -e "${textcolor}Выберите действие:${clear}"
@@ -1200,6 +1236,8 @@ main_menu() {
     echo "------------------------"
     echo "13 - Отключить IPv6 на сервере"
     echo "14 - Не отключать IPv6 на сервере"
+    echo "------------------------"
+    echo "15 - Показать пути до конфигов и других значимых файлов"
     read option
     echo ""
 
@@ -1245,6 +1283,9 @@ main_menu() {
         ;;
         14)
         enable_ipv6
+        ;;
+        15)
+        show_paths
         ;;
         *)
         exit 0
