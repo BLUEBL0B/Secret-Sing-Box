@@ -2,7 +2,7 @@
 
 Press Win + X and open the terminal with admin rights:
 
-![w1](https://github.com/user-attachments/assets/ebffb58e-9251-4ec5-94a7-8b5416b0ced2)
+![w1](https://github.com/user-attachments/assets/614a2643-df78-478c-ad5f-66bd2cfb7405)
 
 Then enter the command:
 
@@ -55,11 +55,11 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 Then change the settings of the shortcut to run it as admin.
 
-![w2](https://github.com/user-attachments/assets/22d79731-f46d-4d1a-868c-36b45a9e4d36)
+![w2](https://github.com/user-attachments/assets/ae7e770a-795b-47aa-8cba-c8f889d1caaa)
 
-![w3](https://github.com/user-attachments/assets/91a6f89f-a2b3-4029-bbfa-2e21a0c047da)
+![w3](https://github.com/user-attachments/assets/1b34ebaf-1b7f-4356-a7ee-39b1d3eeda25)
 
-![w4](https://github.com/user-attachments/assets/d35d5648-e593-4ab5-9afb-f8e8a2201f41)
+![w4](https://github.com/user-attachments/assets/beb78b94-128d-4e57-aaa3-2c8120c001cd)
 
 Then press OK.
 
