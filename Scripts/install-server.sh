@@ -1244,7 +1244,6 @@ cat > /etc/sing-box/config.json <<EOF
       "tag": "trojan-in",
       "listen": "127.0.0.1",
       "listen_port": 10443,
-      "sniff": true,
       "users": [
         {
           "name": "1${userkey}",
@@ -1265,7 +1264,6 @@ cat > /etc/sing-box/config.json <<EOF
       "tag": "vless-in",
       "listen": "127.0.0.1",
       "listen_port": 11443,
-      "sniff": true,
       "users": [
         {
           "name": "1${userkey}",
@@ -1288,14 +1286,6 @@ cat > /etc/sing-box/config.json <<EOF
       "tag": "direct"
     },
     {
-      "type": "dns",
-      "tag": "dns-out"
-    },
-    {
-      "type": "block",
-      "tag": "block"
-    },
-    {
       "type": "direct",
       "tag": "IPv4",
       "domain_strategy": "ipv4_only"
@@ -1310,18 +1300,23 @@ cat > /etc/sing-box/config.json <<EOF
   "route": {
     "rules": [
       {
+        "action": "sniff"
+      },
+      {
         "protocol": "dns",
-        "outbound": "dns-out"
+        "action": "hijack-dns"
       },
       {
         "rule_set": [
           "category-ads-all"
         ],
-        "outbound": "block"
+        "action": "reject",
+        "method": "drop"
       },
       {
         "protocol": "quic",
-        "outbound": "block"
+        "action": "reject",
+        "method": "drop"
       },
       {
         "rule_set": [
@@ -1571,7 +1566,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       "address": "172.19.0.1/28",
       "auto_route": true,
       "strict_route": true,
-      "sniff": true,
       "sniff_override_destination": true
     }
   ],
@@ -1579,14 +1573,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
     {
       "type": "direct",
       "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
-    },
-    {
-      "type": "dns",
-      "tag": "dns-out"
     },
     {
       "type": "trojan",
@@ -1615,8 +1601,11 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
   "route": {
     "rules": [
       {
+        "action": "sniff"
+      },
+      {
         "protocol": "dns",
-        "outbound": "dns-out"
+        "action": "hijack-dns"
       },
       {
         "ip_is_private": true,
@@ -1630,7 +1619,8 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "rule_set": [
           "category-ads-all"
         ],
-        "outbound": "block"
+        "action": "reject",
+        "method": "drop"
       },
       {
         "rule_set": [

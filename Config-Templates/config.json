@@ -35,7 +35,6 @@
       "tag": "trojan-in",
       "listen": "127.0.0.1",
       "listen_port": 10443,
-      "sniff": true,
       "users": [
         {
           "name": "1-me",
@@ -55,14 +54,6 @@
       "tag": "direct"
     },
     {
-      "type": "dns",
-      "tag": "dns-out"
-    },
-    {
-      "type": "block",
-      "tag": "block"
-    },
-    {
       "type": "direct",
       "tag": "IPv4",
       "domain_strategy": "ipv4_only"
@@ -77,18 +68,23 @@
   "route": {
     "rules": [
       {
+        "action": "sniff"
+      },
+      {
         "protocol": "dns",
-        "outbound": "dns-out"
+        "action": "hijack-dns"
       },
       {
         "rule_set": [
           "category-ads-all"
         ],
-        "outbound": "block"
+        "action": "reject",
+        "method": "drop"
       },
       {
         "protocol": "quic",
-        "outbound": "block"
+        "action": "reject",
+        "method": "drop"
       },
       {
         "rule_set": [
