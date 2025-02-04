@@ -8,18 +8,18 @@ All OS: https://github.com/SagerNet/sing-box/releases/latest
 -----
 
 ### Open Sing-Box app and import the link:
-![a1](https://github.com/user-attachments/assets/5323c7f4-5e45-44dd-9cfe-1cd7ed0d2c1b)
+![a1](https://github.com/user-attachments/assets/850f80f0-0d69-452f-ab6c-a501e6403f99)
 
-![a2](https://github.com/user-attachments/assets/7dd5ee7f-2fd9-4258-81c2-032ca7631663)
+![a2](https://github.com/user-attachments/assets/0ebf3b0c-3741-4143-bbc5-416cb397b7fb)
 
-![a3e](https://github.com/user-attachments/assets/9c2999c5-f62f-4e1c-bc26-557e67fa6218)
+![a3e](https://github.com/user-attachments/assets/3be21bfe-9741-432c-ad45-4e56c8c7671f)
 
 Paste the link after step 6
 
 -----
 
 ### Check the connection:
-![a4](https://github.com/user-attachments/assets/b1031b28-df75-4993-92f7-c1c9a0e6fb05)
+![a4](https://github.com/user-attachments/assets/e596bee9-fbd5-417a-818f-41ff1983256e)
 
 The proxy should work now
 
@@ -28,7 +28,7 @@ But the setup is not complete yet
 -----
 
 ### It’s strongly recommended to use proxy only for the necessary apps:
-![a5](https://github.com/user-attachments/assets/ded0c2bb-09b6-47f9-82ff-f221fef2ad6a)
+![a5](https://github.com/user-attachments/assets/5ac39237-f7c7-4f13-8f8c-bd2aa5e54a02)
 
 Then click on 3 dots in the upper right corner, select «Proxy Mode», and then select «Include»
 
