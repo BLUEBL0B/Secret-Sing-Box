@@ -9,7 +9,7 @@
 ### Настройки DNS
 Пример DNS записей:
 
-![dns-2](https://github.com/user-attachments/assets/a0be45a5-2013-48b7-a3f9-565a396b33bb)
+![dns-2](https://github.com/user-attachments/assets/8f67a737-bb84-48bc-ba36-f56985e951d5)
 
 Для варианта настройки с терминированием TLS на NGINX и транспортом WebSocket или HTTPUpgrade можно включить проксирование обеих записей (требует [отключения ECH](https://habr.com/ru/articles/856602/)).
 
@@ -25,7 +25,7 @@ Overview > Get your API token > Create Token > Edit zone DNS (Use template)
 
 Далее нужно указать следующие настройки:
 
-![token](https://github.com/user-attachments/assets/7eecc898-923b-4cbc-97f7-fc3d45deb395)
+![token](https://github.com/user-attachments/assets/e32a752b-faa5-4d14-9c8c-1745b59636e4)
 
 Остальные настройки можно оставить, как есть.
 
