@@ -7,11 +7,11 @@
 
 - Все запросы к прокси принимает NGINX, запросы передаются на Sing-Box только при наличии в них правильного пути (транспорт WebSocket или HTTPUpgrade)
 
-![nginx-ru](https://github.com/user-attachments/assets/ed0a702c-07d3-4d07-a24f-66a3180141f4)
+![nginx-ru](https://github.com/user-attachments/assets/19eb8ac7-9feb-41cf-a744-b935546d7b58)
 
 - Все запросы к прокси принимает HAProxy, пароли Trojan считываются из первых 56 байт запроса с помощью скрипта на Lua, запросы передаются на Sing-Box только при наличии в них правильного пароля Trojan (транспорт TCP) — метод [FPPweb3](https://github.com/FPPweb3)
 
-![haproxy-ru](https://github.com/user-attachments/assets/ffa801e9-4328-4262-ae87-beb15b0687f6)
+![haproxy-ru](https://github.com/user-attachments/assets/b0a6ade5-df2b-4baf-8ca2-cc52cc5433bc)
 
 Оба варианта настройки делают невозможным обнаружение Sing-Box снаружи, что повышает уровень безопасности.
 
@@ -45,7 +45,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Затем просто введите необходимую информацию:
 
-![pic-1-ru](https://github.com/user-attachments/assets/cc3ebd50-5fd2-4e8f-b327-0a7bd5ef0945)
+![pic-1-ru](https://github.com/user-attachments/assets/f1248d11-a930-4acc-9f66-40851ecf380e)
 
 В конце скрипт покажет ссылки на клиентские конфиги, рекомендуется их сохранить.
 
@@ -59,7 +59,7 @@ sbmanager
 
 Далее следуйте инструкциям:
 
-![pic-2-ru](https://github.com/user-attachments/assets/1d6cc726-4f14-4905-8a3b-4c7a275c3bf5)
+![pic-2-ru](https://github.com/user-attachments/assets/3c15ff58-549d-4c58-a8bc-ab2f98f76f20)
 
 Пункты 5 и 6 синхронизируют настройки в клиентских конфигах всех пользователей, что позволяет не редактировать конфиг каждого пользователя отдельно. При добавлении в конфиги новых наборов правил (rule sets) с помощью пункта 6, они будут автоматически загружены на сервер, если это наборы правил от [SagerNet](https://github.com/SagerNet/sing-geosite/tree/rule-set).
 
