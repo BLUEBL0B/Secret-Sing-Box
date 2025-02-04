@@ -2,7 +2,7 @@
 
 Жмём Win + X, после этого открываем командную строку с правами аминистратора:
 
-![w1](https://github.com/user-attachments/assets/ebffb58e-9251-4ec5-94a7-8b5416b0ced2)
+![w1](https://github.com/user-attachments/assets/52ac24b2-101e-4a4a-b45f-740582620fb3)
 
 Далее вводим команду:
 
@@ -55,11 +55,11 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 Далее настраиваем ярлык, чтобы запускать его с правами администратора.
 
-![w2](https://github.com/user-attachments/assets/22d79731-f46d-4d1a-868c-36b45a9e4d36)
+![w2](https://github.com/user-attachments/assets/ad3da50e-9a46-49a7-8f98-c3828edd0a1b)
 
-![w3](https://github.com/user-attachments/assets/bce8b230-f0f4-4f99-9bf4-609e74290897)
+![w3](https://github.com/user-attachments/assets/92e2f6ae-623e-4b28-8065-f10443888336)
 
-![w4](https://github.com/user-attachments/assets/d35d5648-e593-4ab5-9afb-f8e8a2201f41)
+![w4](https://github.com/user-attachments/assets/60185d25-6cb4-4ee0-9b98-7f639937334f)
 
 Везде жмём OK.
 
