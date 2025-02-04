@@ -7,11 +7,11 @@ This script is designed to fully and easily configure a secure proxy server with
 
 - All requests to the proxy are received by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket or HTTPUpgrade transport)
 
-![nginx-en](https://github.com/user-attachments/assets/712075b6-1c93-482f-9297-0f20cc06fc2f)
+![nginx-en](https://github.com/user-attachments/assets/8b832294-f14f-4c8b-876e-30b1d160fd1e)
 
 - All requests to the proxy are received by HAProxy, then Trojan passwords are read from the first 56 bytes of the request by using a Lua script, the requests are passed to Sing-Box only if they contain the correct Trojan password (TCP transport) — [FPPweb3](https://github.com/FPPweb3) method
 
-![haproxy-en](https://github.com/user-attachments/assets/b3eb970d-7856-4bdd-83ad-112b5019e7b5)
+![haproxy-en](https://github.com/user-attachments/assets/a9753846-4f40-414d-b4eb-4c37b4e9de14)
 
 Both setup methods make it impossible to detect Sing-Box from the outside, which improves security.
 
@@ -45,7 +45,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/b12bb3af-75e8-4a67-bd3d-faebe75f7f6d)
+![pic-1-en](https://github.com/user-attachments/assets/7dc408a9-6357-49c3-a58a-d3da90c4ced4)
 
 The script will show your client links in the end, it's recommended to save them.
 
@@ -59,7 +59,7 @@ sbmanager
 
 Then follow the instructions:
 
-![pic-2-en](https://github.com/user-attachments/assets/bed437c9-9fec-46a5-9445-285241c1e064)
+![pic-2-en](https://github.com/user-attachments/assets/c4fecd03-4618-4b02-a885-4871e4daac8b)
 
 Options 5 and 6 synchronize the settings in client configs of all users, which eliminates the need to edit the config of each user separately. If new rule sets are added to the configs by using option 6, they will be automatically downloaded on the server if they are from [SagerNet](https://github.com/SagerNet/sing-geosite/tree/rule-set).
 
