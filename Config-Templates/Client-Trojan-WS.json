@@ -65,7 +65,6 @@
           "aliexpress"
         ],
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "yandex",
           "vk",
@@ -226,7 +225,6 @@
           "SERVER-IP"
         ],
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "yandex",
           "vk",
@@ -285,12 +283,6 @@
         "tag": "torrent-clients",
         "format": "source",
         "url": "https://DOMAIN/RULESETPATH/torrent-clients.json"
-      },
-      {
-        "tag": "geoip-ru",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geoip-ru.srs"
       },
       {
         "tag": "gov-ru",

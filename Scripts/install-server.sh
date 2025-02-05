@@ -1502,7 +1502,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "aliexpress"
         ],
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "yandex",
           "vk",
@@ -1663,7 +1662,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "${serverip}"
         ],
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "yandex",
           "vk",
@@ -1722,12 +1720,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "tag": "torrent-clients",
         "format": "source",
         "url": "https://${domain}/${rulesetpath}/torrent-clients.json"
-      },
-      {
-        "tag": "geoip-ru",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geoip-ru.srs"
       },
       {
         "tag": "gov-ru",

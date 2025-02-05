@@ -65,7 +65,6 @@
           "aliexpress"
         ],
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "yandex",
           "vk",
@@ -223,7 +222,6 @@
           "SERVER-IP"
         ],
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "yandex",
           "vk",
@@ -282,12 +280,6 @@
         "tag": "torrent-clients",
         "format": "source",
         "url": "https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json"
-      },
-      {
-        "tag": "geoip-ru",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geoip/raw/rule-set/geoip-ru.srs"
       },
       {
         "tag": "gov-ru",
