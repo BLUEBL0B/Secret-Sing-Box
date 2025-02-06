@@ -1703,6 +1703,16 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "outbound": "direct"
       },
       {
+        "action": "resolve",
+        "strategy": "prefer_ipv4"
+      },
+      {
+        "rule_set": [
+          "geoip-ru"
+        ],
+        "outbound": "direct"
+      },
+      {
         "inbound": [
           "tun-in"
         ],
@@ -1711,10 +1721,16 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
     ],
     "rule_set": [
       {
-        "type": "remote",
         "tag": "torrent-clients",
+        "type": "remote",
         "format": "source",
         "url": "https://${domain}/${rulesetpath}/torrent-clients.json"
+      },
+      {
+        "tag": "geoip-ru",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://${domain}/${rulesetpath}/geoip-ru.srs"
       },
       {
         "tag": "gov-ru",
