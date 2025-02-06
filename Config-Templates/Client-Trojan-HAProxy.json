@@ -29,7 +29,8 @@
       },
       {
         "rule_set": [
-          "telegram"
+          "telegram",
+          "google"
         ],
         "server": "dns-remote"
       },
@@ -171,10 +172,6 @@
         "outbound": "direct"
       },
       {
-        "protocol": "quic",
-        "outbound": "direct"
-      },
-      {
         "rule_set": [
           "category-ads-all"
         ],
@@ -183,9 +180,14 @@
       },
       {
         "rule_set": [
-          "telegram"
+          "telegram",
+          "google"
         ],
         "outbound": "proxy"
+      },
+      {
+        "protocol": "quic",
+        "outbound": "direct"
       },
       {
         "domain_suffix": [
@@ -292,6 +294,12 @@
         "type": "remote",
         "format": "binary",
         "url": "https://DOMAIN/RULESETPATH/geosite-yandex.srs"
+      },
+      {
+        "tag": "google",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://DOMAIN/RULESETPATH/geosite-google.srs"
       },
       {
         "tag": "telegram",

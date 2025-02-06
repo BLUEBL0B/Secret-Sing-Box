@@ -37,11 +37,34 @@
       "listen_port": 10443,
       "users": [
         {
-          "name": "1-me",
+          "name": "user",
           "password": "TROJAN-PASSWORD"
         }
       ],
-      "transport": {},
+      "transport": {
+        "type": "ws",
+        "path": "/TROJAN-PATH"
+      },
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "vless-in",
+      "listen": "127.0.0.1",
+      "listen_port": 11443,
+      "users": [
+        {
+          "name": "user",
+          "uuid": "VLESS-UUID"
+        }
+      ],
+      "transport": {
+        "type": "ws",
+        "path": "/VLESS-PATH"
+      },
       "multiplex": {
         "enabled": true,
         "padding": true
@@ -88,7 +111,6 @@
       },
       {
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "openai",
           "telegram"
@@ -132,12 +154,6 @@
       }
     ],
     "rule_set": [
-      {
-        "tag": "geoip-ru",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geoip-ru.srs"
-      },
       {
         "tag": "gov-ru",
         "type": "local",

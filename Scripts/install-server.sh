@@ -1320,7 +1320,6 @@ cat > /etc/sing-box/config.json <<EOF
       },
       {
         "rule_set": [
-          "geoip-ru",
           "gov-ru",
           "openai",
           "telegram"
@@ -1364,12 +1363,6 @@ cat > /etc/sing-box/config.json <<EOF
       }
     ],
     "rule_set": [
-      {
-        "tag": "geoip-ru",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/${rulesetpath}/geoip-ru.srs"
-      },
       {
         "tag": "gov-ru",
         "type": "local",
@@ -1466,7 +1459,8 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "rule_set": [
-          "telegram"
+          "telegram",
+          "google"
         ],
         "server": "dns-remote"
       },
@@ -1611,10 +1605,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "outbound": "direct"
       },
       {
-        "protocol": "quic",
-        "outbound": "direct"
-      },
-      {
         "rule_set": [
           "category-ads-all"
         ],
@@ -1623,9 +1613,14 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "rule_set": [
-          "telegram"
+          "telegram",
+          "google"
         ],
         "outbound": "proxy"
+      },
+      {
+        "protocol": "quic",
+        "outbound": "direct"
       },
       {
         "domain_suffix": [
@@ -1732,6 +1727,12 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://${domain}/${rulesetpath}/geosite-yandex.srs"
+      },
+      {
+        "tag": "google",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://${domain}/${rulesetpath}/geosite-google.srs"
       },
       {
         "tag": "telegram",
