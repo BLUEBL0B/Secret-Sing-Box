@@ -2,7 +2,7 @@
 
 [**English version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README-ENG.md)
 
-### Прокси с использованием протоколов Trojan и VLESS и терминированием TLS на NGINX или HAProxy
+### Простая настройка прокси с использованием протоколов Trojan и VLESS и терминированием TLS на NGINX или HAProxy
 Данный скрипт предназначен для полной и простой настройки защищённого прокси-сервера с ядром [Sing-Box](https://sing-box.sagernet.org) и маскировкой при помощи [NGINX](https://nginx.org/ru/) или [HAProxy](https://www.haproxy.org). Два варианта настройки на выбор:
 
 - Все запросы к прокси принимает NGINX, запросы передаются на Sing-Box только при наличии в них правильного пути (транспорт WebSocket или HTTPUpgrade)
