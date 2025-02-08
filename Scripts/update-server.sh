@@ -221,11 +221,15 @@ update_scripts() {
     if [[ "${language}" == "1" ]]
     then
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-ru.sh
+        chmod +x /usr/local/bin/sbmanager
+        echo "Установка обновления завершена"
     else
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-en.sh
+        chmod +x /usr/local/bin/sbmanager
+        echo "The update has been installed"
     fi
 
-    chmod +x /usr/local/bin/sbmanager
+    echo ""
     echo ""
 }
 
