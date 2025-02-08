@@ -28,18 +28,18 @@ check_update() {
         echo -e "${textcolor}Current version:${clear} v${version}"
         echo -e "${textcolor}New version is available:${clear} v${new_version}"
     fi
-    echo ""
 }
 
 extract_values() {
     inboundnumbertr=$(jq '[.inbounds[].tag] | index("trojan-in")' /etc/sing-box/config.json)
-    inboundnumbervl=$(jq '[.inbounds[].tag] | index("vless-in")' /etc/sing-box/config.json)
     userstr=$(jq ".inbounds[${inboundnumbertr}].users" /etc/sing-box/config.json)
-    usersvl=$(jq ".inbounds[${inboundnumbervl}].users" /etc/sing-box/config.json)
 
-    transport=$(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json)
-    trojanpath=$(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.path' /etc/sing-box/config.json)
-    vlesspath=$(jq -r '.inbounds[] | select(.tag=="vless-in") | .transport.path' /etc/sing-box/config.json)
+    if [ ! -f /etc/haproxy/auth.lua ]
+    then
+        inboundnumbervl=$(jq '[.inbounds[].tag] | index("vless-in")' /etc/sing-box/config.json)
+        usersvl=$(jq ".inbounds[${inboundnumbervl}].users" /etc/sing-box/config.json)
+        transport=$(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json)
+    fi
 
     warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     warp_rule=$(cat /etc/sing-box/config.json | jq '.route.rules[] | select(.outbound=="warp")')
@@ -51,6 +51,9 @@ extract_values() {
 }
 
 insert_values() {
+    inboundnumbertr=$(jq '[.inbounds[].tag] | index("trojan-in")' /etc/sing-box/config.json)
+    inboundnumbervl=$(jq '[.inbounds[].tag] | index("vless-in")' /etc/sing-box/config.json)
+
     echo "$(jq </etc/sing-box/config.json "del(.inbounds[${inboundnumbertr}].users[0])")" > /etc/sing-box/config.json
     echo "$(jq ".inbounds[${inboundnumbertr}].users |= . + ${userstr}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
 
@@ -222,6 +225,8 @@ update_scripts() {
     fi
 
     chmod +x /usr/local/bin/sbmanager
+    echo ""
+    echo ""
 }
 
 main_menu() {
@@ -242,6 +247,8 @@ update_menu() {
         echo "2 - Update without syncing settings in client configs with Github"
     fi
     read update_option
+    echo ""
+    echo ""
     echo ""
 
     case $update_option in
