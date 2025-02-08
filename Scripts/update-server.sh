@@ -12,9 +12,9 @@ check_update() {
     then
         if [[ "${language}" == "1" ]]
         then
-            echo -e "${textcolor}Установлена последняя версия:${clear} v${version}"
+            echo -e "Установлена последняя версия: ${textcolor}v${version}${clear}"
         else
-            echo -e "${textcolor}The latest version is already installed:${clear} v${version}"
+            echo -e "The latest version is already installed: ${textcolor}v${version}${clear}"
         fi
         echo ""
         exit 0
@@ -22,11 +22,11 @@ check_update() {
 
     if [[ "${language}" == "1" ]]
     then
-        echo -e "${textcolor}Текущая версия:${clear} v${version}"
-        echo -e "${textcolor}Доступна новая версия:${clear} v${new_version}"
+        echo -e "Текущая версия: ${textcolor}v${version}${clear}"
+        echo -e "Доступна новая версия: ${textcolor}v${new_version}${clear}"
     else
-        echo -e "${textcolor}Current version:${clear} v${version}"
-        echo -e "${textcolor}New version is available:${clear} v${new_version}"
+        echo -e "Current version: ${textcolor}v${version}${clear}"
+        echo -e "New version is available: ${textcolor}v${new_version}${clear}"
     fi
 }
 
@@ -124,6 +124,9 @@ insert_chain() {
 }
 
 update_services() {
+    echo ""
+    echo ""
+
     if [[ "${language}" == "1" ]]
     then
         echo -e "${textcolor_light}Обновление сервисов...${clear}"
@@ -247,8 +250,6 @@ update_menu() {
         echo "2 - Update without syncing settings in client configs with Github"
     fi
     read update_option
-    echo ""
-    echo ""
     echo ""
 
     case $update_option in
