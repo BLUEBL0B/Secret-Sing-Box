@@ -231,7 +231,7 @@ update_scripts() {
 }
 
 main_menu() {
-    exit 0
+    :
 }
 
 update_menu() {
@@ -240,12 +240,12 @@ update_menu() {
         echo -e "${textcolor}Выберите вариант обновления:${clear}"
         echo "0 - Выйти"
         echo "1 - Обновить всё"
-        echo "2 - Обновить без синхронизации настроек в клиентских конфигах с Github"
+        echo "2 - Обновить без синхронизации клиентских конфигов с Github"
     else
         echo -e "${textcolor}Select an update option:${clear}"
         echo "0 - Exit"
         echo "1 - Update everything"
-        echo "2 - Update without syncing settings in client configs with Github"
+        echo "2 - Update without syncing client configs with Github"
     fi
     read update_option
     echo ""
