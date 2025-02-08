@@ -133,8 +133,6 @@ update_services() {
         echo -e "${textcolor_light}Updating services...${clear}"
     fi
 
-    systemctl stop sing-box.service
-
     extract_values
     wget -O /etc/sing-box/config.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/config.json
     insert_values
@@ -152,7 +150,8 @@ update_services() {
     apt-mark unhold sing-box
     apt update && apt full-upgrade -y
     apt-mark hold sing-box
-    systemctl start sing-box.service
+
+    systemctl restart sing-box.service
     systemctl restart warp-svc.service
     systemctl restart nginx.service
 
