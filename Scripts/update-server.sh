@@ -125,7 +125,6 @@ insert_chain() {
 
 update_services() {
     echo ""
-    echo ""
 
     if [[ "${language}" == "1" ]]
     then
@@ -228,7 +227,6 @@ update_scripts() {
     fi
 
     chmod +x /usr/local/bin/sbmanager
-    echo ""
     echo ""
 }
 
