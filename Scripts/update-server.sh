@@ -76,7 +76,7 @@ insert_values() {
         echo "$(jq "del(.inbounds[${inboundnumbertr}].transport.type) | del(.inbounds[${inboundnumbertr}].transport.path) | del(.inbounds[${inboundnumbervl}])" /etc/sing-box/config.json)" > /etc/sing-box/config.json
     fi
 
-    if [ ! -z ${nextoutbound} ]
+    if [[ ! -z ${nextoutbound} ]]
     then
         insert_chain
     fi
@@ -128,9 +128,9 @@ update_services() {
 
     if [[ "${language}" == "1" ]]
     then
-        echo -e "${textcolor_light}Обновление сервисов...${clear}"
+        echo -e "${textcolor_light}Обновление пакетов...${clear}"
     else
-        echo -e "${textcolor_light}Updating services...${clear}"
+        echo -e "${textcolor_light}Updating packages...${clear}"
     fi
 
     extract_values
@@ -222,11 +222,11 @@ update_scripts() {
     then
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-ru.sh
         chmod +x /usr/local/bin/sbmanager
-        echo "Установка обновления завершена"
+        echo -e "${textcolor}Установка обновления завершена${clear}"
     else
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-en.sh
         chmod +x /usr/local/bin/sbmanager
-        echo "The update has been installed"
+        echo -e "${textcolor}The update has been installed${clear}"
     fi
 
     echo ""
