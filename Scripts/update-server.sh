@@ -41,7 +41,6 @@ extract_values() {
         transport=$(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json)
     fi
 
-    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     warp_domain_suffix=$(cat /etc/sing-box/config.json | jq '.route.rules[] | select(.outbound=="warp") | .domain_suffix')
 
     if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "true" ]]
@@ -64,6 +63,7 @@ insert_values() {
     fi
 
     echo "$(jq ".inbounds[${inboundnumbertr}].transport.path = \"/${trojanpath}\" | .inbounds[${inboundnumbervl}].transport.path = \"/${vlesspath}\"" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     echo "$(jq ".route.rules[${warpnum}].domain_suffix = [] | .route.rules[${warpnum}].domain_suffix |= . + ${warp_domain_suffix}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
 
     if [[ "${transport}" == "httpupgrade" ]]
@@ -95,6 +95,7 @@ insert_chain() {
         echo "$(jq ".route.rules[${proxy_rule_num}] |= . + {\"inbound\":[\"trojan-in\",\"vless-in\"],\"outbound\":\"proxy\"} | .outbounds[${proxy_num}] |= . + ${nextoutbound}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
     fi
 
+    warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
     echo "$(jq ".route.rules[${warpnum}] |= . + {\"rule_set\":[\"geoip-ru\",\"gov-ru\"],\"domain_suffix\":[\".ru\",\".su\",\".ru.com\",\".ru.net\"],\"domain_keyword\":[\"xn--\"],\"outbound\":\"warp\"}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
 
     if [[ $(jq 'any(.outbounds[]; .tag == "IPv4")' /etc/sing-box/config.json) == "true" ]]
