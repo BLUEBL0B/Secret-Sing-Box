@@ -413,6 +413,8 @@ sync_client_configs_github() {
         fi
     done
 
+    chmod -R 755 /var/www/${rulesetpath}
+
     echo "Synchronization of the settings is completed"
     echo ""
 }
@@ -473,6 +475,8 @@ sync_client_configs_local() {
             fi
         done
     fi
+
+    chmod -R 755 /var/www/${rulesetpath}
 
     echo "Synchronization of the settings is completed"
     echo ""

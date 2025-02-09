@@ -152,6 +152,8 @@ update_services() {
         fi
     done
 
+    chmod -R 755 /var/www/${rulesetpath}
+
     apt-mark unhold sing-box
     apt update && apt full-upgrade -y
     apt-mark hold sing-box
@@ -239,6 +241,7 @@ update_scripts() {
     fi
 
     echo ""
+    exit 0
 }
 
 main_menu() {
