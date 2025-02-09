@@ -46,7 +46,7 @@ extract_values() {
 
     if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "true" ]]
     then
-        nextoutbound=$(cat /etc/sing-box/config.json | jq '.route.rules[] | select(.outbound=="proxy")')
+        nextoutbound=$(cat /etc/sing-box/config.json | jq '.outbounds[] | select(.tag=="proxy")')
     fi
 }
 
