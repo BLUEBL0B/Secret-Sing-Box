@@ -1320,6 +1320,7 @@ cat > /etc/sing-box/config.json <<EOF
       },
       {
         "rule_set": [
+          "geoip-ru",
           "gov-ru",
           "openai",
           "telegram"
@@ -1363,6 +1364,12 @@ cat > /etc/sing-box/config.json <<EOF
       }
     ],
     "rule_set": [
+      {
+        "tag": "geoip-ru",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geoip-ru.srs"
+      },
       {
         "tag": "gov-ru",
         "type": "local",
