@@ -1263,6 +1263,7 @@ update_ssb() {
     if [ $(wget -q -O /dev/null https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/update-server.sh; echo $?) -eq 0 ]
     then
         bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/update-server.sh)
+        exit 0
     else
         echo -e "${red}Ошибка: не удалось загрузить данные с Github${clear}"
         echo ""
