@@ -235,10 +235,12 @@ update_scripts() {
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-ru.sh
         chmod +x /usr/local/bin/sbmanager
         echo -e "${textcolor}Установка обновления завершена${clear}"
+        echo "При проблемах с Sing-Box запустите команду: cp -f /etc/sing-box/config.json.0 /etc/sing-box/config.json && systemctl restart sing-box"
     else
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-en.sh
         chmod +x /usr/local/bin/sbmanager
         echo -e "${textcolor}The update has been installed${clear}"
+        echo "If you have problems with Sing-Box, run this command: cp -f /etc/sing-box/config.json.0 /etc/sing-box/config.json && systemctl restart sing-box"
     fi
 
     echo ""
