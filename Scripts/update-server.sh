@@ -42,7 +42,7 @@ extract_values() {
     fi
 
     warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
-    warp_rule=$(cat /etc/sing-box/config.json | jq '.route.rules[] | select(.outbound=="warp")')
+    warp_domain_suffix=$(cat /etc/sing-box/config.json | jq '.route.rules[] | select(.outbound=="warp") | .domain_suffix')
 
     if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "true" ]]
     then
@@ -64,7 +64,7 @@ insert_values() {
     fi
 
     echo "$(jq ".inbounds[${inboundnumbertr}].transport.path = \"/${trojanpath}\" | .inbounds[${inboundnumbervl}].transport.path = \"/${vlesspath}\"" /etc/sing-box/config.json)" > /etc/sing-box/config.json
-    echo "$(jq ".route.rules[${warpnum}] |= . + ${warp_rule}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    echo "$(jq ".route.rules[${warpnum}].domain_suffix = [] | .route.rules[${warpnum}].domain_suffix |= . + ${warp_domain_suffix}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
 
     if [[ "${transport}" == "httpupgrade" ]]
     then
