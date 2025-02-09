@@ -183,7 +183,11 @@ check_sync_client() {
     
     check_users
     validate_template
-    sync_client_configs_github
+
+    if [[ "${stop_sync}" != "1" ]]
+    then
+        sync_client_configs_github
+    fi
 }
 
 update_sub_page() {
@@ -235,11 +239,10 @@ update_scripts() {
     fi
 
     echo ""
-    echo ""
 }
 
 main_menu() {
-    :
+    stop_sync="1"
 }
 
 update_menu() {

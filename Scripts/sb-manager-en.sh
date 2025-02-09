@@ -106,7 +106,7 @@ validate_template() {
     then
         echo -e "${red}Error: failed to load data from Github${clear}"
         echo ""
-        exit 1
+        main_menu
     fi
 }
 
@@ -530,6 +530,26 @@ sync_with_local_temp() {
     validate_local_template
     sync_client_configs_local
     main_menu
+}
+
+sync_client_configs() {
+    echo -e "${textcolor}Select synchronisation option:${clear}"
+    echo "0 - Exit"
+    echo "1 - Sync with Github"
+    echo "2 - Sync with local template (custom settings)"
+    read syncoption
+    echo ""
+
+    case $syncoption in
+        1)
+        sync_with_github
+        ;;
+        2)
+        sync_with_local_temp
+        ;;
+        *)
+        main_menu
+    esac
 }
 
 show_warp_domains() {
@@ -1165,7 +1185,7 @@ enable_ipv6() {
     sed -i "/net.ipv6.conf.default.disable_ipv6 = 1/d" /etc/sysctl.conf
     sed -i "/net.ipv6.conf.lo.disable_ipv6 = 1/d" /etc/sysctl.conf
 
-    echo -e "${textcolor}IPv6 is not disabled:${clear}"
+    echo -e "${textcolor}IPv6 is enabled:${clear}"
     sysctl -p
 
     if [[ ! -z $(crontab -l | grep "@reboot sysctl -p") ]]
@@ -1223,6 +1243,29 @@ show_paths() {
     exit 0
 }
 
+update_ssb() {
+    export version="1.0.0"
+    export language="2"
+    export -f check_root
+    export -f get_ip
+    export -f replace_template
+    export -f templates
+    export -f get_data
+    export -f check_users
+    export -f validate_template
+    export -f get_pass
+    export -f sync_client_configs_github
+
+    if [ $(wget -q -O /dev/null https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/update-server.sh; echo $?) -eq 0 ]
+    then
+        bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/update-server.sh)
+    else
+        echo -e "${red}Error: failed to load data from Github${clear}"
+        echo ""
+        main_menu
+    fi
+}
+
 main_menu() {
     echo ""
     echo -e "${textcolor}Select an option:${clear}"
@@ -1231,24 +1274,22 @@ main_menu() {
     echo "1 - Show the list of users"
     echo "2 - Add a new user"
     echo "3 - Delete a user"
-    echo "------------------------"
     echo "4 - Change \"stack\" in tun interface of the user"
-    echo "5 - Sync settings in all client configs with Github"
-    echo "6 - Sync settings in all client configs with local template (custom settings)"
+    echo "5 - Sync settings in all client configs"
     echo "------------------------"
-    echo "7 - Show the list of domains/suffixes routed through WARP"
-    echo "8 - Add a new domain/suffix to WARP routing"
-    echo "9 - Delete a domain/suffix from WARP routing"
+    echo "6 - Show the list of domains/suffixes routed through WARP"
+    echo "7 - Add a new domain/suffix to WARP routing"
+    echo "8 - Delete a domain/suffix from WARP routing"
+    echo "9 - Setup/remove a chain of two or more servers"
     echo "------------------------"
-    echo "10 - Setup/remove a chain of two or more servers"
+    echo "10 - Renew certificate manually"
+    echo "11 - Change domain"
     echo "------------------------"
-    echo "11 - Renew certificate manually"
-    echo "12 - Change domain"
+    echo "12 - Disable IPv6 on the server"
+    echo "13 - Enable IPv6 on the server"
     echo "------------------------"
-    echo "13 - Disable IPv6 on the server"
-    echo "14 - Enable IPv6 on the server"
-    echo "------------------------"
-    echo "15 - Show paths to configs and other important files"
+    echo "14 - Show paths to configs and other important files"
+    echo "15 - Update"
     read option
     echo ""
 
@@ -1266,37 +1307,37 @@ main_menu() {
         change_stack
         ;;
         5)
-        sync_with_github
+        sync_client_configs
         ;;
         6)
-        sync_with_local_temp
-        ;;
-        7)
         show_warp_domains
         ;;
-        8)
+        7)
         add_warp_domains
         ;;
-        9)
+        8)
         delete_warp_domains
         ;;
-        10)
+        9)
         chain_setup
         ;;
-        11)
+        10)
         renew_cert
         ;;
-        12)
+        11)
         change_domain
         ;;
-        13)
+        12)
         disable_ipv6
         ;;
-        14)
+        13)
         enable_ipv6
         ;;
-        15)
+        14)
         show_paths
+        ;;
+        15)
+        update_ssb
         ;;
         *)
         exit 0
