@@ -134,8 +134,13 @@ update_services() {
     fi
 
     extract_values
-    wget -O /etc/sing-box/config.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/config.json
-    insert_values
+    wget -O /etc/sing-box/config.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/config.json
+
+    if [ $? -eq 0 ]
+    then
+        mv -f /etc/sing-box/config.json.1 /etc/sing-box/config.json
+        insert_values
+    fi
 
     for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /etc/sing-box/config.json) - 1))
     do
