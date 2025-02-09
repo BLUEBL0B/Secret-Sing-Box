@@ -241,6 +241,7 @@ update_scripts() {
     fi
 
     echo ""
+    sleep 1
     exit 0
 }
 
