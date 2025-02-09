@@ -134,6 +134,7 @@ update_services() {
     fi
 
     extract_values
+    cp /etc/sing-box/config.json /etc/sing-box/config.json.0
     wget -O /etc/sing-box/config.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/config.json
 
     if [ $? -eq 0 ]
