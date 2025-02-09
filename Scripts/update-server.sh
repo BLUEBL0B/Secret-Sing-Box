@@ -63,7 +63,7 @@ insert_values() {
         echo "$(jq ".inbounds[${inboundnumbervl}].users |= . + ${usersvl}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
     fi
 
-    echo "$(jq ".inbounds[${inboundnumbertr}].transport.path = \"${trojanpath}\" | .inbounds[${inboundnumbervl}].transport.path = \"${vlesspath}\"" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    echo "$(jq ".inbounds[${inboundnumbertr}].transport.path = \"/${trojanpath}\" | .inbounds[${inboundnumbervl}].transport.path = \"/${vlesspath}\"" /etc/sing-box/config.json)" > /etc/sing-box/config.json
     echo "$(jq ".route.rules[${warpnum}] |= . + ${warp_rule}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
 
     if [[ "${transport}" == "httpupgrade" ]]
