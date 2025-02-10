@@ -12,7 +12,7 @@ iOS: https://apps.apple.com/us/app/sing-box-vt/id6673731168
 
 ![a2](https://github.com/user-attachments/assets/180fc416-0377-4313-b847-68145dc4b3d5)
 
-![a3r](https://github.com/user-attachments/assets/362971a0-a251-415a-815f-edbe80f705e4)
+![a3r](https://github.com/user-attachments/assets/bb3c374e-5836-4f6b-8271-2bf466dc8bdb)
 
 В пункте 6 вставляем ссылку
 
