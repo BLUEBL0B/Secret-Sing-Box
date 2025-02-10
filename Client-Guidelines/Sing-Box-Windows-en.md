@@ -1,4 +1,4 @@
-### Install Sing-Box (for Windows 10 and 11)
+### 1.1) Install Sing-Box (for Windows 10 and 11)
 
 Press Win + X and open the terminal with admin rights:
 
@@ -16,7 +16,7 @@ If you are getting an error telling that winget is absent, then follow the instr
 
 -----
 
-### Install Sing-Box (for Windows versions without winget)
+### 1.2) Install Sing-Box (for Windows versions without winget)
 
 Download Sing-Box for Windows from the official repository:
 
@@ -26,7 +26,7 @@ Then extract sing-box.exe from the archive.
 
 -----
 
-### Create a .cmd or .bat file with such content:
+### 2) Create a .cmd or .bat file with such content:
 
 ```
 @echo off
@@ -51,7 +51,7 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 -----
 
-### Create a shortcut for this .cmd or .bat file
+### 3) Create a shortcut for this .cmd or .bat file
 
 Then change the settings of the shortcut to run it as admin.
 
@@ -65,7 +65,7 @@ Then press OK.
 
 -----
 
-### Click on the shortcut to connect to the server
+### 4) Click on the shortcut to connect to the server
 
 Do not close the terminal window while connected to proxy.
 
