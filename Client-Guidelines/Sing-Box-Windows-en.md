@@ -55,11 +55,11 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 Then change the settings of the shortcut to run it as admin.
 
-![w2](https://github.com/user-attachments/assets/ae7e770a-795b-47aa-8cba-c8f889d1caaa)
+![w2](https://github.com/user-attachments/assets/18d9550a-0ba1-4331-b8b3-d80edd3a7362)
 
-![w3](https://github.com/user-attachments/assets/1b34ebaf-1b7f-4356-a7ee-39b1d3eeda25)
+![w3](https://github.com/user-attachments/assets/73f76c75-f891-49a9-9b95-dd659b145725)
 
-![w4](https://github.com/user-attachments/assets/beb78b94-128d-4e57-aaa3-2c8120c001cd)
+![w4](https://github.com/user-attachments/assets/bf8fa331-1442-4bcb-99e6-8748b5253e9a)
 
 Then press OK.
 
