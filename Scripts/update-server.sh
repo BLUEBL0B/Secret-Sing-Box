@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# WARNING! DO NOT RUN THIS SCRIPT MANUALLY, IT DEPENDS ON FUNCTIONS AND VARIABLES FROM SBMANAGER.
+
 textcolor='\033[1;34m'
 textcolor_light='\033[1;36m'
 red='\033[1;31m'
