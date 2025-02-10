@@ -12,7 +12,7 @@ All OS: https://github.com/SagerNet/sing-box/releases/latest
 
 ![a2](https://github.com/user-attachments/assets/0ebf3b0c-3741-4143-bbc5-416cb397b7fb)
 
-![a3e](https://github.com/user-attachments/assets/3be21bfe-9741-432c-ad45-4e56c8c7671f)
+![a3e](https://github.com/user-attachments/assets/6659bd0d-f77a-4db1-ac98-cd8275b65b84)
 
 Paste the link after step 6
 
