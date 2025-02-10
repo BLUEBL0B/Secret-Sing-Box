@@ -55,11 +55,11 @@ C:\actual\path\to\sing-box.exe run -c C:\1-sbconfig\client.json
 
 Далее настраиваем ярлык, чтобы запускать его с правами администратора.
 
-![w2](https://github.com/user-attachments/assets/ad3da50e-9a46-49a7-8f98-c3828edd0a1b)
+![w2](https://github.com/user-attachments/assets/131f8d9d-494f-4c67-850e-cf7e506f867c)
 
-![w3](https://github.com/user-attachments/assets/92e2f6ae-623e-4b28-8065-f10443888336)
+![w3](https://github.com/user-attachments/assets/ec6a3c3b-e3ab-4eda-86ef-24b780b6a17f)
 
-![w4](https://github.com/user-attachments/assets/60185d25-6cb4-4ee0-9b98-7f639937334f)
+![w4](https://github.com/user-attachments/assets/9b9f1338-71ba-4ce1-ac6e-6d18f4987816)
 
 Везде жмём OK.
 
