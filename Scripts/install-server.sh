@@ -448,10 +448,39 @@ check_uuid_en() {
     done
 }
 
-check_vless_path_ru() {
-    while [ "$trojanpath" = "$vlesspath" ] && [ ! -z "$vlesspath" ]
+check_trojan_path_ru() {
+    while [[ $trojanpath =~ ['{}() \$/'] ]] && [ ! -z "$trojanpath" ]
     do
-        echo -e "${red}Ошибка: пути для Trojan и VLESS не должны совпадать${clear}"
+        echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
+        read trojanpath
+        [[ ! -z $trojanpath ]] && echo ""
+        crop_trojan_path
+    done
+}
+
+check_trojan_path_en() {
+    while [[ $trojanpath =~ ['{}() \$/'] ]] && [ ! -z "$trojanpath" ]
+    do
+        echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Enter your path for Trojan or leave this empty to generate a random path:"
+        read trojanpath
+        [[ ! -z $trojanpath ]] && echo ""
+        crop_trojan_path
+    done
+}
+
+check_vless_path_ru() {
+    while ([ "$trojanpath" = "$vlesspath" ] || [[ $vlesspath =~ ['{}() \$/'] ]]) && [ ! -z "$vlesspath" ]
+    do
+        if [[ $vlesspath =~ ['{}() \$/'] ]]
+        then
+            echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+        else
+            echo -e "${red}Ошибка: пути для Trojan и VLESS не должны совпадать${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Введите путь для VLESS или оставьте пустым для генерации случайного пути:"
         read vlesspath
@@ -461,9 +490,14 @@ check_vless_path_ru() {
 }
 
 check_vless_path_en() {
-    while [ "$trojanpath" = "$vlesspath" ] && [ ! -z "$vlesspath" ]
+    while ([ "$trojanpath" = "$vlesspath" ] || [[ $vlesspath =~ ['{}() \$/'] ]]) && [ ! -z "$vlesspath" ]
     do
-        echo -e "${red}Error: paths for Trojan and VLESS must be different${clear}"
+        if [[ $vlesspath =~ ['{}() \$/'] ]]
+        then
+            echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+        else
+            echo -e "${red}Error: paths for Trojan and VLESS must be different${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Enter your path for VLESS or leave this empty to generate a random path:"
         read vlesspath
@@ -473,9 +507,14 @@ check_vless_path_en() {
 }
 
 check_subscription_path_ru() {
-    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ]) && [ ! -z "$subspath" ]
+    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ] || [[ $subspath =~ ['{}() \$/'] ]]) && [ ! -z "$subspath" ]
     do
-        echo -e "${red}Ошибка: пути для Trojan, VLESS и подписки должны быть разными${clear}"
+        if [[ $subspath =~ ['{}() \$/'] ]]
+        then
+            echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+        else
+            echo -e "${red}Ошибка: пути для Trojan, VLESS и подписки должны быть разными${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Введите путь для подписки или оставьте пустым для генерации случайного пути:"
         read subspath
@@ -485,9 +524,14 @@ check_subscription_path_ru() {
 }
 
 check_subscription_path_en() {
-    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ]) && [ ! -z "$subspath" ]
+    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ] || [[ $subspath =~ ['{}() \$/'] ]]) && [ ! -z "$subspath" ]
     do
-        echo -e "${red}Error: paths for Trojan, VLESS and subscription must be different${clear}"
+        if [[ $subspath =~ ['{}() \$/'] ]]
+        then
+            echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+        else
+            echo -e "${red}Error: paths for Trojan, VLESS and subscription must be different${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Enter your subscription path or leave this empty to generate a random path:"
         read subspath
@@ -497,9 +541,14 @@ check_subscription_path_en() {
 }
 
 check_rulesetpath_ru() {
-    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ]) && [ ! -z "$rulesetpath" ]
+    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ] || [[ $rulesetpath =~ ['{}() \$/'] ]]) && [ ! -z "$rulesetpath" ]
     do
-        echo -e "${red}Ошибка: пути для Trojan, VLESS, подписки и наборов правил должны быть разными${clear}"
+        if [[ $rulesetpath =~ ['{}() \$/'] ]]
+        then
+            echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+        else
+            echo -e "${red}Ошибка: пути для Trojan, VLESS, подписки и наборов правил должны быть разными${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Введите путь для наборов правил (rule sets) или оставьте пустым для генерации случайного пути:"
         read rulesetpath
@@ -509,9 +558,14 @@ check_rulesetpath_ru() {
 }
 
 check_rulesetpath_en() {
-    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ]) && [ ! -z "$rulesetpath" ]
+    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ] || [[ $rulesetpath =~ ['{}() \$/'] ]]) && [ ! -z "$rulesetpath" ]
     do
-        echo -e "${red}Error: paths for Trojan, VLESS, subscription and rule sets must be different${clear}"
+        if [[ $rulesetpath =~ ['{}() \$/'] ]]
+        then
+            echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+        else
+            echo -e "${red}Error: paths for Trojan, VLESS, subscription and rule sets must be different${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Enter your path for rule sets or leave this empty to generate a random path:"
         read rulesetpath
@@ -521,7 +575,7 @@ check_rulesetpath_en() {
 }
 
 check_redirect_domain_ru() {
-    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${redirect}/)" == "000" ]] || [[ -z $redirect ]]
+    while [[ $redirect =~ " " ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${redirect}/)" == "000" ]] || [[ -z $redirect ]]
     do
         if [[ -z $redirect ]]
         then
@@ -538,7 +592,7 @@ check_redirect_domain_ru() {
 }
 
 check_redirect_domain_en() {
-    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${redirect}/)" == "000" ]] || [[ -z $redirect ]]
+    while [[ $redirect =~ " " ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${redirect}/)" == "000" ]] || [[ -z $redirect ]]
     do
         if [[ -z $redirect ]]
         then
@@ -555,7 +609,7 @@ check_redirect_domain_en() {
 }
 
 check_index_ru() {
-    while [ ! -f /root${index} ] || [ -z "$index" ]
+    while [[ $index =~ " " ]] || [ ! -f /root${index} ] || [ -z "$index" ]
     do
         echo -e "${red}Ошибка: файл /root${index} не существует${clear}"
         echo ""
@@ -567,7 +621,7 @@ check_index_ru() {
 }
 
 check_index_en() {
-    while [ ! -f /root${index} ] || [ -z "$index" ]
+    while [[ $index =~ " " ]] || [ ! -f /root${index} ] || [ -z "$index" ]
     do
         echo -e "${red}Error: file /root${index} doesn't exist${clear}"
         echo ""
@@ -579,7 +633,7 @@ check_index_en() {
 }
 
 check_site_link_ru() {
-    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
+    while [[ $sitelink =~ " " ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
     do
         if [[ -z $sitelink ]]
         then
@@ -596,7 +650,7 @@ check_site_link_ru() {
 }
 
 check_site_link_en() {
-    while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
+    while [[ $sitelink =~ " " ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
     do
         if [[ -z $sitelink ]]
         then
@@ -802,6 +856,7 @@ enter_data_ru() {
         read trojanpath
         [[ ! -z $trojanpath ]] && echo ""
         crop_trojan_path
+        check_trojan_path_ru
         echo -e "${textcolor}[?]${clear} Введите UUID для VLESS или оставьте пустым для генерации случайного UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
@@ -882,6 +937,7 @@ enter_data_en() {
         read trojanpath
         [[ ! -z $trojanpath ]] && echo ""
         crop_trojan_path
+        check_trojan_path_en
         echo -e "${textcolor}[?]${clear} Enter your UUID for VLESS or leave this empty to generate a random UUID:"
         read uuid
         [[ ! -z $uuid ]] && echo ""
