@@ -59,7 +59,7 @@ sbmanager
 
 Далее следуйте инструкциям:
 
-![pic-2-ru](https://github.com/user-attachments/assets/f5fba07b-61de-4e3f-bab0-9beaaa741026)
+![pic-2-ru](https://github.com/user-attachments/assets/be64a418-21dc-4f8d-bd55-97e5518aaf48)
 
 Пункт 5 синхронизирует настройки в клиентских конфигах всех пользователей, что позволяет не редактировать конфиг каждого пользователя отдельно. При добавлении в конфиги новых наборов правил (rule sets) с помощью пункта 5.2, они будут автоматически загружены на сервер, если это наборы правил от [SagerNet](https://github.com/SagerNet/sing-geosite/tree/rule-set).
 
