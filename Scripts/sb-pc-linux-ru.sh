@@ -24,6 +24,15 @@ check_sbmanager() {
 	fi
 }
 
+banner() {
+    echo ""
+    echo "╔══╗ ╔══╗ ╦══╗"
+    echo "║    ║    ║  ║"
+    echo "╚══╗ ╚══╗ ╠══╣"
+    echo "   ║    ║ ║  ║"
+    echo "╚══╝ ╚══╝ ╩══╝"
+}
+
 install_sing_box() {
 	if [[ ! -f /usr/local/bin/proxylist ]]
 	then
@@ -238,5 +247,6 @@ main_menu() {
 
 check_root
 check_sbmanager
+banner
 install_sing_box
 main_menu

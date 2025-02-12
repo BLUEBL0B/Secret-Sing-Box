@@ -63,16 +63,16 @@ check_if_updated() {
 }
 
 get_ip() {
-    serverip=$(curl -s ipinfo.io/ip)
+    serverip=$(curl -s https://cloudflare.com/cdn-cgi/trace | grep "ip" | cut -d "=" -f 2)
 
     if [[ ! $serverip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
     then
-        serverip=$(curl -s 2ip.io)
+        serverip=$(curl -s ipinfo.io/ip)
     fi
 
     if [[ ! $serverip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
     then
-        serverip=$(curl -s ifconfig.me)
+        serverip=$(curl -s 2ip.io)
     fi
 }
 

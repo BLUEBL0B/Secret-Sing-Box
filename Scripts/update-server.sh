@@ -269,12 +269,12 @@ main_menu() {
 update_menu() {
     if [[ "${language}" == "1" ]]
     then
-        echo -e "${textcolor}Выберите вариант обновления:${clear}"
+        echo -e "${textcolor}[?]${clear} Выберите вариант обновления:"
         echo "0 - Выйти"
         echo "1 - Обновить всё"
         echo "2 - Обновить без синхронизации клиентских конфигов с Github"
     else
-        echo -e "${textcolor}Select an update option:${clear}"
+        echo -e "${textcolor}[?]${clear} Select an update option:"
         echo "0 - Exit"
         echo "1 - Update everything"
         echo "2 - Update without syncing client configs with Github"
