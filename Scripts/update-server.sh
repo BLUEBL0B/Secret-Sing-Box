@@ -267,6 +267,7 @@ main_menu() {
 }
 
 update_menu() {
+    echo ""
     if [[ "${language}" == "1" ]]
     then
         echo -e "${textcolor}[?]${clear} Выберите вариант обновления:"
