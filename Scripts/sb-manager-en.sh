@@ -17,7 +17,6 @@ check_root() {
 
 banner() {
     echo ""
-    echo ""
     echo "╔══╗ ╔══╗ ╦══╗"
     echo "║    ║    ║  ║"
     echo "╚══╗ ╚══╗ ╠══╣"
@@ -107,8 +106,6 @@ get_data() {
     temprulesetpath=$(jq -r ".route.rule_set[-1].url" /var/www/${subspath}/template.json)
     temprulesetpath=${temprulesetpath#*"https://${tempdomain}/"}
     temprulesetpath=${temprulesetpath%"/"*}
-
-    echo ""
 }
 
 validate_template() {
