@@ -90,7 +90,7 @@ exit_del_proxy() {
 }
 
 check_link() {
-	while [[ -z $link ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" ${link})" == "000" ]]
+	while [[ -z $link ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" ${link})" == "000" ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" ${link})" == "404" ]]
 	do
 		if [[ -z $link ]]
 		then
