@@ -5,6 +5,8 @@ iOS: https://apps.apple.com/us/app/sing-box-vt/id6673731168
 
 All OS: https://github.com/SagerNet/sing-box/releases/latest
 
+After installing the app, you can use the subscription page for easier setup or import the config link manually (see below).
+
 -----
 
 ### 2) Open Sing-Box app and import the link:
