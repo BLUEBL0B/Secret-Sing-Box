@@ -1,6 +1,6 @@
 # Secret Sing-Box (SSB)
 
-[**Russian version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/README.md)
+[**Russian version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README.md)
 
 ### Easy setup of Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
 This script is designed to fully and quickly configure a secure proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. Two setup methods:
