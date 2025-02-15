@@ -163,6 +163,7 @@ update_services() {
     apt update && apt full-upgrade -y
     apt-mark hold sing-box
     apt autoremove -y && apt autoclean -y
+    systemctl daemon-reload
 
     systemctl restart sing-box.service
     systemctl restart warp-svc.service
