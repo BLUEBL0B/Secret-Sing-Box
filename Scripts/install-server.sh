@@ -2647,6 +2647,7 @@ final_message_ru() {
         echo -e "${red}ВНИМАНИЕ!${clear}"
         echo "Вы пропустили настройку безопасности"
         echo "Настоятельно рекомендуется почитать о безопасности сервера и выполнить настройку самостоятельно"
+        echo "При этом порты 443 и SSH нужно оставить открытыми"
     fi
     echo ""
     echo -e "${red}ВАЖНО:${clear}"
@@ -2699,6 +2700,7 @@ final_message_en() {
         echo -e "${red}ATTENTION!${clear}"
         echo "You have skipped security setup"
         echo "It is highly recommended to find information about server security and to configure it yourself"
+        echo "Ports 443 and SSH must be left open"
     fi
     echo ""
     echo -e "${red}IMPORTANT:${clear}"
