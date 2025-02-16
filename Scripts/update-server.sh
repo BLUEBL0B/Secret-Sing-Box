@@ -136,6 +136,20 @@ update_services() {
         echo -e "${textcolor_light}Updating packages...${clear}"
     fi
 
+    systemctl stop sing-box.service
+    systemctl stop warp-svc.service
+    systemctl stop nginx.service
+
+    if [ -f /etc/haproxy/auth.lua ]
+    then
+        systemctl stop haproxy.service
+    fi
+
+    if [ -f /etc/apt/apt.conf.d/50unattended-upgrades ]
+    then
+        systemctl stop unattended-upgrades
+    fi
+
     extract_values
     cp /etc/sing-box/config.json /etc/sing-box/config.json.0
     wget -O /etc/sing-box/config.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/config.json
@@ -159,23 +173,23 @@ update_services() {
     chmod -R 755 /var/www/${rulesetpath}
 
     apt-mark unhold sing-box
-    apt update -y && systemctl daemon-reload && apt full-upgrade -y
+    apt update -y && apt full-upgrade -y
     apt-mark hold sing-box
     apt autoremove -y && apt autoclean -y
     systemctl daemon-reload
 
-    systemctl restart sing-box.service
-    systemctl restart warp-svc.service
-    systemctl restart nginx.service
+    systemctl start sing-box.service
+    systemctl start warp-svc.service
+    systemctl start nginx.service
 
     if [ -f /etc/haproxy/auth.lua ]
     then
-        systemctl restart haproxy.service
+        systemctl start haproxy.service
     fi
 
     if [ -f /etc/apt/apt.conf.d/50unattended-upgrades ]
     then
-        systemctl restart unattended-upgrades
+        systemctl start unattended-upgrades
     fi
 
     echo ""
