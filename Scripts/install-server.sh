@@ -54,7 +54,7 @@ check_if_updated() {
     if [[ "${systemupdated}" == "1" ]]
     then
         echo ""
-        apt update && apt full-upgrade -y
+        apt update -y && apt full-upgrade -y
         sleep 1.5
         echo ""
         reboot
@@ -107,7 +107,7 @@ start_message_ru() {
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Запускайте скрипт на чистой системе"
     echo "Перед запуском скрипта рекомендуется выполнить следующие действия:"
-    echo -e "1) Обновить систему командой ${textcolor}apt update && apt full-upgrade -y${clear}"
+    echo -e "1) Обновить систему командой ${textcolor}apt update -y && apt full-upgrade -y${clear}"
     echo -e "2) Перезагрузить сервер командой ${textcolor}reboot${clear}"
     echo -e "3) При наличии своего сайта отправить папку с его файлами в ${textcolor}/root${clear} директорию сервера"
     echo ""
@@ -120,7 +120,7 @@ start_message_en() {
     echo -e "${red}ATTENTION!${clear}"
     echo "Run the script on a newly installed system"
     echo "Before running the script, it's recommended to do the following:"
-    echo -e "1) Update the system (${textcolor}apt update && apt full-upgrade -y${clear})"
+    echo -e "1) Update the system (${textcolor}apt update -y && apt full-upgrade -y${clear})"
     echo -e "2) Reboot the server (${textcolor}reboot${clear})"
     echo -e "3) If you have your own website then send the folder with its contents to the ${textcolor}/root${clear} directory of the server"
     echo ""
@@ -1016,7 +1016,7 @@ install_packages() {
 
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(grep "VERSION_CODENAME=" /etc/os-release | cut -d "=" -f 2) main" | tee /etc/apt/sources.list.d/cloudflare-client.list
-    apt-get update && apt-get install cloudflare-warp -y
+    apt-get update -y && apt-get install cloudflare-warp -y
     #wget https://pkg.cloudflareclient.com/pool/$(grep "VERSION_CODENAME=" /etc/os-release | cut -d "=" -f 2)/main/c/cloudflare-warp/cloudflare-warp_2024.6.497-1_amd64.deb
     #dpkg -i cloudflare-warp_2024.6.497-1_amd64.deb
     #apt-mark hold cloudflare-warp
@@ -1029,7 +1029,7 @@ install_packages() {
     curl -fsSL https://sing-box.app/gpg.key -o /etc/apt/keyrings/sagernet.asc
     chmod a+r /etc/apt/keyrings/sagernet.asc
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/sagernet.asc] https://deb.sagernet.org/ * *" | tee /etc/apt/sources.list.d/sagernet.list > /dev/null
-    apt-get update
+    apt-get update -y
     apt-get install sing-box -y
     apt-mark hold sing-box
 
@@ -1042,7 +1042,7 @@ install_packages() {
         echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | tee /etc/apt/sources.list.d/nginx.list
     fi
     echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | tee /etc/apt/preferences.d/99nginx
-    apt update
+    apt update -y
     apt install nginx -y
 
     if [ ! -d /var/www ]

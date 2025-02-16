@@ -52,14 +52,14 @@ install_sing_box() {
 		curl -fsSL https://sing-box.app/gpg.key -o /etc/apt/keyrings/sagernet.asc
 		chmod a+r /etc/apt/keyrings/sagernet.asc
 		echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/sagernet.asc] https://deb.sagernet.org/ * *" | tee /etc/apt/sources.list.d/sagernet.list > /dev/null
-		apt-get update
+		apt-get update -y
 		apt-get install sing-box -y
 		systemctl disable sing-box.service
 
 		echo ""
 		echo -e "${textcolor}Sing-Box is installed${clear}"
 		echo ""
-		echo -e "It can be updated with ${textcolor}apt-get install sing-box${clear} command"
+		echo -e "It can be updated with ${textcolor}apt-get install sing-box -y${clear} command"
 		echo ""
 		main_menu
 	fi

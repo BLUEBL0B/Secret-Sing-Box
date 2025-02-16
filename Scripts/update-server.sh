@@ -158,9 +158,8 @@ update_services() {
 
     chmod -R 755 /var/www/${rulesetpath}
 
-    systemctl daemon-reload
     apt-mark unhold sing-box
-    apt update && apt full-upgrade -y
+    apt update -y && systemctl daemon-reload && apt full-upgrade -y
     apt-mark hold sing-box
     apt autoremove -y && apt autoclean -y
     systemctl daemon-reload
