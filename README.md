@@ -78,7 +78,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 
 [Android и iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/Sing-Box-Android-iOS-ru.md). Инструкция дана для Android, на iOS интерфейс приложения отличается, но настройки аналогичны.
 
-[Windows](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/Sing-Box-Windows-ru.md). Рекомендован данный способ, так как он обеспечивает более полные настройки маршрутизации, но можно также вставить ссылку в клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest).
+[Windows](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/Sing-Box-Windows-ru.md). Рекомендован данный способ, так как он обеспечивает более полные настройки маршрутизации, но можно также вставить ссылку в клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest). Если при использовании Hiddify не проксируются некоторые приложения, то измените параметры конфигурации > режим работы > VPN.
 
 [Linux](https://github.com/BLUEBL0B/Secret-Sing-Box#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2). Запустите команду ниже и следуйте инструкциям или используйте клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest).
 ```
