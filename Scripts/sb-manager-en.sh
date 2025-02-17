@@ -1255,7 +1255,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.2"
+    export version="1.0.3"
     export language="2"
     export -f check_root
     export -f get_ip

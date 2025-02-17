@@ -1521,6 +1521,9 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "disable_cache": true
       },
       {
+        "domain_suffix": [
+          "habr.com"
+        ],
         "rule_set": [
           "telegram",
           "google"
@@ -1675,6 +1678,9 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "method": "drop"
       },
       {
+        "domain_suffix": [
+          "habr.com"
+        ],
         "rule_set": [
           "telegram",
           "google"

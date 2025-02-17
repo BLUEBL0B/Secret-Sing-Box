@@ -28,6 +28,9 @@
         "disable_cache": true
       },
       {
+        "domain_suffix": [
+          "habr.com"
+        ],
         "rule_set": [
           "telegram",
           "google"
@@ -182,6 +185,9 @@
         "method": "drop"
       },
       {
+        "domain_suffix": [
+          "habr.com"
+        ],
         "rule_set": [
           "telegram",
           "google"

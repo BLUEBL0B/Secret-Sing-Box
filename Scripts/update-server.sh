@@ -8,7 +8,7 @@ red='\033[1;31m'
 clear='\033[0m'
 
 check_update() {
-    new_version="1.0.2"
+    new_version="1.0.3"
 
     if [[ "${version}" == "${new_version}" ]]
     then
