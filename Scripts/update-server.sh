@@ -9,12 +9,7 @@ check_parent() {
     if [[ -z $version ]]
     then
         echo ""
-        if [[ "${language}" == "1" ]]
-        then
-            echo -e "${red}Ошибка: этот скрипт нужно запускать из sbmanager, а не вручную${clear}"
-        else
-            echo -e "${red}Error: this script should be run from sbmanager, not manually${clear}"
-        fi
+        echo -e "${red}Error: this script should be run from sbmanager, not manually${clear}"
         echo ""
         exit 1
     fi
