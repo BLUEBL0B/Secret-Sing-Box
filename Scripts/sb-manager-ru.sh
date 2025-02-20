@@ -1257,7 +1257,6 @@ show_paths() {
 update_ssb() {
     export version="1.0.3"
     export language="1"
-    export -f check_root
     export -f get_ip
     export -f replace_template
     export -f templates

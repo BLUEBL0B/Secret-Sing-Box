@@ -1,11 +1,24 @@
 #!/bin/bash
 
-# WARNING! DO NOT RUN THIS SCRIPT MANUALLY, IT DEPENDS ON FUNCTIONS AND VARIABLES FROM SBMANAGER.
-
 textcolor='\033[1;34m'
 textcolor_light='\033[1;36m'
 red='\033[1;31m'
 clear='\033[0m'
+
+check_parent() {
+    if [[ -z $version ]]
+    then
+        echo ""
+        if [[ "${language}" == "1" ]]
+        then
+            echo -e "${red}Ошибка: этот скрипт нужно запускать из sbmanager, а не вручную${clear}"
+        else
+            echo -e "${red}Error: this script should be run from sbmanager, not manually${clear}"
+        fi
+        echo ""
+        exit 1
+    fi
+}
 
 check_update() {
     new_version="1.0.3"
@@ -266,7 +279,7 @@ update_scripts() {
         echo -e "${textcolor}The update v${new_version} has been installed${clear}"
         echo "It is not necessary to reboot the server"
         echo ""
-        echo "If you have problems with Sing-Box, run this command:"
+        echo "If you are having problems with Sing-Box, run this command:"
         echo "cp -f /etc/sing-box/config.json.0 /etc/sing-box/config.json && systemctl restart sing-box"
     fi
 
@@ -314,7 +327,7 @@ update_menu() {
     esac
 }
 
-check_root
+check_parent
 check_update
 get_data
 update_menu
