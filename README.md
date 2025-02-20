@@ -48,6 +48,9 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 ![pic-1-ru](https://github.com/user-attachments/assets/f1248d11-a930-4acc-9f66-40851ecf380e)
 
+> [!CAUTION]
+> Пароли, UUID, пути и другие данные на изображении выше даны для примера. Не используйте их на своём сервере.
+
 В конце скрипт покажет ссылки на клиентские конфиги, рекомендуется их сохранить.
 
 -----
