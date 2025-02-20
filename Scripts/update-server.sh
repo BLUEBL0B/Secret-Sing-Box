@@ -16,7 +16,7 @@ check_parent() {
 }
 
 check_update() {
-    new_version="1.0.3"
+    new_version="1.0.4"
 
     if [[ "${version}" == "${new_version}" ]]
     then
@@ -262,7 +262,7 @@ update_scripts() {
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-ru.sh
         chmod +x /usr/local/bin/sbmanager
         echo ""
-        echo -e "${textcolor}Установка обновления v${new_version} завершена${clear}"
+        echo -e "${textcolor}Установка обновления v${new_version} завершена!${clear}"
         echo "Перезагружать сервер не обязательно"
         echo ""
         echo "При проблемах с Sing-Box запустите команду:"
@@ -271,7 +271,7 @@ update_scripts() {
         wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-en.sh
         chmod +x /usr/local/bin/sbmanager
         echo ""
-        echo -e "${textcolor}The update v${new_version} has been installed${clear}"
+        echo -e "${textcolor}The update v${new_version} has been installed!${clear}"
         echo "It is not necessary to reboot the server"
         echo ""
         echo "If you are having problems with Sing-Box, run this command:"

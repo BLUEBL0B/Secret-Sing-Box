@@ -1255,7 +1255,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.3"
+    export version="1.0.4"
     export language="2"
     export -f get_ip
     export -f replace_template
