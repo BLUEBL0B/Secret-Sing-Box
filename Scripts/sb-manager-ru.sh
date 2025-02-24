@@ -146,19 +146,19 @@ exit_username() {
 }
 
 check_username_add() {
-    while [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]] || [[ $username =~ " " ]] || [[ $username =~ '$' ]] || [ -z "$username" ]
+    while [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]] || [[ ! $username =~ ^[a-zA-Z0-9_-]+$ ]] || [ -z "$username" ]
     do
         if [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]]
         then
             echo -e "${red}Ошибка: пользователь с таким именем уже существует${clear}"
             echo ""
-        elif [[ $username =~ " " ]] || [[ $username =~ '$' ]]
-        then
-            echo -e "${red}Ошибка: имя пользователя не должно содержать пробелы и \$${clear}"
-            echo ""
         elif [ -z "$username" ]
         then
             :
+        elif [[ ! $username =~ ^[a-zA-Z0-9_-]+$ ]]
+        then
+            echo -e "${red}Ошибка: имя пользователя должно содержать только английские буквы, цифры, символы _ и -${clear}"
+            echo ""
         fi
         echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
         read username
@@ -167,9 +167,14 @@ check_username_add() {
 }
 
 check_trjpass() {
-    while [[ $(jq "any(.inbounds[].users[]; .password == \"$trjpass\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$trjpass" ]
+    while ([[ $trjpass =~ '"' ]] || [[ $(jq "any(.inbounds[].users[]; .password == \"$trjpass\")" /etc/sing-box/config.json) == "true" ]]) && [ ! -z "$trjpass" ]
     do
-        echo -e "${red}Ошибка: этот пароль уже закреплён за другим пользователем${clear}"
+        if [[ $trjpass =~ '"' ]]
+        then
+            echo -e "${red}Ошибка: пароль Trojan не должен содержать кавычки \"${clear}"
+        else
+            echo -e "${red}Ошибка: этот пароль уже закреплён за другим пользователем${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
         read trjpass
@@ -1255,7 +1260,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.4"
+    export version="1.0.5"
     export language="1"
     export -f get_ip
     export -f replace_template

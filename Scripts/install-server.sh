@@ -270,15 +270,15 @@ check_ssh_port_en() {
 }
 
 check_username_ru() {
-    while [[ $username =~ " " ]] || [[ $username =~ '$' ]] || [[ -z $username ]]
+    while [[ ! $username =~ ^[a-z][-a-z0-9_]*\$?$ ]] || [[ -z $username ]]
     do
-        if [[ $username =~ " " ]] || [[ $username =~ '$' ]]
-        then
-            echo -e "${red}Ошибка: имя пользователя не должно содержать пробелы и \$${clear}"
-            echo ""
-        elif [[ -z $username ]]
+        if [[ -z $username ]]
         then
             :
+        elif [[ ! $username =~ ^[a-z][-a-z0-9_]*\$?$ ]]
+        then
+            echo -e "${red}Ошибка: имя пользователя должно содержать только английские строчные буквы, цифры, символы _ и -, а также начинаться со строчной буквы${clear}"
+            echo ""
         fi
         echo -e "${textcolor}[?]${clear} Введите имя нового пользователя или root (рекомендуется не root):"
         read username
@@ -287,15 +287,15 @@ check_username_ru() {
 }
 
 check_username_en() {
-    while [[ $username =~ " " ]] || [[ $username =~ '$' ]] || [[ -z $username ]]
+    while [[ ! $username =~ ^[a-z][-a-z0-9_]*\$?$ ]] || [[ -z $username ]]
     do
-        if [[ $username =~ " " ]] || [[ $username =~ '$' ]]
-        then
-            echo -e "${red}Error: username should not contain spaces and \$${clear}"
-            echo ""
-        elif [[ -z $username ]]
+        if [[ -z $username ]]
         then
             :
+        elif [[ ! $username =~ ^[a-z][-a-z0-9_]*\$?$ ]]
+        then
+            echo -e "${red}Error: the username should contain only lowercase letters, numbers, _ and - symbols, and must start with a lowercase letter${clear}"
+            echo ""
         fi
         echo -e "${textcolor}[?]${clear} Enter your username or root (non-root user is recommended):"
         read username
@@ -426,6 +426,28 @@ check_cf_token_en() {
     echo ""
 }
 
+check_trjpass_ru() {
+    while [[ $trjpass =~ '"' ]]
+    do
+        echo -e "${red}Ошибка: пароль Trojan не должен содержать кавычки \"${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
+        read trjpass
+        [[ ! -z $trjpass ]] && echo ""
+    done
+}
+
+check_trjpass_en() {
+    while [[ $trjpass =~ '"' ]]
+    do
+        echo -e "${red}Error: Trojan password should not contain quotes \"${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Enter your password for Trojan or leave this empty to generate a random password:"
+        read trjpass
+        [[ ! -z $trjpass ]] && echo ""
+    done
+}
+
 check_uuid_ru() {
     while [[ ! $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]] && [ ! -z "$uuid" ]
     do
@@ -449,9 +471,9 @@ check_uuid_en() {
 }
 
 check_trojan_path_ru() {
-    while [[ $trojanpath =~ ['{}() \$/'] ]] && [ ! -z "$trojanpath" ]
+    while [[ ! $trojanpath =~ ^[a-zA-Z0-9_-]+$ ]] && [ ! -z "$trojanpath" ]
     do
-        echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+        echo -e "${red}Ошибка: путь должен содержать только английские буквы, цифры, символы _ и -${clear}"
         echo ""
         echo -e "${textcolor}[?]${clear} Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
         read trojanpath
@@ -461,9 +483,9 @@ check_trojan_path_ru() {
 }
 
 check_trojan_path_en() {
-    while [[ $trojanpath =~ ['{}() \$/'] ]] && [ ! -z "$trojanpath" ]
+    while [[ ! $trojanpath =~ ^[a-zA-Z0-9_-]+$ ]] && [ ! -z "$trojanpath" ]
     do
-        echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+        echo -e "${red}Error: the path should contain only letters, numbers, _ and - symbols${clear}"
         echo ""
         echo -e "${textcolor}[?]${clear} Enter your path for Trojan or leave this empty to generate a random path:"
         read trojanpath
@@ -473,11 +495,11 @@ check_trojan_path_en() {
 }
 
 check_vless_path_ru() {
-    while ([ "$trojanpath" = "$vlesspath" ] || [[ $vlesspath =~ ['{}() \$/'] ]]) && [ ! -z "$vlesspath" ]
+    while ([ "$trojanpath" = "$vlesspath" ] || [[ ! $vlesspath =~ ^[a-zA-Z0-9_-]+$ ]]) && [ ! -z "$vlesspath" ]
     do
-        if [[ $vlesspath =~ ['{}() \$/'] ]]
+        if [[ ! $vlesspath =~ ^[a-zA-Z0-9_-]+$ ]]
         then
-            echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+            echo -e "${red}Ошибка: путь должен содержать только английские буквы, цифры, символы _ и -${clear}"
         else
             echo -e "${red}Ошибка: пути для Trojan и VLESS не должны совпадать${clear}"
         fi
@@ -490,11 +512,11 @@ check_vless_path_ru() {
 }
 
 check_vless_path_en() {
-    while ([ "$trojanpath" = "$vlesspath" ] || [[ $vlesspath =~ ['{}() \$/'] ]]) && [ ! -z "$vlesspath" ]
+    while ([ "$trojanpath" = "$vlesspath" ] || [[ ! $vlesspath =~ ^[a-zA-Z0-9_-]+$ ]]) && [ ! -z "$vlesspath" ]
     do
-        if [[ $vlesspath =~ ['{}() \$/'] ]]
+        if [[ ! $vlesspath =~ ^[a-zA-Z0-9_-]+$ ]]
         then
-            echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+            echo -e "${red}Error: the path should contain only letters, numbers, _ and - symbols${clear}"
         else
             echo -e "${red}Error: paths for Trojan and VLESS must be different${clear}"
         fi
@@ -507,11 +529,11 @@ check_vless_path_en() {
 }
 
 check_subscription_path_ru() {
-    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ] || [[ $subspath =~ ['{}() \$/'] ]]) && [ ! -z "$subspath" ]
+    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ] || [[ ! $subspath =~ ^[a-zA-Z0-9_-]+$ ]]) && [ ! -z "$subspath" ]
     do
-        if [[ $subspath =~ ['{}() \$/'] ]]
+        if [[ ! $subspath =~ ^[a-zA-Z0-9_-]+$ ]]
         then
-            echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+            echo -e "${red}Ошибка: путь должен содержать только английские буквы, цифры, символы _ и -${clear}"
         else
             echo -e "${red}Ошибка: пути для Trojan, VLESS и подписки должны быть разными${clear}"
         fi
@@ -524,11 +546,11 @@ check_subscription_path_ru() {
 }
 
 check_subscription_path_en() {
-    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ] || [[ $subspath =~ ['{}() \$/'] ]]) && [ ! -z "$subspath" ]
+    while ([ "$trojanpath" = "$subspath" ] || [ "$vlesspath" = "$subspath" ] || [[ ! $subspath =~ ^[a-zA-Z0-9_-]+$ ]]) && [ ! -z "$subspath" ]
     do
-        if [[ $subspath =~ ['{}() \$/'] ]]
+        if [[ ! $subspath =~ ^[a-zA-Z0-9_-]+$ ]]
         then
-            echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+            echo -e "${red}Error: the path should contain only letters, numbers, _ and - symbols${clear}"
         else
             echo -e "${red}Error: paths for Trojan, VLESS and subscription must be different${clear}"
         fi
@@ -541,11 +563,11 @@ check_subscription_path_en() {
 }
 
 check_rulesetpath_ru() {
-    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ] || [[ $rulesetpath =~ ['{}() \$/'] ]]) && [ ! -z "$rulesetpath" ]
+    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ] || [[ ! $rulesetpath =~ ^[a-zA-Z0-9_-]+$ ]]) && [ ! -z "$rulesetpath" ]
     do
-        if [[ $rulesetpath =~ ['{}() \$/'] ]]
+        if [[ ! $rulesetpath =~ ^[a-zA-Z0-9_-]+$ ]]
         then
-            echo -e "${red}Ошибка: путь не должен содержать пробелы и символы {}()\$/${clear}"
+            echo -e "${red}Ошибка: путь должен содержать только английские буквы, цифры, символы _ и -${clear}"
         else
             echo -e "${red}Ошибка: пути для Trojan, VLESS, подписки и наборов правил должны быть разными${clear}"
         fi
@@ -558,11 +580,11 @@ check_rulesetpath_ru() {
 }
 
 check_rulesetpath_en() {
-    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ] || [[ $rulesetpath =~ ['{}() \$/'] ]]) && [ ! -z "$rulesetpath" ]
+    while ([ "$trojanpath" = "$rulesetpath" ] || [ "$vlesspath" = "$rulesetpath" ] || [ "$subspath" = "$rulesetpath" ] || [[ ! $rulesetpath =~ ^[a-zA-Z0-9_-]+$ ]]) && [ ! -z "$rulesetpath" ]
     do
-        if [[ $rulesetpath =~ ['{}() \$/'] ]]
+        if [[ ! $rulesetpath =~ ^[a-zA-Z0-9_-]+$ ]]
         then
-            echo -e "${red}Error: the path should not contain spaces and {}()\$/ symbols${clear}"
+            echo -e "${red}Error: the path should contain only letters, numbers, _ and - symbols${clear}"
         else
             echo -e "${red}Error: paths for Trojan, VLESS, subscription and rule sets must be different${clear}"
         fi
@@ -850,6 +872,7 @@ enter_data_ru() {
     echo -e "${textcolor}[?]${clear} Введите пароль для Trojan или оставьте пустым для генерации случайного пароля:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
+    check_trjpass_ru
     if [[ "${variant}" == "1" ]]
     then
         echo -e "${textcolor}[?]${clear} Введите путь для Trojan или оставьте пустым для генерации случайного пути:"
@@ -931,6 +954,7 @@ enter_data_en() {
     echo -e "${textcolor}[?]${clear} Enter your password for Trojan or leave this empty to generate a random password:"
     read trjpass
     [[ ! -z $trjpass ]] && echo ""
+    check_trjpass_en
     if [[ "${variant}" == "1" ]]
     then
         echo -e "${textcolor}[?]${clear} Enter your path for Trojan or leave this empty to generate a random path:"

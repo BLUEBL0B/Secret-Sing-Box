@@ -146,19 +146,19 @@ exit_username() {
 }
 
 check_username_add() {
-    while [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]] || [[ $username =~ " " ]] || [[ $username =~ '$' ]] || [ -z "$username" ]
+    while [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]] || [[ ! $username =~ ^[a-zA-Z0-9_-]+$ ]] || [ -z "$username" ]
     do
         if [[ -f /var/www/${subspath}/${username}-TRJ-CLIENT.json ]]
         then
             echo -e "${red}Error: this user already exists${clear}"
             echo ""
-        elif [[ $username =~ " " ]] || [[ $username =~ '$' ]]
-        then
-            echo -e "${red}Error: username should not contain spaces and \$${clear}"
-            echo ""
         elif [ -z "$username" ]
         then
             :
+        elif [[ ! $username =~ ^[a-zA-Z0-9_-]+$ ]]
+        then
+            echo -e "${red}Error: the username should contain only letters, numbers, _ and - symbols${clear}"
+            echo ""
         fi
         echo -e "${textcolor}[?]${clear} Enter the name of the new user or enter ${textcolor}x${clear} to exit:"
         read username
@@ -167,9 +167,14 @@ check_username_add() {
 }
 
 check_trjpass() {
-    while [[ $(jq "any(.inbounds[].users[]; .password == \"$trjpass\")" /etc/sing-box/config.json) == "true" ]] && [ ! -z "$trjpass" ]
+    while ([[ $trjpass =~ '"' ]] || [[ $(jq "any(.inbounds[].users[]; .password == \"$trjpass\")" /etc/sing-box/config.json) == "true" ]]) && [ ! -z "$trjpass" ]
     do
-        echo -e "${red}Error: this password is already assigned to another user${clear}"
+        if [[ $trjpass =~ '"' ]]
+        then
+            echo -e "${red}Error: Trojan password should not contain quotes \"${clear}"
+        else
+            echo -e "${red}Error: this password is already assigned to another user${clear}"
+        fi
         echo ""
         echo -e "${textcolor}[?]${clear} Enter the password for Trojan or leave this empty to generate a random password:"
         read trjpass
@@ -1255,7 +1260,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.4"
+    export version="1.0.5"
     export language="2"
     export -f get_ip
     export -f replace_template
