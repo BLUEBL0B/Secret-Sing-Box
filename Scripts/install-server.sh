@@ -1525,11 +1525,13 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       {
         "tag": "dns-remote",
         "address": "tls://1.1.1.1",
-        "client_subnet": "${serverip}"
+        "client_subnet": "${serverip}",
+        "detour": "proxy"
       },
       {
         "tag": "dns-local",
-        "address": "tls://1.1.1.1"
+        "address": "tcp://77.88.8.8",
+        "detour": "direct"
       },
       {
         "tag": "dns-block",
@@ -1546,7 +1548,8 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "domain_suffix": [
-          "habr.com"
+          "habr.com",
+          "jut.su"
         ],
         "rule_set": [
           "telegram",
@@ -1702,7 +1705,8 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "domain_suffix": [
-          "habr.com"
+          "habr.com",
+          "jut.su"
         ],
         "rule_set": [
           "telegram",

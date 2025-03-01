@@ -31,7 +31,8 @@
       },
       {
         "domain_suffix": [
-          "habr.com"
+          "habr.com",
+          "jut.su"
         ],
         "rule_set": [
           "telegram",
