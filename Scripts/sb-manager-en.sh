@@ -530,6 +530,72 @@ delete_users() {
     main_menu
 }
 
+stack_text() {
+    echo -e "${textcolor}[?]${clear} Select \"stack\" value for user ${username}:"
+    echo "0 - Exit"
+    echo "1 - \"system\" (system stack, the best performance, default value)             ${stack_sel_1}"
+    echo "2 - \"gvisor\" (runs in userspace, is recommended if \"system\" isn't working)   ${stack_sel_2}"
+    echo "3 - \"mixed\" (mixed variant: \"system\" for TCP, \"gvisor\" for UDP)              ${stack_sel_3}"
+    read stackoption
+    echo ""
+}
+
+change_stack() {
+    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
+    read username
+    echo ""
+    exit_username
+    check_username_del
+
+    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
+    then
+        stack_sel_1="[Selected]"
+        stack_sel_2=""
+        stack_sel_3=""
+    elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "gvisor" ]]
+    then
+        stack_sel_1=""
+        stack_sel_2="[Selected]"
+        stack_sel_3=""
+    elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "mixed" ]]
+    then
+        stack_sel_1=""
+        stack_sel_2=""
+        stack_sel_3="[Selected]"
+    fi
+
+    stack_text
+
+    case $stackoption in
+        1)
+        stack_value="system"
+        ;;
+        2)
+        stack_value="gvisor"
+        ;;
+        3)
+        stack_value="mixed"
+        ;;
+        *)
+        main_menu
+    esac
+
+    inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+    echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+
+    if [ ! -f /etc/haproxy/auth.lua ]
+    then
+        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+        echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+    fi
+
+    inboundnum=""
+    stack_value=""
+    echo "The \"stack\" value has been changed, update the config on the client app to apply new settings"
+    echo ""
+    main_menu
+}
+
 sync_with_github() {
     sync_github_message
     exit_sync
@@ -742,7 +808,7 @@ chain_end() {
 
     systemctl reload sing-box.service
 
-    echo "Settings changed"
+    echo "Settings changed successfully"
     echo ""
     main_menu
 }
@@ -806,35 +872,37 @@ chain_middle() {
 
     systemctl reload sing-box.service
 
-    echo "Settings changed"
+    echo "Settings changed successfully"
     echo ""
     main_menu
 }
 
-chain_setup() {
+chain_text() {
     echo -e "${textcolor}[?]${clear} Select the position of the server in the chain:"
     echo "0 - Exit"
-    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
-    then
-        echo "1 - Configure this server as the end of the chain or the only one                  [Selected]"
-        echo "2 - Configure this server as intermediate in the chain or change the next server"
-    else
-        echo "1 - Configure this server as the end of the chain or the only one"
-        echo "2 - Configure this server as intermediate in the chain or change the next server   [Selected]"
-    fi
+    echo "1 - Configure this server as the end of the chain or the only one                  ${chain_sel_1}"
+    echo "2 - Configure this server as intermediate in the chain or change the next server   ${chain_sel_2}"
     read chain_option
     echo ""
+}
+
+chain_setup() {
+    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
+    then
+        chain_sel_1="[Selected]"
+        chain_sel_2=""
+    else
+        chain_sel_1=""
+        chain_sel_2="[Selected]"
+    fi
+
+    chain_text
 
     while [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]] && [[ $chain_option == "1" ]]
     do
         echo -e "${red}Error: this server is already configured as the end of the chain or the only one${clear}"
         echo ""
-        echo -e "${textcolor}[?]${clear} Select the position of the server in the chain:"
-        echo "0 - Exit"
-        echo "1 - Configure this server as the end of the chain or the only one                  [Selected]"
-        echo "2 - Configure this server as intermediate in the chain or change the next server"
-        read chain_option
-        echo ""
+        chain_text
     done
 
     case $chain_option in
@@ -847,74 +915,6 @@ chain_setup() {
         *)
         main_menu
     esac
-}
-
-change_stack() {
-    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
-
-    echo -e "${textcolor}[?]${clear} Select \"stack\" value for user ${username}:"
-    echo "0 - Exit"
-    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
-    then
-        echo "1 - \"system\" (system stack, the best performance, default value)             [Selected]"
-    else
-        echo "1 - \"system\" (system stack, the best performance, default value)"
-    fi
-    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "gvisor" ]]
-    then
-        echo "2 - \"gvisor\" (runs in userspace, is recommended if \"system\" isn't working)   [Selected]"
-    else
-        echo "2 - \"gvisor\" (runs in userspace, is recommended if \"system\" isn't working)"
-    fi
-    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "mixed" ]]
-    then
-        echo "3 - \"mixed\" (mixed variant: \"system\" for TCP, \"gvisor\" for UDP)              [Selected]"
-    else
-        echo "3 - \"mixed\" (mixed variant: \"system\" for TCP, \"gvisor\" for UDP)"
-    fi
-    read stackoption
-    echo ""
-
-    inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
-
-    case $stackoption in
-        1)
-        echo "$(jq ".inbounds[${inboundnum}].stack = \"system\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
-        ;;
-        2)
-        echo "$(jq ".inbounds[${inboundnum}].stack = \"gvisor\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
-        ;;
-        3)
-        echo "$(jq ".inbounds[${inboundnum}].stack = \"mixed\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
-        ;;
-        *)
-        main_menu
-    esac
-
-    if [ ! -f /etc/haproxy/auth.lua ]
-    then
-        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
-
-        case $stackoption in
-            2)
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"gvisor\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-            ;;
-            3)
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"mixed\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-            ;;
-            *)
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"system\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-        esac
-    fi
-
-    inboundnum=""
-    echo "The \"stack\" value changed, update the config on the client app to apply new settings"
-    echo ""
-    main_menu
 }
 
 exit_renew_cert() {
@@ -1260,7 +1260,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.5"
+    export version="1.0.6"
     export language="2"
     export -f get_ip
     export -f replace_template

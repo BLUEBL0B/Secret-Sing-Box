@@ -530,6 +530,72 @@ delete_users() {
     main_menu
 }
 
+stack_text() {
+    echo -e "${textcolor}[?]${clear} Выберите \"stack\" для пользователя ${username}:"
+    echo "0 - Выйти"
+    echo "1 - \"system\" (системный стек, лучшая производительность, значение по умолчанию)    ${stack_sel_1}"
+    echo "2 - \"gvisor\" (запускается в userspace, рекомендуется, если не работает \"system\")   ${stack_sel_2}"
+    echo "3 - \"mixed\" (смешанный вариант: \"system\" для TCP, \"gvisor\" для UDP)                ${stack_sel_3}"
+    read stackoption
+    echo ""
+}
+
+change_stack() {
+    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    read username
+    echo ""
+    exit_username
+    check_username_del
+
+    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
+    then
+        stack_sel_1="[Выбрано]"
+        stack_sel_2=""
+        stack_sel_3=""
+    elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "gvisor" ]]
+    then
+        stack_sel_1=""
+        stack_sel_2="[Выбрано]"
+        stack_sel_3=""
+    elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "mixed" ]]
+    then
+        stack_sel_1=""
+        stack_sel_2=""
+        stack_sel_3="[Выбрано]"
+    fi
+
+    stack_text
+
+    case $stackoption in
+        1)
+        stack_value="system"
+        ;;
+        2)
+        stack_value="gvisor"
+        ;;
+        3)
+        stack_value="mixed"
+        ;;
+        *)
+        main_menu
+    esac
+
+    inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+    echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+
+    if [ ! -f /etc/haproxy/auth.lua ]
+    then
+        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+        echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+    fi
+
+    inboundnum=""
+    stack_value=""
+    echo "Изменение \"stack\" завершено, для применения новых настроек обновите конфиг на клиенте"
+    echo ""
+    main_menu
+}
+
 sync_with_github() {
     sync_github_message
     exit_sync
@@ -811,30 +877,32 @@ chain_middle() {
     main_menu
 }
 
-chain_setup() {
-    echo -e "${textcolor}[?]${clear} Выберите положение сервера цепочке:"
+chain_text() {
+    echo -e "${textcolor}[?]${clear} Выберите положение сервера в цепочке:"
     echo "0 - Выйти"
-    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
-    then
-        echo "1 - Настроить этот сервер как конечный в цепочке или единственный                     [Выбрано]"
-        echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер"
-    else
-        echo "1 - Настроить этот сервер как конечный в цепочке или единственный"
-        echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер   [Выбрано]"
-    fi
+    echo "1 - Настроить этот сервер как конечный в цепочке или единственный                     ${chain_sel_1}"
+    echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер   ${chain_sel_2}"
     read chain_option
     echo ""
+}
+
+chain_setup() {
+    if [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]]
+    then
+        chain_sel_1="[Выбрано]"
+        chain_sel_2=""
+    else
+        chain_sel_1=""
+        chain_sel_2="[Выбрано]"
+    fi
+
+    chain_text
 
     while [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /etc/sing-box/config.json) == "false" ]] && [[ $chain_option == "1" ]]
     do
         echo -e "${red}Ошибка: этот сервер уже настроен как конечный в цепочке или единственный${clear}"
         echo ""
-        echo -e "${textcolor}[?]${clear} Выберите положение сервера цепочке:"
-        echo "0 - Выйти"
-        echo "1 - Настроить этот сервер как конечный в цепочке или единственный                     [Выбрано]"
-        echo "2 - Настроить этот сервер как промежуточный в цепочке или поменять следующий сервер"
-        read chain_option
-        echo ""
+        chain_text
     done
 
     case $chain_option in
@@ -847,74 +915,6 @@ chain_setup() {
         *)
         main_menu
     esac
-}
-
-change_stack() {
-    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
-
-    echo -e "${textcolor}[?]${clear} Выберите \"stack\" для пользователя ${username}:"
-    echo "0 - Выйти"
-    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
-    then
-        echo "1 - \"system\" (системный стек, лучшая производительность, значение по умолчанию)    [Выбрано]"
-    else
-        echo "1 - \"system\" (системный стек, лучшая производительность, значение по умолчанию)"
-    fi
-    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "gvisor" ]]
-    then
-        echo "2 - \"gvisor\" (запускается в userspace, рекомендуется, если не работает \"system\")   [Выбрано]"
-    else
-        echo "2 - \"gvisor\" (запускается в userspace, рекомендуется, если не работает \"system\")"
-    fi
-    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "mixed" ]]
-    then
-        echo "3 - \"mixed\" (смешанный вариант: \"system\" для TCP, \"gvisor\" для UDP)                [Выбрано]"
-    else
-        echo "3 - \"mixed\" (смешанный вариант: \"system\" для TCP, \"gvisor\" для UDP)"
-    fi
-    read stackoption
-    echo ""
-
-    inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
-
-    case $stackoption in
-        1)
-        echo "$(jq ".inbounds[${inboundnum}].stack = \"system\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
-        ;;
-        2)
-        echo "$(jq ".inbounds[${inboundnum}].stack = \"gvisor\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
-        ;;
-        3)
-        echo "$(jq ".inbounds[${inboundnum}].stack = \"mixed\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
-        ;;
-        *)
-        main_menu
-    esac
-
-    if [ ! -f /etc/haproxy/auth.lua ]
-    then
-        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
-
-        case $stackoption in
-            2)
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"gvisor\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-            ;;
-            3)
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"mixed\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-            ;;
-            *)
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"system\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-        esac
-    fi
-
-    inboundnum=""
-    echo "Изменение \"stack\" завершено, для применения новых настроек обновите конфиг на клиенте"
-    echo ""
-    main_menu
 }
 
 exit_renew_cert() {
@@ -1260,7 +1260,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.5"
+    export version="1.0.6"
     export language="1"
     export -f get_ip
     export -f replace_template
