@@ -8,11 +8,13 @@
       {
         "tag": "dns-remote",
         "address": "tls://1.1.1.1",
-        "client_subnet": "SERVER-IP"
+        "client_subnet": "SERVER-IP",
+        "detour": "proxy"
       },
       {
         "tag": "dns-local",
-        "address": "tls://1.1.1.1"
+        "address": "tcp://77.88.8.8",
+        "detour": "direct"
       },
       {
         "tag": "dns-block",
@@ -185,7 +187,8 @@
       },
       {
         "domain_suffix": [
-          "habr.com"
+          "habr.com",
+          "jut.su"
         ],
         "rule_set": [
           "telegram",
