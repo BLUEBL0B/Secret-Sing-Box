@@ -1530,7 +1530,7 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "tag": "dns-local",
-        "address": "tcp://77.88.8.8",
+        "address": "195.208.4.1",
         "detour": "direct"
       },
       {
