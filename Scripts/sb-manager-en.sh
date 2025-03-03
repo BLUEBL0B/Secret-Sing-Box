@@ -122,11 +122,11 @@ validate_local_template() {
     then
         echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
         echo ""
-        echo -e "${textcolor}[?]${clear} Press ${textcolor}Enter${clear} to exit or enter ${textcolor}reset${clear} to reset the template to default version"
+        echo -e "${textcolor}[?]${clear} Enter ${textcolor}reset${clear} to reset the template to default version or enter ${textcolor}x${clear} to exit:"
         read resettemp
+        echo ""
         if [[ "$resettemp" == "reset" ]]
         then
-            echo ""
             validate_template
             rm /var/www/${subspath}/template-loc.json
             cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json

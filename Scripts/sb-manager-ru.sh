@@ -122,11 +122,11 @@ validate_local_template() {
     then
         echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
         echo ""
-        echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы выйти, или введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии"
+        echo -e "${textcolor}[?]${clear} Введите ${textcolor}reset${clear}, чтобы сбросить шаблон до исходной версии, или введите ${textcolor}x${clear}, чтобы выйти:"
         read resettemp
+        echo ""
         if [[ "$resettemp" == "reset" ]]
         then
-            echo ""
             validate_template
             rm /var/www/${subspath}/template-loc.json
             cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
