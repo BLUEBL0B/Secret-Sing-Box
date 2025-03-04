@@ -28,7 +28,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 2) NGINX or HAProxy reverse proxy and website setup on port 443
 3) Cloudflare TLS certificates with auto renewal
 4) Security setup (optional)
-5) Multiplexing to optimise connections
+5) Multiplexing to optimise connections and to solve TLS in TLS problem
 6) Enable BBR
 7) WARP setup
 8) Optional setup of proxy chains of two or more servers
@@ -51,7 +51,7 @@ Then just enter the necessary information:
 > [!CAUTION]
 > Passwords, UUIDs, paths and other data in the image above are for example purposes only. Do not use them on your server.
 
-The script will show your client links in the end, it's recommended to save them.
+In the end, the script will show your links to client configs and to subscription page, it's recommended to save them.
 
 -----
 
