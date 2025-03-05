@@ -96,6 +96,8 @@
           "mycdn.me"
         ],
         "rule_set": [
+          "connectivity-check",
+          "ru-app",
           "gov-ru",
           "yandex",
           "vk",
@@ -208,6 +210,7 @@
         "action": "reject",
         "method": "drop"
       },
+
       {
         "domain_suffix": [
           "habr.com",
@@ -282,6 +285,8 @@
           "SERVER-IP"
         ],
         "rule_set": [
+          "connectivity-check",
+          "ru-app",
           "gov-ru",
           "yandex",
           "vk",
@@ -334,12 +339,6 @@
       {
         "rule_set": [
           "geoip-ru"
-        ],
-        "outbound": "direct"
-      },
-      {
-        "rule_set": [
-          "ru-app"
         ],
         "outbound": "direct"
       },
@@ -566,6 +565,23 @@
           }
         ]
       },
+      {
+        "type": "inline",
+        "tag": "connectivity-check",
+        "rules": [
+            {
+                "domain_regex": [
+                    "^cp\\.cloudflare\\.com$",
+                    "msftconnecttest\\.com$",
+                    "msftncsi\\.com$",
+                    "connectivitycheck\\.gstatic\\.com$",
+                    "^captive\\.apple\\.com$",
+                    "^detectportal\\.firefox\\.com$",
+                    "networkcheck\\.kde\\.org$"
+                ]
+            }
+        ]
+    },
       {
         "tag": "torrent-clients",
         "type": "remote",
