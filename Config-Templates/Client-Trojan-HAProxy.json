@@ -32,6 +32,7 @@
       {
         "domain_suffix": [
           "habr.com",
+          "kemono.su",
           "jut.su"
         ],
         "rule_set": [
@@ -186,6 +187,7 @@
       {
         "domain_suffix": [
           "habr.com",
+          "kemono.su",
           "jut.su"
         ],
         "rule_set": [

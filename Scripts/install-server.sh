@@ -1549,6 +1549,7 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       {
         "domain_suffix": [
           "habr.com",
+          "kemono.su",
           "jut.su"
         ],
         "rule_set": [
@@ -1706,6 +1707,7 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       {
         "domain_suffix": [
           "habr.com",
+          "kemono.su",
           "jut.su"
         ],
         "rule_set": [
