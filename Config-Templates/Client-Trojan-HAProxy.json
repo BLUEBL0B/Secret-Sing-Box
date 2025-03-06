@@ -52,7 +52,8 @@
           "animedub",
           "anidub",
           "animelib",
-          "ikianime"
+          "ikianime",
+          "anilibria"
         ],
         "rule_set": [
           "telegram",
@@ -236,7 +237,8 @@
           "animedub",
           "anidub",
           "animelib",
-          "ikianime"
+          "ikianime",
+          "anilibria"
         ],
         "rule_set": [
           "telegram",

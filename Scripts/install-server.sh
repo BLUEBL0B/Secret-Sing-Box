@@ -1569,7 +1569,8 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "animedub",
           "anidub",
           "animelib",
-          "ikianime"
+          "ikianime",
+          "anilibria"
         ],
         "rule_set": [
           "telegram",
@@ -1756,7 +1757,8 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "animedub",
           "anidub",
           "animelib",
-          "ikianime"
+          "ikianime",
+          "anilibria"
         ],
         "rule_set": [
           "telegram",
