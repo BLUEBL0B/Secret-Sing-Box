@@ -1638,7 +1638,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "samsung",
           "huawei",
           "apple",
-          "microsoft",
           "nvidia",
           "xiaomi",
           "hp",
@@ -1833,7 +1832,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "samsung",
           "huawei",
           "apple",
-          "microsoft",
           "nvidia",
           "xiaomi",
           "hp",
@@ -2014,12 +2012,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://${domain}/${rulesetpath}/geosite-apple.srs"
-      },
-      {
-        "tag": "microsoft",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-microsoft.srs"
       },
       {
         "tag": "nvidia",

@@ -121,7 +121,6 @@
           "samsung",
           "huawei",
           "apple",
-          "microsoft",
           "nvidia",
           "xiaomi",
           "hp",
@@ -316,7 +315,6 @@
           "samsung",
           "huawei",
           "apple",
-          "microsoft",
           "nvidia",
           "xiaomi",
           "hp",
@@ -497,12 +495,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://DOMAIN/RULESETPATH/geosite-apple.srs"
-      },
-      {
-        "tag": "microsoft",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-microsoft.srs"
       },
       {
         "tag": "nvidia",
