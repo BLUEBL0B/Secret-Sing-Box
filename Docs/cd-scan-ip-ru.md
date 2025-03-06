@@ -32,6 +32,21 @@ chmod +x CloudflareScanner
 ./CloudflareScanner
 ```
 
+## Использование на Linux
+
+Воспользуемся командами ниже, чтобы:
+   - Определить архитектуру вашего устройства.
+   - Загрузить последний релиз для вашей архитектуры.
+   - Распаковать архив, сделать файл исполняемым и запустить CloudflareScanner.
+
+```bash
+ARCH=$(uname -m); case $ARCH in x86_64) FILE="CloudflareScanner_linux-amd64.zip";; aarch64|arm64) FILE="CloudflareScanner_linux-arm64.zip";; armv7l) FILE="CloudflareScanner_linux-arm7.zip";; mips64) FILE="CloudflareScanner_linux-mips64.zip";; mips64le) FILE="CloudflareScanner_linux-mips64le.zip";; riscv64) FILE="CloudflareScanner_linux-riscv64.zip";; *) echo "Архитектура не поддерживается: $ARCH"; exit 1;; esac
+wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/$FILE"
+unzip "$FILE" -d CloudflareScanner && cd CloudflareScanner
+chmod +x CloudflareScanner
+./CloudflareScanner
+```
+
 ## Пример результата
 
 | IP-адрес       | Отправлено | Получено | Потери | Средняя задержка (мс) | Скорость загрузки (МБ/с) |
