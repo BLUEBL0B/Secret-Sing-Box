@@ -1550,7 +1550,26 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "domain_suffix": [
           "habr.com",
           "kemono.su",
-          "jut.su"
+          "jut.su",
+          "kara.su",
+          "theins.ru",
+          "tvrain.ru",
+          "echo.msk.ru",
+          "the-village.ru",
+          "snob.ru",
+          "novayagazeta.ru",
+          "moscowtimes.ru"
+        ],
+        "domain_keyword": [
+          "animego",
+          "yummyanime",
+          "yummy-anime",
+          "animeportal",
+          "anime-portal",
+          "animedub",
+          "anidub",
+          "animelib",
+          "ikianime"
         ],
         "rule_set": [
           "telegram",
@@ -1565,10 +1584,21 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           ".ru.com",
           ".ru.net",
           "${domain}",
-          "wikipedia.org"
+          "wikipedia.org",
+          "kudago.com",
+          "kinescope.io",
+          "redheadsound.studio",
+          "plplayer.online",
+          "lomont.site"
         ],
         "domain_keyword": [
           "xn--",
+          "miradres",
+          "premier",
+          "shutterstock",
+          "2gis",
+          "diginetica",
+          "kinescopecdn",
           "researchgate",
           "springer",
           "nextcloud",
@@ -1707,7 +1737,26 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "domain_suffix": [
           "habr.com",
           "kemono.su",
-          "jut.su"
+          "jut.su",
+          "kara.su",
+          "theins.ru",
+          "tvrain.ru",
+          "echo.msk.ru",
+          "the-village.ru",
+          "snob.ru",
+          "novayagazeta.ru",
+          "moscowtimes.ru"
+        ],
+        "domain_keyword": [
+          "animego",
+          "yummyanime",
+          "yummy-anime",
+          "animeportal",
+          "anime-portal",
+          "animedub",
+          "anidub",
+          "animelib",
+          "ikianime"
         ],
         "rule_set": [
           "telegram",
@@ -1726,10 +1775,21 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           ".ru.com",
           ".ru.net",
           "${domain}",
-          "wikipedia.org"
+          "wikipedia.org",
+          "kudago.com",
+          "kinescope.io",
+          "redheadsound.studio",
+          "plplayer.online",
+          "lomont.site"
         ],
         "domain_keyword": [
           "xn--",
+          "miradres",
+          "premier",
+          "shutterstock",
+          "2gis",
+          "diginetica",
+          "kinescopecdn",
           "researchgate",
           "springer",
           "nextcloud",
