@@ -1,20 +1,41 @@
-# Как выбрать подсеть Cloudflare?
+## Как выбрать подсеть Cloudflare?
 
 Для этого воспользуемся инструментом CloudflareScanner для тестирования задержки и скорости CDN Cloudflare с целью определения самых быстрых IP-адресов (IPv4 и IPv6).
 
-## Основные возможности
+### Основные возможности
 
 - Тестирование задержки (latency) и скорости загрузки IP-адресов Cloudflare.
 - Возможность указания пользовательских параметров для более точного тестирования.
 - Поддержка тестирования IP-адресов других CDN и веб-сайтов.
 
-## Использование на Windows
+### Использование на Windows
 
-1. Скачайте исполняемый файл с [страницы релизов](https://github.com/Ptechgithub/CloudflareScanner/releases) и распакуйте его.
-2. Запустите файл `CloudflareScanner.exe` без VPN (для Windows) и дождитесь завершения тестирования.
+1. Скачайте исполняемый файл со [страницы релизов](https://github.com/Ptechgithub/CloudflareScanner/releases/latest) и распакуйте его.
+2. Запустите файл `CloudflareScanner.exe` без VPN/прокси и дождитесь завершения тестирования.
 3. После завершения теста будут отображены 10 самых быстрых IP-адресов с информацией о задержке и скорости загрузки.
 
-## Использование на macOS
+### Использование на Linux
+
+Воспользуемся командами ниже, чтобы:
+   - Определить архитектуру вашего устройства.
+   - Загрузить последний релиз для вашей архитектуры.
+   - Распаковать архив, сделать файл исполняемым и запустить CloudflareScanner.
+
+```bash
+ARCH=$(uname -m); case $ARCH in x86_64) FILE="CloudflareScanner_linux-amd64.zip";; aarch64|arm64) FILE="CloudflareScanner_linux-arm64.zip";; armv7l) FILE="CloudflareScanner_linux-arm7.zip";; mips64) FILE="CloudflareScanner_linux-mips64.zip";; mips64le) FILE="CloudflareScanner_linux-mips64le.zip";; riscv64) FILE="CloudflareScanner_linux-riscv64.zip";; *) echo "Архитектура не поддерживается: $ARCH"; exit 1;; esac
+wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/$FILE"
+unzip "$FILE" -d CloudflareScanner && cd CloudflareScanner
+chmod +x CloudflareScanner
+./CloudflareScanner
+```
+
+В дальнейшем используйте эту команду для запуска:
+
+```
+./CloudflareScanner/CloudflareScanner
+```
+
+### Использование на macOS
 
 Для запуска инструмента на macOS выполните следующие шаги:
 
@@ -32,22 +53,28 @@ chmod +x CloudflareScanner
 ./CloudflareScanner
 ```
 
-## Использование на Linux
+### Использование на Android
 
-Воспользуемся командами ниже, чтобы:
-   - Определить архитектуру вашего устройства.
-   - Загрузить последний релиз для вашей архитектуры.
+Для начала нужно установить [Termux](https://play.google.com/store/apps/details?id=com.termux) на ваше устройство.
+
+Далее откройте приложение и используйте команды ниже, чтобы:
+   - Загрузить последний релиз для Android.
    - Распаковать архив, сделать файл исполняемым и запустить CloudflareScanner.
 
 ```bash
-ARCH=$(uname -m); case $ARCH in x86_64) FILE="CloudflareScanner_linux-amd64.zip";; aarch64|arm64) FILE="CloudflareScanner_linux-arm64.zip";; armv7l) FILE="CloudflareScanner_linux-arm7.zip";; mips64) FILE="CloudflareScanner_linux-mips64.zip";; mips64le) FILE="CloudflareScanner_linux-mips64le.zip";; riscv64) FILE="CloudflareScanner_linux-riscv64.zip";; *) echo "Архитектура не поддерживается: $ARCH"; exit 1;; esac
-wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/$FILE"
-unzip "$FILE" -d CloudflareScanner && cd CloudflareScanner
+wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/CloudflareScanner_android-arm64.zip"
+unzip "CloudflareScanner_android-arm64.zip" -d CloudflareScanner && cd CloudflareScanner
 chmod +x CloudflareScanner
 ./CloudflareScanner
 ```
 
-## Пример результата
+В дальнейшем используйте эту команду для запуска:
+
+```
+./CloudflareScanner/CloudflareScanner
+```
+
+### Пример результата
 
 | IP-адрес       | Отправлено | Получено | Потери | Средняя задержка (мс) | Скорость загрузки (МБ/с) |
 |----------------|------------|----------|--------|-----------------------|--------------------------|
@@ -57,7 +84,7 @@ chmod +x CloudflareScanner
 
 Полные результаты сохраняются в файл `result.csv` в текущей директории.
 
-## Интернет-провайдер
+### Интернет-провайдер
 
 При выборе оптимальной подсети учитывайте тип вашего интернет-подключения:
 
@@ -66,7 +93,7 @@ chmod +x CloudflareScanner
 
 Результаты тестирования могут значительно различаться в зависимости от используемого оператора связи или провайдера интернет-услуг, поэтому важно сканировать именно из той сети, из которой будет происходить подключение.
 
-## Дополнительные параметры
+### Дополнительные параметры
 
 - `-n`: Количество потоков для тестирования задержки (по умолчанию 200, максимум 1000).
 - `-t`: Количество тестов задержки для каждого IP (по умолчанию 4).
