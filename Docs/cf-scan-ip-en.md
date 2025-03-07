@@ -1,12 +1,12 @@
 ## How to Select a Cloudflare Subnet?
 
-We'll use the CloudflareScanner tool to test latency and download speeds for Cloudflare's CDN, identifying the fastest IP addresses (IPv4 and IPv6). Run the scanner without VPN/proxy.
+We will use the CloudflareScanner tool to test latency and download speed for Cloudflare's CDN, identifying the fastest IP addresses (IPv4 and IPv6). Run the scanner without VPN/proxy.
 
 ### Main Features
 
 - Latency and download speed testing for Cloudflare IP addresses.
-- Ability to specify custom parameters for more accurate testing.
-- Supports testing IP addresses from other CDNs and websites.
+- Can be used with custom parameters for more accurate testing.
+- Supports testing IP addresses of other CDNs and websites.
 
 ### Usage on Windows
 
@@ -17,7 +17,6 @@ We'll use the CloudflareScanner tool to test latency and download speeds for Clo
 ### Usage on Linux
 
 Use the commands below to:
-
 - Identify your device's architecture.
 - Download the latest release for your architecture.
 - Extract the archive, make the file executable, and run CloudflareScanner.
@@ -41,13 +40,12 @@ cd CloudflareScanner && ./CloudflareScanner
 Follow these steps to run the tool on macOS:
 
 1. Download the file corresponding to your CPU:
-
-   - `` — for Macs with Apple Silicon (M1, M2, etc.).
-   - `` — for Intel-based Macs.
+   - **`CloudflareScanner_darwin-arm64.zip`** — for Macs with Apple Silicon (M1, M2, and newer).
+   - **`CloudflareScanner_darwin-amd64.zip`** — for Intel-based Macs.
 
 2. Extract the downloaded archive to a convenient location, such as the `Downloads` folder.
 
-3. Open the terminal and execute:
+3. Open the terminal and execute these commands:
 
 ```bash
 cd ~/Downloads/CloudflareScanner_darwin-arm64
@@ -66,7 +64,6 @@ cd ~/Downloads/CloudflareScanner_darwin-arm64 && ./CloudflareScanner
 First, install [Termux](https://play.google.com/store/apps/details?id=com.termux) on your device.
 
 Then open the app and use the commands below to:
-
 - Download the latest release for Android.
 - Extract the archive, make the file executable, and run CloudflareScanner.
 
@@ -86,11 +83,11 @@ cd CloudflareScanner && ./CloudflareScanner
 
 ### Example Output
 
-| IP Address    | Sent | Received | Loss | Avg. Latency (ms) | Download Speed (MB/s) |
-| ------------- | ---- | -------- | ---- | ----------------- | --------------------- |
-| 104.27.200.69 | 4    | 4        | 0.00 | 146.23            | 28.64                 |
-| 172.67.60.78  | 4    | 4        | 0.00 | 139.82            | 15.02                 |
-| ...           | ...  | ...      | ...  | ...               | ...                   |
+| IP Address    | Sent | Received | Loss Rate | Average Delay (ms) | Download Speed (MB/s) |
+| ------------- | ---- | -------- | --------- | ------------------ | --------------------- |
+| 104.27.200.69 | 4    | 4        | 0.00      | 146.23             | 28.64                 |
+| 172.67.60.78  | 4    | 4        | 0.00      | 139.82             | 15.02                 |
+| ...           | ...  | ...      | ...       | ...                | ...                   |
 
 Full results are saved to `result.csv` in the current directory.
 
@@ -98,10 +95,10 @@ Full results are saved to `result.csv` in the current directory.
 
 When choosing an optimal subnet, consider your internet connection type:
 
-- For mobile internet, scan using the connection shared from the phone or modem you'll use later.
-- For wired broadband connections, scan using the specific internet provider and channel intended for later use.
+- For mobile internet, scan using the connection shared from the phone or modem of the ISP you are going to use later.
+- For wired internet connections, scan using the specific internet provider and channel intended for later use.
 
-Test results can vary significantly based on the telecom or ISP, so it's crucial to perform the scan from the actual network you'll use.
+Test results can vary significantly based on the telecom or ISP, so it's crucial to perform the scan from the actual network you are going to use.
 
 ### Additional Parameters
 
@@ -119,11 +116,12 @@ Test results can vary significantly based on the telecom or ISP, so it's crucial
 - `-tlr`: Maximum packet loss threshold; only display IPs with loss below this ratio (default 1.00).
 - `-sl`: Minimum download speed threshold; only display IPs above this speed (default 0.00 MB/s).
 - `-p`: Number of results to display directly after testing (default 10).
-- `-o`: Save results to file; wrap paths with spaces in quotes (default `result.csv`).
-- `-f`: IP range data directly specified via parameters, separated by commas (default empty).
+- `-f`: IP range data file; if the path contains spaces, wrap it in quotes; supports IP ranges of other CDNs (default ip.txt).
+- `-ip`: IP range data directly specified via parameters, separated by commas (default empty).
+- `-o`: Write result to file; if path contains spaces, wrap it in quotes; if set to empty [-o ""] do not write to file (default is result.csv).
+- `-dd`: Disable download speed test; when disabled, test results will be sorted by latency (by default sorted by download speed) (enabled by default).
 - `-allip`: Test all IPs within each range (IPv4 only); defaults to randomly testing one IP per /24 subnet.
-- `-v`: Print program version and check.
-- `-allip`: Test all IPs; default is randomly testing one IP from each /24 range.
+- `-v`: Print program version and check for updates.
 - `-h`: Show help information and exit.
 
-Full results are saved to the file `result.csv` in the current directory.
+For more information and the latest updates, visit [CloudflareScanner GitHub repository](https://github.com/Ptechgithub/CloudflareScanner).
