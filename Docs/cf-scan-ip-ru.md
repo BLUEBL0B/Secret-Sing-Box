@@ -1,6 +1,6 @@
 ## Как выбрать подсеть Cloudflare?
 
-Для этого воспользуемся инструментом CloudflareScanner для тестирования задержки и скорости CDN Cloudflare с целью определения самых быстрых IP-адресов (IPv4 и IPv6).
+Для этого воспользуемся инструментом CloudflareScanner для тестирования задержки и скорости CDN Cloudflare с целью определения самых быстрых IP-адресов (IPv4 и IPv6). Запускать сканер нужно без VPN/прокси.
 
 ### Основные возможности
 
@@ -11,7 +11,7 @@
 ### Использование на Windows
 
 1. Скачайте исполняемый файл со [страницы релизов](https://github.com/Ptechgithub/CloudflareScanner/releases/latest) и распакуйте его.
-2. Запустите файл `CloudflareScanner.exe` без VPN/прокси и дождитесь завершения тестирования.
+2. Запустите файл `CloudflareScanner.exe` и дождитесь завершения тестирования.
 3. После завершения теста будут отображены 10 самых быстрых IP-адресов с информацией о задержке и скорости загрузки.
 
 ### Использование на Linux
@@ -31,7 +31,7 @@ chmod +x CloudflareScanner
 
 В дальнейшем используйте эту команду для запуска:
 
-```
+```bash
 cd CloudflareScanner && ./CloudflareScanner
 ```
 
@@ -55,7 +55,7 @@ chmod +x CloudflareScanner
 
 В дальнейшем используйте эту команду для запуска:
 
-```
+```bash
 cd ~/Downloads/CloudflareScanner_darwin-arm64 && ./CloudflareScanner
 ```
 
@@ -76,7 +76,7 @@ chmod +x CloudflareScanner
 
 В дальнейшем используйте эту команду для запуска:
 
-```
+```bash
 cd CloudflareScanner && ./CloudflareScanner
 ```
 
