@@ -24,15 +24,15 @@
 ```bash
 ARCH=$(uname -m); case $ARCH in x86_64) FILE="CloudflareScanner_linux-amd64.zip";; aarch64|arm64) FILE="CloudflareScanner_linux-arm64.zip";; armv7l) FILE="CloudflareScanner_linux-arm7.zip";; mips64) FILE="CloudflareScanner_linux-mips64.zip";; mips64le) FILE="CloudflareScanner_linux-mips64le.zip";; riscv64) FILE="CloudflareScanner_linux-riscv64.zip";; *) echo "Архитектура не поддерживается: $ARCH"; exit 1;; esac
 wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/$FILE"
-unzip "$FILE" -d CloudflareScanner
-chmod +x ./CloudflareScanner/CloudflareScanner
-./CloudflareScanner/CloudflareScanner
+unzip "$FILE" -d CloudflareScanner && cd CloudflareScanner
+chmod +x CloudflareScanner
+./CloudflareScanner
 ```
 
 В дальнейшем используйте эту команду для запуска:
 
 ```bash
-./CloudflareScanner/CloudflareScanner
+cd CloudflareScanner && ./CloudflareScanner
 ```
 
 ### Использование на macOS
@@ -69,15 +69,15 @@ cd ~/Downloads/CloudflareScanner_darwin-arm64 && ./CloudflareScanner
 
 ```bash
 wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/CloudflareScanner_android-arm64.zip"
-unzip "CloudflareScanner_android-arm64.zip" -d CloudflareScanner
-chmod +x ./CloudflareScanner/CloudflareScanner
-./CloudflareScanner/CloudflareScanner
+unzip "CloudflareScanner_android-arm64.zip" -d CloudflareScanner && cd CloudflareScanner
+chmod +x CloudflareScanner
+./CloudflareScanner
 ```
 
 В дальнейшем используйте эту команду для запуска:
 
 ```bash
-./CloudflareScanner/CloudflareScanner
+cd CloudflareScanner && ./CloudflareScanner
 ```
 
 ### Пример результата
