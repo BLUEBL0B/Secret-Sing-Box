@@ -68,6 +68,7 @@ cd ~/Downloads/CloudflareScanner_darwin-arm64 && ./CloudflareScanner
    - Распаковать архив, сделать файл исполняемым и запустить CloudflareScanner.
 
 ```bash
+pkg install wget
 wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/CloudflareScanner_android-arm64.zip"
 unzip "CloudflareScanner_android-arm64.zip" -d CloudflareScanner && cd CloudflareScanner
 chmod +x CloudflareScanner
