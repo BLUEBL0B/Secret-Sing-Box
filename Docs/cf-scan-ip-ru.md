@@ -32,7 +32,7 @@ chmod +x CloudflareScanner
 В дальнейшем используйте эту команду для запуска:
 
 ```
-./CloudflareScanner/CloudflareScanner
+cd CloudflareScanner && ./CloudflareScanner
 ```
 
 ### Использование на macOS
@@ -53,6 +53,12 @@ chmod +x CloudflareScanner
 ./CloudflareScanner
 ```
 
+В дальнейшем используйте эту команду для запуска:
+
+```
+cd ~/Downloads/CloudflareScanner_darwin-arm64 && ./CloudflareScanner
+```
+
 ### Использование на Android
 
 Для начала нужно установить [Termux](https://play.google.com/store/apps/details?id=com.termux) на ваше устройство.
@@ -71,7 +77,7 @@ chmod +x CloudflareScanner
 В дальнейшем используйте эту команду для запуска:
 
 ```
-./CloudflareScanner/CloudflareScanner
+cd CloudflareScanner && ./CloudflareScanner
 ```
 
 ### Пример результата
