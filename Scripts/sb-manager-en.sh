@@ -118,7 +118,7 @@ validate_template() {
 }
 
 validate_local_template() {
-    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template-loc.json ]
+    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template-loc.json ] || [[ $(jq 'any(.inbounds[]; .tag == "tun-in")' /var/www/${subspath}/template-loc.json) == "false" ]] || [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /var/www/${subspath}/template-loc.json) == "false" ]]
     then
         echo -e "${red}Error: template-loc.json contains mistakes, corrections needed${clear}"
         echo ""
@@ -434,6 +434,7 @@ sync_client_configs_github() {
 sync_local_message() {
     echo -e "${red}ATTENTION!${clear}"
     echo -e "You can manually edit the settings in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
+    echo "Do not change \"tag\" values in \"inbounds\" and \"outbounds\""
     echo "The settings in this file will be applied to client configs of all users"
     echo ""
     echo -e "${textcolor}[?]${clear} Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}x${clear} to exit:"

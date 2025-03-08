@@ -118,7 +118,7 @@ validate_template() {
 }
 
 validate_local_template() {
-    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template-loc.json ]
+    if [ $(jq -e . < /var/www/${subspath}/template-loc.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template-loc.json ] || [[ $(jq 'any(.inbounds[]; .tag == "tun-in")' /var/www/${subspath}/template-loc.json) == "false" ]] || [[ $(jq 'any(.outbounds[]; .tag == "proxy")' /var/www/${subspath}/template-loc.json) == "false" ]]
     then
         echo -e "${red}Ошибка: структура template-loc.json нарушена, требуются исправления${clear}"
         echo ""
@@ -434,6 +434,7 @@ sync_client_configs_github() {
 sync_local_message() {
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo -e "Вы можете вручную отредактировать настройки в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
+    echo "Не меняйте значения \"tag\" у \"inbounds\" и \"outbounds\""
     echo "Настройки в этом файле будут применены к клиентским конфигам всех пользователей"
     echo ""
     echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
