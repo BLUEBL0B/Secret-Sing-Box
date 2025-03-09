@@ -390,6 +390,11 @@ get_pass() {
         protocol="vless"
         cred=$(jq -r '.outbounds[] | select(.tag=="proxy") | .uuid' ${file})
     fi
+
+    if [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' ${file}) == "true" ]]
+    then
+        cfip=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' ${file})
+    fi
 }
 
 sync_client_configs_github() {
@@ -400,6 +405,7 @@ sync_client_configs_github() {
         cp /var/www/${subspath}/template.json ${file}
         inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
+
         if [[ "$protocol" == "trojan" ]] && [ -f /etc/haproxy/auth.lua ]
         then
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
@@ -409,7 +415,15 @@ sync_client_configs_github() {
         else
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
+
         sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" -e "s/$temprulesetpath/$rulesetpath/g" ${file}
+
+        if [[ ! -z $cfip ]]
+        then
+            echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" ${file})" > ${file}
+        fi
+
+        cfip=""
         cred=""
         inboundnum=""
         outboundnum=""
@@ -434,8 +448,8 @@ sync_client_configs_github() {
 sync_local_message() {
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo -e "Вы можете вручную отредактировать настройки в шаблоне ${textcolor}/var/www/${subspath}/template-loc.json${clear}"
-    echo "Не меняйте значения \"tag\" у \"inbounds\" и \"outbounds\""
     echo "Настройки в этом файле будут применены к клиентским конфигам всех пользователей"
+    echo "При редактировании не меняйте значения \"tag\" у \"inbounds\" и \"outbounds\""
     echo ""
     echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
     read sync
@@ -461,6 +475,7 @@ sync_client_configs_local() {
         cp /var/www/${subspath}/template-loc.json ${file}
         inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
+
         if [[ "$protocol" == "trojan" ]] && [ -f /etc/haproxy/auth.lua ]
         then
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
@@ -470,7 +485,15 @@ sync_client_configs_local() {
         else
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
+
         sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" ${file}
+
+        if [[ ! -z $cfip ]]
+        then
+            echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" ${file})" > ${file}
+        fi
+
+        cfip=""
         cred=""
         inboundnum=""
         outboundnum=""
@@ -629,6 +652,99 @@ sync_client_configs() {
         ;;
         2)
         sync_with_local_temp
+        ;;
+        *)
+        main_menu
+    esac
+}
+
+check_cfip() {
+    while [[ ! $cfip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    do
+        echo -e "${red}Ошибка: введённое значение не является IP${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Введите выбранный IP Cloudflare:"
+        read cfip
+        echo ""
+    done
+}
+
+set_cf_ip() {
+    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    read username
+    echo ""
+    exit_username
+    check_username_del
+    echo -e "${textcolor}[?]${clear} Введите выбранный IP Cloudflare:"
+    read cfip
+    echo ""
+    check_cfip
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+
+    echo -e "Изменение настроек для пользователя ${textcolor}${username}${clear} завершено, установлен IP ${textcolor}${cfip}${clear}"
+    outboundnum=""
+    cfip=""
+    echo ""
+    main_menu
+}
+
+remove_cf_ip() {
+    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    read username
+    echo ""
+    exit_username
+    check_username_del
+
+    if [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]]
+    then
+        echo -e "${red}Ошибка: IP Cloudflare итак не указан в конфиге этого пользователя${clear}"
+        echo ""
+        main_menu
+    fi
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${domain}\" | del(.outbounds[${outboundnum}].transport.headers) | del(.route.rule_set[].download_detour)" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${domain}\" | del(.outbounds[${outboundnum}].transport.headers) | del(.route.rule_set[].download_detour)" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+
+    outboundnum=""
+    echo -e "Изменение настроек для пользователя ${textcolor}${username}${clear} завершено"
+    echo ""
+    main_menu
+}
+
+cf_ip_settings() {
+    if [ -f /etc/haproxy/auth.lua ]
+    then
+        echo -e "${red}Ошибка: этот пункт поддерживается только для вариантов настройки с транспортом WebSocket или HTTPUpgrade${clear}"
+        echo ""
+        main_menu
+    fi
+
+    echo -e "${red}ВНИМАНИЕ!${clear}"
+    echo "Этот пункт рекомендуется в случае недоступности IP, который Cloudflare выделил вашему домену для проксирования"
+    echo "Нужно просканировать диапазоны IP Cloudflare с вашего устройства и самостоятельно выбрать оптимальный IP"
+    echo "Инструкция: https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/cf-scan-ip-ru.md"
+    echo ""
+    echo -e "${textcolor}[?]${clear} Выберите опцию:"
+    echo "0 - Выйти"
+    echo "1 - Настроить/сменить выбранный IP Cloudflare"
+    echo "2 - Убрать выбранный IP Cloudflare"
+    read cfoption
+    echo ""
+
+    case $cfoption in
+        1)
+        set_cf_ip
+        ;;
+        2)
+        remove_cf_ip
         ;;
         *)
         main_menu
@@ -1253,7 +1369,7 @@ show_paths() {
     echo ""
 
     echo -e "${textcolor}Скрипты:${clear}"
-    echo "Sbmanager (этот скрипт)                /usr/local/bin/sbmanager"
+    echo "Этот скрипт (sbmanager)                /usr/local/bin/sbmanager"
     echo "Скрипт, обновляющий наборы правил      /usr/local/bin/rsupdate"
     echo ""
     echo ""
@@ -1261,7 +1377,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.7"
+    export version="1.1.0"
     export language="1"
     export -f get_ip
     export -f replace_template
@@ -1287,26 +1403,27 @@ main_menu() {
     echo ""
     echo -e "${textcolor}Выберите действие:${clear}"
     echo "0 - Выйти"
-    echo "------------------------"
     echo "1 - Вывести список пользователей"
     echo "2 - Добавить нового пользователя"
     echo "3 - Удалить пользователя"
+    echo "---------------------------------"
     echo "4 - Поменять \"stack\" в tun-интерфейсе у пользователя"
     echo "5 - Синхронизировать настройки во всех клиентских конфигах"
-    echo "------------------------"
-    echo "6 - Вывести список доменов/суффиксов WARP"
-    echo "7 - Добавить домен/суффикс в WARP"
-    echo "8 - Удалить домен/суффикс из WARP"
-    echo "9 - Настроить/убрать цепочку из двух и более серверов"
-    echo "------------------------"
-    echo "10 - Обновить сертификат вручную"
-    echo "11 - Сменить домен"
-    echo "------------------------"
-    echo "12 - Отключить IPv6 на сервере"
-    echo "13 - Включить IPv6 на сервере"
-    echo "------------------------"
-    echo "14 - Показать пути до конфигов и других значимых файлов"
-    echo "15 - Обновить"
+    echo "6 - Настроить на клиенте подключение к выбранному IP Cloudflare"
+    echo "---------------------------------"
+    echo "7 - Вывести список доменов/суффиксов WARP"
+    echo "8 - Добавить домен/суффикс в WARP"
+    echo "9 - Удалить домен/суффикс из WARP"
+    echo "10 - Настроить/убрать цепочку из двух и более серверов"
+    echo "---------------------------------"
+    echo "11 - Обновить сертификат вручную"
+    echo "12 - Сменить домен"
+    echo "---------------------------------"
+    echo "13 - Отключить IPv6 на сервере"
+    echo "14 - Включить IPv6 на сервере"
+    echo "---------------------------------"
+    echo "15 - Показать пути до конфигов и других значимых файлов"
+    echo "16 - Обновить"
     read option
     echo ""
 
@@ -1327,33 +1444,36 @@ main_menu() {
         sync_client_configs
         ;;
         6)
-        show_warp_domains
+        cf_ip_settings
         ;;
         7)
-        add_warp_domains
+        show_warp_domains
         ;;
         8)
-        delete_warp_domains
+        add_warp_domains
         ;;
         9)
-        chain_setup
+        delete_warp_domains
         ;;
         10)
-        renew_cert
+        chain_setup
         ;;
         11)
-        change_domain
+        renew_cert
         ;;
         12)
-        disable_ipv6
+        change_domain
         ;;
         13)
-        enable_ipv6
+        disable_ipv6
         ;;
         14)
-        show_paths
+        enable_ipv6
         ;;
         15)
+        show_paths
+        ;;
+        16)
         update_ssb
         ;;
         *)

@@ -390,6 +390,11 @@ get_pass() {
         protocol="vless"
         cred=$(jq -r '.outbounds[] | select(.tag=="proxy") | .uuid' ${file})
     fi
+
+    if [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' ${file}) == "true" ]]
+    then
+        cfip=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' ${file})
+    fi
 }
 
 sync_client_configs_github() {
@@ -400,6 +405,7 @@ sync_client_configs_github() {
         cp /var/www/${subspath}/template.json ${file}
         inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
+
         if [[ "$protocol" == "trojan" ]] && [ -f /etc/haproxy/auth.lua ]
         then
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
@@ -409,7 +415,15 @@ sync_client_configs_github() {
         else
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
+
         sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" -e "s/$temprulesetpath/$rulesetpath/g" ${file}
+
+        if [[ ! -z $cfip ]]
+        then
+            echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" ${file})" > ${file}
+        fi
+
+        cfip=""
         cred=""
         inboundnum=""
         outboundnum=""
@@ -434,8 +448,8 @@ sync_client_configs_github() {
 sync_local_message() {
     echo -e "${red}ATTENTION!${clear}"
     echo -e "You can manually edit the settings in ${textcolor}/var/www/${subspath}/template-loc.json${clear} template"
-    echo "Do not change \"tag\" values in \"inbounds\" and \"outbounds\""
     echo "The settings in this file will be applied to client configs of all users"
+    echo "Do not change \"tag\" values in \"inbounds\" and \"outbounds\" while editing"
     echo ""
     echo -e "${textcolor}[?]${clear} Press ${textcolor}Enter${clear} to synchronize the settings or enter ${textcolor}x${clear} to exit:"
     read sync
@@ -461,6 +475,7 @@ sync_client_configs_local() {
         cp /var/www/${subspath}/template-loc.json ${file}
         inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
+
         if [[ "$protocol" == "trojan" ]] && [ -f /etc/haproxy/auth.lua ]
         then
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
@@ -470,7 +485,15 @@ sync_client_configs_local() {
         else
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
+
         sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" ${file}
+
+        if [[ ! -z $cfip ]]
+        then
+            echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" ${file})" > ${file}
+        fi
+
+        cfip=""
         cred=""
         inboundnum=""
         outboundnum=""
@@ -629,6 +652,99 @@ sync_client_configs() {
         ;;
         2)
         sync_with_local_temp
+        ;;
+        *)
+        main_menu
+    esac
+}
+
+check_cfip() {
+    while [[ ! $cfip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    do
+        echo -e "${red}Error: the entered value is not an IP${clear}"
+        echo ""
+        echo -e "${textcolor}[?]${clear} Enter the custom Cloudflare IP:"
+        read cfip
+        echo ""
+    done
+}
+
+set_cf_ip() {
+    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
+    read username
+    echo ""
+    exit_username
+    check_username_del
+    echo -e "${textcolor}[?]${clear} Enter the custom Cloudflare IP:"
+    read cfip
+    echo ""
+    check_cfip
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+
+    echo -e "Changed the settings for the user ${textcolor}${username}${clear}, IP ${textcolor}${cfip}${clear} has been set"
+    outboundnum=""
+    cfip=""
+    echo ""
+    main_menu
+}
+
+remove_cf_ip() {
+    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
+    read username
+    echo ""
+    exit_username
+    check_username_del
+
+    if [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]]
+    then
+        echo -e "${red}Error: the config file of this user does not contain Cloudflare IP anyway${clear}"
+        echo ""
+        main_menu
+    fi
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${domain}\" | del(.outbounds[${outboundnum}].transport.headers) | del(.route.rule_set[].download_detour)" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+
+    outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+    echo "$(jq ".outbounds[${outboundnum}].server = \"${domain}\" | del(.outbounds[${outboundnum}].transport.headers) | del(.route.rule_set[].download_detour)" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+
+    outboundnum=""
+    echo -e "Changed the settings for the user ${textcolor}${username}${clear}"
+    echo ""
+    main_menu
+}
+
+cf_ip_settings() {
+    if [ -f /etc/haproxy/auth.lua ]
+    then
+        echo -e "${red}Error: this option is only available for the setup variants with WebSocket or HTTPUpgrade transport${clear}"
+        echo ""
+        main_menu
+    fi
+
+    echo -e "${red}ATTENTION!${clear}"
+    echo "This option is recommended in case of unavailability of the IP that Cloudflare allocated to your domain for proxying"
+    echo "You need to scan Cloudflare IP ranges from your device and choose the optimal IP by yourself"
+    echo "Instruction: https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/cf-scan-ip-en.md"
+    echo ""
+    echo -e "${textcolor}[?]${clear} Select an option:"
+    echo "0 - Exit"
+    echo "1 - Setup/change custom Cloudflare IP"
+    echo "2 - Remove custom Cloudflare IP"
+    read cfoption
+    echo ""
+
+    case $cfoption in
+        1)
+        set_cf_ip
+        ;;
+        2)
+        remove_cf_ip
         ;;
         *)
         main_menu
@@ -1253,7 +1369,7 @@ show_paths() {
     echo ""
 
     echo -e "${textcolor}Scripts:${clear}"
-    echo "Sbmanager (this script)              /usr/local/bin/sbmanager"
+    echo "This script (sbmanager)              /usr/local/bin/sbmanager"
     echo "Rule set renewal script              /usr/local/bin/rsupdate"
     echo ""
     echo ""
@@ -1261,7 +1377,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.0.7"
+    export version="1.1.0"
     export language="2"
     export -f get_ip
     export -f replace_template
@@ -1287,26 +1403,27 @@ main_menu() {
     echo ""
     echo -e "${textcolor}Select an option:${clear}"
     echo "0 - Exit"
-    echo "------------------------"
     echo "1 - Show the list of users"
     echo "2 - Add a new user"
     echo "3 - Delete a user"
+    echo "---------------------------------"
     echo "4 - Change \"stack\" in tun interface of the user"
     echo "5 - Sync settings in all client configs"
-    echo "------------------------"
-    echo "6 - Show the list of domains/suffixes routed through WARP"
-    echo "7 - Add a new domain/suffix to WARP routing"
-    echo "8 - Delete a domain/suffix from WARP routing"
-    echo "9 - Setup/remove a chain of two or more servers"
-    echo "------------------------"
-    echo "10 - Renew certificate manually"
-    echo "11 - Change domain"
-    echo "------------------------"
-    echo "12 - Disable IPv6 on the server"
-    echo "13 - Enable IPv6 on the server"
-    echo "------------------------"
-    echo "14 - Show paths to configs and other important files"
-    echo "15 - Update"
+    echo "6 - Setup connection to custom Cloudflare IP on the client"
+    echo "---------------------------------"
+    echo "7 - Show the list of domains/suffixes routed through WARP"
+    echo "8 - Add a new domain/suffix to WARP routing"
+    echo "9 - Delete a domain/suffix from WARP routing"
+    echo "10 - Setup/remove a chain of two or more servers"
+    echo "---------------------------------"
+    echo "11 - Renew certificate manually"
+    echo "12 - Change domain"
+    echo "---------------------------------"
+    echo "13 - Disable IPv6 on the server"
+    echo "14 - Enable IPv6 on the server"
+    echo "---------------------------------"
+    echo "15 - Show paths to configs and other important files"
+    echo "16 - Update"
     read option
     echo ""
 
@@ -1327,33 +1444,36 @@ main_menu() {
         sync_client_configs
         ;;
         6)
-        show_warp_domains
+        cf_ip_settings
         ;;
         7)
-        add_warp_domains
+        show_warp_domains
         ;;
         8)
-        delete_warp_domains
+        add_warp_domains
         ;;
         9)
-        chain_setup
+        delete_warp_domains
         ;;
         10)
-        renew_cert
+        chain_setup
         ;;
         11)
-        change_domain
+        renew_cert
         ;;
         12)
-        disable_ipv6
+        change_domain
         ;;
         13)
-        enable_ipv6
+        disable_ipv6
         ;;
         14)
-        show_paths
+        enable_ipv6
         ;;
         15)
+        show_paths
+        ;;
+        16)
         update_ssb
         ;;
         *)

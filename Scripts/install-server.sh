@@ -2763,7 +2763,7 @@ final_message_ru() {
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
         echo ""
-        echo -e "${red}Ошибка: сертификат не выпущен, введите команду \"sbmanager\" и выберите пункт 10${clear}"
+        echo -e "${red}Ошибка: сертификат не выпущен, введите команду \"sbmanager\" и выберите пункт 11${clear}"
     fi
 }
 
@@ -2816,7 +2816,7 @@ final_message_en() {
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
         echo ""
-        echo -e "${red}Error: certificate has not been issued, enter \"sbmanager\" command and select option 10${clear}"
+        echo -e "${red}Error: certificate has not been issued, enter \"sbmanager\" command and select option 11${clear}"
     fi
 }
 
