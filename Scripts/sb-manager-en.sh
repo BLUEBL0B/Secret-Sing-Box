@@ -670,11 +670,6 @@ check_cfip() {
 }
 
 set_cf_ip() {
-    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
     echo -e "${textcolor}[?]${clear} Enter the custom Cloudflare IP:"
     read cfip
     echo ""
@@ -694,19 +689,6 @@ set_cf_ip() {
 }
 
 remove_cf_ip() {
-    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
-
-    if [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]]
-    then
-        echo -e "${red}Error: the config file of this user does not contain Cloudflare IP anyway${clear}"
-        echo ""
-        main_menu
-    fi
-
     outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
     echo "$(jq ".outbounds[${outboundnum}].server = \"${domain}\" | del(.outbounds[${outboundnum}].transport.headers) | del(.route.rule_set[].download_detour)" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
 
@@ -717,6 +699,15 @@ remove_cf_ip() {
     echo -e "Changed the settings for the user ${textcolor}${username}${clear}"
     echo ""
     main_menu
+}
+
+cf_text() {
+    echo -e "${textcolor}[?]${clear} Select an option:"
+    echo "0 - Exit"
+    echo "1 - Setup/change custom Cloudflare IP   ${cf_ip_status}"
+    echo "2 - Remove custom Cloudflare IP"
+    read cfoption
+    echo ""
 }
 
 cf_ip_settings() {
@@ -732,12 +723,30 @@ cf_ip_settings() {
     echo "You need to scan Cloudflare IP ranges from your device and choose the optimal IP by yourself"
     echo "Instruction: https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/cf-scan-ip-en.md"
     echo ""
-    echo -e "${textcolor}[?]${clear} Select an option:"
-    echo "0 - Exit"
-    echo "1 - Setup/change custom Cloudflare IP"
-    echo "2 - Remove custom Cloudflare IP"
-    read cfoption
+
+    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
+    read username
     echo ""
+    exit_username
+    check_username_del
+
+    sel_cfip=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+
+    if [[ $sel_cfip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        cf_ip_status="[Selected: ${sel_cfip}]"
+    else
+        cf_ip_status="[Cloudflare IP is not selected]"
+    fi
+
+    cf_text
+
+    while [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]] && [[ $cfoption == "2" ]]
+    do
+        echo -e "${red}Error: the config file of this user does not contain Cloudflare IP anyway${clear}"
+        echo ""
+        cf_text
+    done
 
     case $cfoption in
         1)
@@ -1377,7 +1386,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.1.0"
+    export version="1.1.1"
     export language="2"
     export -f get_ip
     export -f replace_template

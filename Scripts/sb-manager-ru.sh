@@ -670,11 +670,6 @@ check_cfip() {
 }
 
 set_cf_ip() {
-    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
     echo -e "${textcolor}[?]${clear} Введите выбранный IP Cloudflare:"
     read cfip
     echo ""
@@ -694,19 +689,6 @@ set_cf_ip() {
 }
 
 remove_cf_ip() {
-    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
-
-    if [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]]
-    then
-        echo -e "${red}Ошибка: IP Cloudflare итак не указан в конфиге этого пользователя${clear}"
-        echo ""
-        main_menu
-    fi
-
     outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
     echo "$(jq ".outbounds[${outboundnum}].server = \"${domain}\" | del(.outbounds[${outboundnum}].transport.headers) | del(.route.rule_set[].download_detour)" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
 
@@ -717,6 +699,15 @@ remove_cf_ip() {
     echo -e "Изменение настроек для пользователя ${textcolor}${username}${clear} завершено"
     echo ""
     main_menu
+}
+
+cf_text() {
+    echo -e "${textcolor}[?]${clear} Выберите опцию:"
+    echo "0 - Выйти"
+    echo "1 - Настроить/сменить выбранный IP Cloudflare   ${cf_ip_status}"
+    echo "2 - Убрать выбранный IP Cloudflare"
+    read cfoption
+    echo ""
 }
 
 cf_ip_settings() {
@@ -732,12 +723,30 @@ cf_ip_settings() {
     echo "Нужно просканировать диапазоны IP Cloudflare с вашего устройства и самостоятельно выбрать оптимальный IP"
     echo "Инструкция: https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/cf-scan-ip-ru.md"
     echo ""
-    echo -e "${textcolor}[?]${clear} Выберите опцию:"
-    echo "0 - Выйти"
-    echo "1 - Настроить/сменить выбранный IP Cloudflare"
-    echo "2 - Убрать выбранный IP Cloudflare"
-    read cfoption
+
+    echo -e "${textcolor}[?]${clear} Введите имя пользователя или введите ${textcolor}x${clear}, чтобы закончить:"
+    read username
     echo ""
+    exit_username
+    check_username_del
+
+    sel_cfip=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+
+    if [[ $sel_cfip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+    then
+        cf_ip_status="[Выбрано: ${sel_cfip}]"
+    else
+        cf_ip_status="[IP Cloudflare не выбран]"
+    fi
+
+    cf_text
+
+    while [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]] && [[ $cfoption == "2" ]]
+    do
+        echo -e "${red}Ошибка: IP Cloudflare итак не указан в конфиге этого пользователя${clear}"
+        echo ""
+        cf_text
+    done
 
     case $cfoption in
         1)
@@ -1377,7 +1386,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.1.0"
+    export version="1.1.1"
     export language="1"
     export -f get_ip
     export -f replace_template
