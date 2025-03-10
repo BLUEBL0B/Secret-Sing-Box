@@ -1394,11 +1394,6 @@ cat > /etc/sing-box/config.json <<EOF
         "method": "drop"
       },
       {
-        "protocol": "quic",
-        "action": "reject",
-        "method": "drop"
-      },
-      {
         "rule_set": [
           "geoip-ru",
           "gov-ru",
@@ -1574,7 +1569,9 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         ],
         "rule_set": [
           "telegram",
-          "google"
+          "google",
+          "openai",
+          "microsoft"
         ],
         "server": "dns-remote"
       },
@@ -1761,7 +1758,9 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         ],
         "rule_set": [
           "telegram",
-          "google"
+          "google",
+          "openai",
+          "microsoft"
         ],
         "outbound": "proxy"
       },
@@ -1904,6 +1903,18 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://${domain}/${rulesetpath}/geosite-google.srs"
+      },
+      {
+        "tag": "microsoft",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://${domain}/${rulesetpath}/geosite-microsoft.srs"
+      },
+      {
+        "tag": "openai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://${domain}/${rulesetpath}/geosite-openai.srs"
       },
       {
         "tag": "telegram",

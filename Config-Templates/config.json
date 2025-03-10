@@ -105,11 +105,6 @@
         "method": "drop"
       },
       {
-        "protocol": "quic",
-        "action": "reject",
-        "method": "drop"
-      },
-      {
         "rule_set": [
           "geoip-ru",
           "gov-ru",
