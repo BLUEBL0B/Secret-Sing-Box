@@ -1569,9 +1569,7 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         ],
         "rule_set": [
           "telegram",
-          "google",
-          "openai",
-          "microsoft"
+          "google"
         ],
         "server": "dns-remote"
       },
@@ -1758,15 +1756,9 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         ],
         "rule_set": [
           "telegram",
-          "google",
-          "openai",
-          "microsoft"
+          "google"
         ],
         "outbound": "proxy"
-      },
-      {
-        "protocol": "quic",
-        "outbound": "direct"
       },
       {
         "domain_suffix": [
@@ -1903,18 +1895,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://${domain}/${rulesetpath}/geosite-google.srs"
-      },
-      {
-        "tag": "microsoft",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-microsoft.srs"
-      },
-      {
-        "tag": "openai",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-openai.srs"
       },
       {
         "tag": "telegram",
