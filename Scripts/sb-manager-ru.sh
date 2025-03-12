@@ -111,7 +111,7 @@ get_data() {
 validate_template() {
     if [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -ne 0 ] || [ ! -s /var/www/${subspath}/template.json ]
     then
-        echo -e "${red}Ошибка: не удалось загрузить данные с Github${clear}"
+        echo -e "${red}Ошибка: не удалось загрузить данные с GitHub${clear}"
         echo ""
         main_menu
     fi
@@ -355,7 +355,7 @@ del_from_auth_lua() {
 
 sync_github_message() {
     echo -e "${red}ВНИМАНИЕ!${clear}"
-    echo "Настройки в клиентских конфигах всех пользователей будут синхронизированы с последней версией на Github"
+    echo "Настройки в клиентских конфигах всех пользователей будут синхронизированы с последней версией на GitHub"
     echo ""
     echo -e "${textcolor}[?]${clear} Нажмите ${textcolor}Enter${clear}, чтобы синхронизировать настройки, или введите ${textcolor}x${clear}, чтобы выйти:"
     read sync
@@ -641,7 +641,7 @@ sync_with_local_temp() {
 sync_client_configs() {
     echo -e "${textcolor}Выберите вариант синхронизации:${clear}"
     echo "0 - Выйти"
-    echo "1 - Синхронизировать с Github"
+    echo "1 - Синхронизировать с GitHub"
     echo "2 - Синхронизировать с локальным шаблоном (свои настройки)"
     read syncoption
     echo ""
@@ -898,6 +898,10 @@ chain_end() {
         warp_rule=$(echo "${config_temp}" | jq '.route.rules[] | select(.outbound=="warp")')
         warpnum=$(jq '[.route.rules[].outbound] | index("warp")' /etc/sing-box/config.json)
         echo "$(jq ".route.rules[${warpnum}] |= . + ${warp_rule}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+    else
+        echo -e "${red}Ошибка: не удалось загрузить данные с GitHub${clear}"
+        echo ""
+        main_menu
     fi
 
     echo "$(jq 'del(.route.rules[] | select(.outbound=="proxy")) | del(.outbounds[] | select(.tag=="proxy"))' /etc/sing-box/config.json)" > /etc/sing-box/config.json
@@ -912,25 +916,33 @@ chain_end() {
         echo "$(jq '.route.rules[.route.rules | length] |= . + {"rule_set":["google"],"outbound":"IPv4"}' /etc/sing-box/config.json)" > /etc/sing-box/config.json
     fi
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "google")' /etc/sing-box/config.json) == "false" ]] && [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
-    then
-        google_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="google")')
-        echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${google_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
-    fi
+    rule_sets=(google telegram openai)
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "false" ]] && [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
-    then
-        telegram_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="telegram")')
-        echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${telegram_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
-    fi
-
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "false" ]] && [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
-    then
-        openai_set=$(echo "${config_temp}" | jq '.route.rule_set[] | select(.tag=="openai")')
-        echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + ${openai_set}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
-    fi
+    for ruleset_tag in "${rule_sets[@]}"
+    do
+        if [[ $(jq "any(.route.rule_set[]; .tag == \"${ruleset_tag}\")" /etc/sing-box/config.json) == "false" ]]
+        then
+            echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + {\"tag\":\"${ruleset_tag}\",\"type\":\"local\",\"format\":\"binary\",\"path\":\"/var/www/${rulesetpath}/geosite-${ruleset_tag}.srs\"}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+        fi
+    done
 
     sed -i -e "s/$temprulesetpath/$rulesetpath/g" /etc/sing-box/config.json
+
+    for i in $(seq 0 $(expr $(jq ".route.rules[${warpnum}].rule_set | length" /etc/sing-box/config.json) - 1))
+    do
+        ruleset_tag=$(jq -r ".route.rules[${warpnum}].rule_set[${i}]" /etc/sing-box/config.json)
+
+        if [[ $(jq "any(.route.rule_set[]; .tag == \"${ruleset_tag}\")" /etc/sing-box/config.json) == "false" ]]
+        then
+            echo "$(jq ".route.rule_set[.route.rule_set | length] |= . + {\"tag\":\"${ruleset_tag}\",\"type\":\"local\",\"format\":\"binary\",\"path\":\"/var/www/${rulesetpath}/geosite-${ruleset_tag}.srs\"}" /etc/sing-box/config.json)" > /etc/sing-box/config.json
+        fi
+
+        if [ ! -f /var/www/${rulesetpath}/geosite-${ruleset_tag}.srs ]
+        then
+            wget -q -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geosite/raw/rule-set/geosite-${ruleset_tag}.srs
+            chmod -R 755 /var/www/${rulesetpath}
+        fi
+    done
 
     systemctl reload sing-box.service
 
@@ -981,20 +993,15 @@ chain_middle() {
         echo "$(jq </etc/sing-box/config.json 'del(.route.rules[] | select(.outbound=="IPv4"))')" > /etc/sing-box/config.json
     fi
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "google")' /etc/sing-box/config.json) == "true" ]]
-    then
-        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="google"))')" > /etc/sing-box/config.json
-    fi
+    rule_sets=(google telegram openai)
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "true" ]]
-    then
-        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="telegram"))')" > /etc/sing-box/config.json
-    fi
-
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "true" ]]
-    then
-        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="openai"))')" > /etc/sing-box/config.json
-    fi
+    for ruleset_tag in "${rule_sets[@]}"
+    do
+        if [[ $(jq "any(.route.rule_set[]; .tag == \"${ruleset_tag}\")" /etc/sing-box/config.json) == "true" ]]
+        then
+            echo "$(jq </etc/sing-box/config.json "del(.route.rule_set[] | select(.tag==\"${ruleset_tag}\"))")" > /etc/sing-box/config.json
+        fi
+    done
 
     systemctl reload sing-box.service
 
@@ -1402,7 +1409,7 @@ update_ssb() {
         bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/update-server.sh)
         exit 0
     else
-        echo -e "${red}Ошибка: не удалось загрузить данные с Github${clear}"
+        echo -e "${red}Ошибка: не удалось загрузить данные с GitHub${clear}"
         echo ""
         main_menu
     fi

@@ -118,20 +118,15 @@ insert_chain() {
         echo "$(jq </etc/sing-box/config.json 'del(.route.rules[] | select(.outbound=="IPv4"))')" > /etc/sing-box/config.json
     fi
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "google")' /etc/sing-box/config.json) == "true" ]]
-    then
-        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="google"))')" > /etc/sing-box/config.json
-    fi
+    rule_sets=(google telegram openai)
 
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "telegram")' /etc/sing-box/config.json) == "true" ]]
-    then
-        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="telegram"))')" > /etc/sing-box/config.json
-    fi
-
-    if [[ $(jq 'any(.route.rule_set[]; .tag == "openai")' /etc/sing-box/config.json) == "true" ]]
-    then
-        echo "$(jq </etc/sing-box/config.json 'del(.route.rule_set[] | select(.tag=="openai"))')" > /etc/sing-box/config.json
-    fi
+    for ruleset_tag in "${rule_sets[@]}"
+    do
+        if [[ $(jq "any(.route.rule_set[]; .tag == \"${ruleset_tag}\")" /etc/sing-box/config.json) == "true" ]]
+        then
+            echo "$(jq </etc/sing-box/config.json "del(.route.rule_set[] | select(.tag==\"${ruleset_tag}\"))")" > /etc/sing-box/config.json
+        fi
+    done
 }
 
 update_services() {
@@ -181,7 +176,7 @@ update_services() {
     chmod -R 755 /var/www/${rulesetpath}
 
     apt-mark unhold sing-box
-    apt update -y && apt full-upgrade -y
+    apt update -y && apt -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" full-upgrade -y
     apt-mark hold sing-box
     apt autoremove -y && apt autoclean -y
     systemctl daemon-reload
@@ -206,9 +201,9 @@ update_services() {
 check_sync_client() {
     if [[ "${language}" == "1" ]]
     then
-        echo -e "${textcolor_light}Синхронизация настроек в клиентских конфигах с Github...${clear}"
+        echo -e "${textcolor_light}Синхронизация настроек в клиентских конфигах с GitHub...${clear}"
     else
-        echo -e "${textcolor_light}Syncing settings in client configs with Github...${clear}"
+        echo -e "${textcolor_light}Syncing settings in client configs with GitHub...${clear}"
     fi
     
     check_users
@@ -295,12 +290,12 @@ update_menu() {
         echo -e "${textcolor}[?]${clear} Выберите вариант обновления:"
         echo "0 - Выйти"
         echo "1 - Обновить всё"
-        echo "2 - Обновить без синхронизации клиентских конфигов с Github"
+        echo "2 - Обновить без синхронизации клиентских конфигов с GitHub"
     else
         echo -e "${textcolor}[?]${clear} Select an update option:"
         echo "0 - Exit"
         echo "1 - Update everything"
-        echo "2 - Update without syncing client configs with Github"
+        echo "2 - Update without syncing client configs with GitHub"
     fi
     read update_option
     echo ""
