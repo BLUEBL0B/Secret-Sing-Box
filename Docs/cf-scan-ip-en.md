@@ -68,7 +68,7 @@ Then open the app and use the commands below to:
 - Extract the archive, make the file executable, and run CloudflareScanner.
 
 ```bash
-pkg install wget
+pkg install wget -y
 wget "https://github.com/Ptechgithub/CloudflareScanner/releases/latest/download/CloudflareScanner_android-arm64.zip"
 unzip "CloudflareScanner_android-arm64.zip" -d CloudflareScanner && cd CloudflareScanner
 chmod +x CloudflareScanner
