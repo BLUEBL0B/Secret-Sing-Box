@@ -1,6 +1,6 @@
-## How to Select a Cloudflare Subnet?
+# How to Select a Cloudflare Subnet?
 
-We will use the CloudflareScanner tool to test latency and download speed for Cloudflare's CDN, identifying the fastest IP addresses (IPv4 and IPv6). Run the scanner without VPN/proxy.
+We will use the **CloudflareScanner** tool to test latency and download speed for Cloudflare's CDN, identifying the fastest IP addresses (IPv4 and IPv6). Run the scanner without VPN/proxy.
 
 ### Main Features
 
