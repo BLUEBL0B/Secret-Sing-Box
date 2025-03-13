@@ -1183,7 +1183,7 @@ check_cf_token() {
         echo ""
         while [[ -z $domain ]]
         do
-            echo -e "${textcolor}[?]${clear} Enter your domain name or enter ${textcolor}x${clear} to exit:"
+            echo -e "${textcolor}[?]${clear} Enter new domain name or enter ${textcolor}x${clear} to exit:"
             read domain
             echo ""
         done
@@ -1222,7 +1222,7 @@ change_domain() {
 
     while [[ -z $domain ]]
     do
-        echo -e "${textcolor}[?]${clear} Enter your domain name or enter ${textcolor}x${clear} to exit:"
+        echo -e "${textcolor}[?]${clear} Enter new domain name or enter ${textcolor}x${clear} to exit:"
         read domain
         echo ""
     done
