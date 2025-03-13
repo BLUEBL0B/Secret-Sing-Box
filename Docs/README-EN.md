@@ -26,15 +26,16 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 ### Includes:
 1) Sing-Box server setup
 2) NGINX or HAProxy reverse proxy and website setup on port 443
-3) Cloudflare TLS certificates with auto renewal
+3) TLS certificates with Cloudflare DNS validation and auto renewal
 4) Security setup (optional)
 5) Multiplexing to optimise connections and to solve TLS in TLS problem
 6) Enable BBR
 7) WARP setup
 8) Optional setup of proxy chains of two or more servers
-9) Client Sing-Box configs with routing rules for Russia
-10) Automated management of user config files
-11) Page for convenient distribution of subscriptions
+9) An option to setup connection to custom Cloudflare IP on the client
+10) Client Sing-Box configs with routing rules for Russia
+11) Automated management of user config files
+12) Page for convenient distribution of subscriptions
  
 ### Server setup:
 
