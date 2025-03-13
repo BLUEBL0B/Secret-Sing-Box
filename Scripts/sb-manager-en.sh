@@ -555,7 +555,7 @@ delete_users() {
 }
 
 stack_text() {
-    echo -e "${textcolor}[?]${clear} Select \"stack\" value for user ${username}:"
+    echo -e "${textcolor}[?]${clear} Select \"stack\" value for the user ${textcolor}${username}${clear}:"
     echo "0 - Exit"
     echo "1 - \"system\" (system stack, the best performance, default value)             ${stack_sel_1}"
     echo "2 - \"gvisor\" (runs in userspace, is recommended if \"system\" isn't working)   ${stack_sel_2}"
@@ -565,59 +565,56 @@ stack_text() {
 }
 
 change_stack() {
-    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
+    while [[ $username != "x" ]] && [[ $username != "х" ]]
+    do
+        enter_user_data_del
 
-    if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
-    then
-        stack_sel_1="[Selected]"
-        stack_sel_2=""
-        stack_sel_3=""
-    elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "gvisor" ]]
-    then
-        stack_sel_1=""
-        stack_sel_2="[Selected]"
-        stack_sel_3=""
-    elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "mixed" ]]
-    then
-        stack_sel_1=""
-        stack_sel_2=""
-        stack_sel_3="[Selected]"
-    fi
+        if [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "system" ]]
+        then
+            stack_sel_1="[Selected]"
+            stack_sel_2=""
+            stack_sel_3=""
+        elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "gvisor" ]]
+        then
+            stack_sel_1=""
+            stack_sel_2="[Selected]"
+            stack_sel_3=""
+        elif [[ $(jq -r '.inbounds[] | select(.tag=="tun-in") | .stack' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "mixed" ]]
+        then
+            stack_sel_1=""
+            stack_sel_2=""
+            stack_sel_3="[Selected]"
+        fi
 
-    stack_text
+        stack_text
 
-    case $stackoption in
-        1)
-        stack_value="system"
-        ;;
-        2)
-        stack_value="gvisor"
-        ;;
-        3)
-        stack_value="mixed"
-        ;;
-        *)
-        main_menu
-    esac
+        case $stackoption in
+            1)
+            stack_value="system"
+            ;;
+            2)
+            stack_value="gvisor"
+            ;;
+            3)
+            stack_value="mixed"
+            ;;
+            *)
+            main_menu
+        esac
 
-    inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
-    echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
+        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
+        echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-TRJ-CLIENT.json)" > /var/www/${subspath}/${username}-TRJ-CLIENT.json
 
-    if [ ! -f /etc/haproxy/auth.lua ]
-    then
-        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
-        echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
-    fi
+        if [ ! -f /etc/haproxy/auth.lua ]
+        then
+            inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' /var/www/${subspath}/${username}-VLESS-CLIENT.json)
+            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack_value}\"" /var/www/${subspath}/${username}-VLESS-CLIENT.json)" > /var/www/${subspath}/${username}-VLESS-CLIENT.json
+        fi
 
-    inboundnum=""
-    stack_value=""
-    echo "The \"stack\" value has been changed, update the config on the client app to apply new settings"
-    echo ""
-    main_menu
+        inboundnum=""
+        echo -e "The \"stack\" value for the user ${textcolor}${username}${clear} has been changed, update the config on the client app to apply new settings"
+        echo ""
+    done
 }
 
 sync_with_github() {
@@ -685,7 +682,6 @@ set_cf_ip() {
     outboundnum=""
     cfip=""
     echo ""
-    main_menu
 }
 
 remove_cf_ip() {
@@ -698,11 +694,10 @@ remove_cf_ip() {
     outboundnum=""
     echo -e "Changed the settings for the user ${textcolor}${username}${clear}"
     echo ""
-    main_menu
 }
 
 cf_text() {
-    echo -e "${textcolor}[?]${clear} Select an option:"
+    echo -e "${textcolor}[?]${clear} Select an option for the user ${textcolor}${username}${clear}:"
     echo "0 - Exit"
     echo "1 - Setup/change custom Cloudflare IP   ${cf_ip_status}"
     echo "2 - Remove custom Cloudflare IP"
@@ -724,40 +719,38 @@ cf_ip_settings() {
     echo "Instruction: https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/cf-scan-ip-en.md"
     echo ""
 
-    echo -e "${textcolor}[?]${clear} Enter the name of the user or enter ${textcolor}x${clear} to exit:"
-    read username
-    echo ""
-    exit_username
-    check_username_del
-
-    sel_cfip=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
-
-    if [[ $sel_cfip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
-    then
-        cf_ip_status="[Selected: ${sel_cfip}]"
-    else
-        cf_ip_status="[Cloudflare IP is not selected]"
-    fi
-
-    cf_text
-
-    while [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]] && [[ $cfoption == "2" ]]
+    while [[ $username != "x" ]] && [[ $username != "х" ]]
     do
-        echo -e "${red}Error: the config file of this user does not contain Cloudflare IP anyway${clear}"
-        echo ""
-        cf_text
-    done
+        enter_user_data_del
+        sel_cfip=$(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /var/www/${subspath}/${username}-TRJ-CLIENT.json)
 
-    case $cfoption in
-        1)
-        set_cf_ip
-        ;;
-        2)
-        remove_cf_ip
-        ;;
-        *)
-        main_menu
-    esac
+        if [[ $sel_cfip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+        then
+            cf_ip_status="[Selected: ${sel_cfip}]"
+        else
+            cf_ip_status="[Cloudflare IP is not selected]"
+        fi
+
+        cf_text
+
+        while [[ $(jq '.outbounds[] | select(.tag=="proxy") | .transport | has("headers")' /var/www/${subspath}/${username}-TRJ-CLIENT.json) == "false" ]] && [[ $cfoption == "2" ]]
+        do
+            echo -e "${red}Error: the config file of this user does not contain Cloudflare IP anyway${clear}"
+            echo ""
+            cf_text
+        done
+
+        case $cfoption in
+            1)
+            set_cf_ip
+            ;;
+            2)
+            remove_cf_ip
+            ;;
+            *)
+            main_menu
+        esac
+    done
 }
 
 show_warp_domains() {
