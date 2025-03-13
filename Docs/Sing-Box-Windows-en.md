@@ -1,3 +1,5 @@
+# Setting Up Sing-Box Client on Windows
+
 ### 1.1) Install Sing-Box (for Windows 10 and 11)
 
 Press Win + X and open the terminal with admin rights:
