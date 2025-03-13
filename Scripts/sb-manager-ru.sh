@@ -1271,7 +1271,10 @@ change_domain() {
 
     if [ ! -f /etc/haproxy/auth.lua ]
     then
-        echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        if ! grep -q "systemctl reload nginx" /etc/letsencrypt/renewal/${domain}.conf
+        then
+            echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        fi
         sed -i -e "s/$old_domain/$domain/g" /etc/nginx/nginx.conf
         systemctl reload nginx.service
         if [ $? -ne 0 ]
@@ -1279,7 +1282,10 @@ change_domain() {
             systemctl start nginx.service
         fi
     else
-        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        if ! grep -q "systemctl reload haproxy" /etc/letsencrypt/renewal/${domain}.conf
+        then
+            echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        fi
         cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
         sed -i -e "s/$old_domain/$domain/g" /etc/haproxy/haproxy.cfg
         systemctl reload haproxy.service
