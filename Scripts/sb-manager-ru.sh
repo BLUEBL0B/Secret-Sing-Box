@@ -1026,7 +1026,7 @@ chain_setup() {
         chain_sel_2=""
     else
         chain_sel_1=""
-        chain_sel_2="[Выбрано]"
+        chain_sel_2="[Выбрано: $(jq -r '.outbounds[] | select(.tag=="proxy") | .server' /etc/sing-box/config.json)]"
     fi
 
     chain_text
@@ -1216,6 +1216,8 @@ change_domain() {
     cftoken=""
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Не забудьте создать А запись для нового домена и заменить домен в ссылках для клиентов"
+    echo ""
+    echo -e "Текущий домен: ${textcolor}${old_domain}${clear}"
     echo ""
 
     while [[ -z $domain ]]
