@@ -3,7 +3,6 @@
 rulesetpath=$(grep "alias /var/www/" /etc/nginx/nginx.conf | head -n 1)
 rulesetpath=${rulesetpath#*"alias /var/www/"}
 rulesetpath=${rulesetpath%"/;"*}
-
 rulesetlist=$(ls -A1 /var/www/${rulesetpath} | grep -v ".1")
 
 for k in $(seq 1 $(echo "$rulesetlist" | wc -l))
@@ -31,3 +30,4 @@ then
 fi
 
 chmod -R 755 /var/www/${rulesetpath}
+journalctl --vacuum-time=7days &> /dev/null
