@@ -1079,8 +1079,6 @@ install_packages() {
         apt install haproxy -y
     fi
 
-    journalctl --vacuum-time=7days
-
     echo ""
 }
 
