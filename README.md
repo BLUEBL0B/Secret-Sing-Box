@@ -91,6 +91,8 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 ### Вы можете поддержать проект, если он полезен для вас:
 - USDT (BEP20): 0xe2FeA540a9F1f85C2bfA3e6949c722393B5d636A
+- USDT (TRC20): TPceeuLTAYZ1wFHiRSK2A3YRHnzyQDNnx6
+- USDT (ERC20): 0x398846E32D56B0996dD6C06e4F5C62AEd3801c23
 - Litecoin (BIP84): ltc1q7quvcq3gtlwf2yuk370vhf2syad8ee4we9huj4
 - Toncoin (TON): UQCWmIBsU-EZJSH3rhghbtSOtKQBmb5y74mkjbohpDWZ6l-H
 
