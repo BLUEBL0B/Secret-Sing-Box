@@ -1341,6 +1341,10 @@ show_paths() {
 
     echo -e "${textcolor}Certificates and accessory files:${clear}"
     echo "Certificate directory                /etc/letsencrypt/live/${domain}/"
+    if [ -f /etc/haproxy/certs/${domain}.pem ]
+    then
+        echo "Combined file with certificates      /etc/haproxy/certs/${domain}.pem"
+    fi
     echo "Certificate renewal config           /etc/letsencrypt/renewal/${domain}.conf"
     echo "File with Cloudflare API token/key   /etc/letsencrypt/cloudflare.credentials"
     echo ""
