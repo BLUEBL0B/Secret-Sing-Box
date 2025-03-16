@@ -16,7 +16,7 @@ check_parent() {
 }
 
 check_update() {
-    new_version="1.1.2"
+    new_version="1.1.3"
 
     if [[ "${version}" == "${new_version}" ]]
     then
@@ -225,20 +225,20 @@ update_sub_page() {
 
     if [ ! -f /etc/haproxy/auth.lua ] && [[ "${language}" == "1" ]]
     then
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru.html
+        sub_page_file="sub-ru.html"
     elif [ ! -f /etc/haproxy/auth.lua ] && [[ "${language}" != "1" ]]
     then
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en.html
+        sub_page_file="sub-en.html"
     elif [ -f /etc/haproxy/auth.lua ] && [[ "${language}" == "1" ]]
     then
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru-hapr.html
+        sub_page_file="sub-ru-hapr.html"
     else
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en-hapr.html
+        sub_page_file="sub-en-hapr.html"
     fi
 
-    sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
-
+    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/${sub_page_file}
     wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/background.jpg
+    sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
 }
 
 update_scripts() {
@@ -249,23 +249,28 @@ update_scripts() {
         echo -e "${textcolor_light}Updating scripts...${clear}"
     fi
 
-    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/ruleset-update.sh
-    chmod +x /usr/local/bin/rsupdate
-
     if [[ "${language}" == "1" ]]
     then
-        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-ru.sh
-        chmod +x /usr/local/bin/sbmanager
-        echo ""
+        sbmanager_file="sb-manager-ru.sh"
+    else
+        sbmanager_file="sb-manager-en.sh"
+    fi
+
+    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/${sbmanager_file}
+    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/ruleset-update.sh
+    chmod +x /usr/local/bin/sbmanager /usr/local/bin/rsupdate
+    echo ""
+}
+
+final_message() {
+    if [[ "${language}" == "1" ]]
+    then
         echo -e "${textcolor}Установка обновления v${new_version} завершена!${clear}"
         echo "Перезагружать сервер не обязательно"
         echo ""
         echo "При проблемах с Sing-Box запустите команду:"
         echo "cp -f /etc/sing-box/config.json.0 /etc/sing-box/config.json && systemctl restart sing-box"
     else
-        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-en.sh
-        chmod +x /usr/local/bin/sbmanager
-        echo ""
         echo -e "${textcolor}The update v${new_version} has been installed!${clear}"
         echo "It is not necessary to reboot the server"
         echo ""
@@ -306,11 +311,13 @@ update_menu() {
         check_sync_client
         update_sub_page
         update_scripts
+        final_message
         ;;
         2)
         update_services
         update_sub_page
         update_scripts
+        final_message
         ;;
         *)
         exit 0

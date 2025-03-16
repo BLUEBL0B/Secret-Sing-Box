@@ -354,31 +354,9 @@ check_cf_token_ru() {
 
     while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
     do
-        domain=""
-        email=""
-        cftoken=""
         echo ""
         echo -e "${red}Ошибка: неправильно введён домен, API токен/ключ или почта${clear}"
-        echo ""
-        while [[ -z $domain ]]
-        do
-            echo -e "${textcolor}[?]${clear} Введите ваш домен:"
-            read domain
-            echo ""
-        done
-        crop_domain
-        while [[ -z $email ]]
-        do
-            echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
-            read email
-            echo ""
-        done
-        while [[ -z $cftoken ]]
-        do
-            echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
-            read cftoken
-            echo ""
-        done
+        enter_domain_data_ru
         echo "Проверка домена, API токена/ключа и почты..."
         get_test_response
     done
@@ -393,31 +371,9 @@ check_cf_token_en() {
 
     while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
     do
-        domain=""
-        email=""
-        cftoken=""
         echo ""
         echo -e "${red}Error: invalid domain name, API token/key or email${clear}"
-        echo ""
-        while [[ -z $domain ]]
-        do
-            echo -e "${textcolor}[?]${clear} Enter your domain name:"
-            read domain
-            echo ""
-        done
-        crop_domain
-        while [[ -z $email ]]
-        do
-            echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
-            read email
-            echo ""
-        done
-        while [[ -z $cftoken ]]
-        do
-            echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
-            read cftoken
-            echo ""
-        done
+        enter_domain_data_en
         echo "Checking domain name, API token/key and email..."
         get_test_response
     done
@@ -655,6 +611,8 @@ check_index_en() {
 }
 
 check_site_link_ru() {
+    apt install wget -y &> /dev/null
+
     while [[ $sitelink =~ " " ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
     do
         if [[ -z $sitelink ]]
@@ -672,6 +630,8 @@ check_site_link_ru() {
 }
 
 check_site_link_en() {
+    apt install wget -y &> /dev/null
+    
     while [[ $sitelink =~ " " ]] || [[ "$(curl -s -o /dev/null -w "%{http_code}" https://${sitelink})" == "000" ]] || [[ -z $sitelink ]] || [ $(wget -q -O /dev/null https://${sitelink}; echo $?) -ne 0 ]
     do
         if [[ -z $sitelink ]]
@@ -826,7 +786,10 @@ enter_ssh_data_en() {
     fi
 }
 
-enter_data_ru() {
+enter_domain_data_ru() {
+    domain=""
+    email=""
+    cftoken=""
     echo ""
     while [[ -z $domain ]]
     do
@@ -847,6 +810,36 @@ enter_data_ru() {
         read cftoken
         echo ""
     done
+}
+
+enter_domain_data_en() {
+    domain=""
+    email=""
+    cftoken=""
+    echo ""
+    while [[ -z $domain ]]
+    do
+        echo -e "${textcolor}[?]${clear} Enter your domain name:"
+        read domain
+        echo ""
+    done
+    crop_domain
+    while [[ -z $email ]]
+    do
+        echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
+        read email
+        echo ""
+    done
+    while [[ -z $cftoken ]]
+    do
+        echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+        read cftoken
+        echo ""
+    done
+}
+
+enter_data_ru() {
+    enter_domain_data_ru
     check_cf_token_ru
     echo -e "${textcolor}[?]${clear} Выберите вариант настройки прокси:"
     echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
@@ -909,26 +902,7 @@ enter_data_ru() {
 }
 
 enter_data_en() {
-    echo ""
-    while [[ -z $domain ]]
-    do
-        echo -e "${textcolor}[?]${clear} Enter your domain name:"
-        read domain
-        echo ""
-    done
-    crop_domain
-    while [[ -z $email ]]
-    do
-        echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
-        read email
-        echo ""
-    done
-    while [[ -z $cftoken ]]
-    do
-        echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
-        read cftoken
-        echo ""
-    done
+    enter_domain_data_en
     check_cf_token_en
     echo -e "${textcolor}[?]${clear} Select a proxy setup option:"
     echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
@@ -1583,7 +1557,9 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "kinescope.io",
           "redheadsound.studio",
           "plplayer.online",
-          "lomont.site"
+          "lomont.site",
+          "remanga.org",
+          "shopstory.live"
         ],
         "domain_keyword": [
           "xn--",
@@ -1770,7 +1746,9 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "kinescope.io",
           "redheadsound.studio",
           "plplayer.online",
-          "lomont.site"
+          "lomont.site",
+          "remanga.org",
+          "shopstory.live"
         ],
         "domain_keyword": [
           "xn--",
@@ -2539,7 +2517,7 @@ placeholderhash=$(echo -n "${placeholder}" | openssl dgst -sha224 | sed 's/.* //
 cat > /etc/haproxy/auth.lua <<EOF
 local passwords = {
     ["${passhash}"] = true,
-    ["${placeholderhash}"] = true		-- Placeholder
+    ["${placeholderhash}"] = false		-- Placeholder
 }
 
 function trojan_auth(txn)
@@ -2657,22 +2635,24 @@ add_sbmanager() {
 
     if [[ "${language}" == "1" ]]
     then
-        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-ru.sh
+        sbmanager_file="sb-manager-ru.sh"
     else
-        wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-manager-en.sh
+        sbmanager_file="sb-manager-en.sh"
     fi
-
-    chmod +x /usr/local/bin/sbmanager
 
     if [[ "${variant}" == "1" ]] && [[ "${transport}" != "2" ]]
     then
-        wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-WS.json
+        template_file="Client-Trojan-WS.json"
     elif [[ "${variant}" == "1" ]] && [[ "${transport}" == "2" ]]
     then
-        wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HTTPUpgrade.json
+        template_file="Client-Trojan-HTTPUpgrade.json"
     else
-        wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HAProxy.json
+        template_file="Client-Trojan-HAProxy.json"
     fi
+
+    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/${sbmanager_file}
+    chmod +x /usr/local/bin/sbmanager
+    wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/${template_file}
 
     if [ -f /var/www/${subspath}/template.json ] && [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
     then
@@ -2687,20 +2667,20 @@ add_sub_page() {
 
     if [[ "${variant}" == "1" ]] && [[ "${language}" == "1" ]]
     then
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru.html
+        sub_page_file="sub-ru.html"
     elif [[ "${variant}" == "1" ]] && [[ "${language}" != "1" ]]
     then
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en.html
+        sub_page_file="sub-en.html"
     elif [[ "${variant}" != "1" ]] && [[ "${language}" == "1" ]]
     then
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-ru-hapr.html
+        sub_page_file="sub-ru-hapr.html"
     else
-        wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/sub-en-hapr.html
+        sub_page_file="sub-en-hapr.html"
     fi
 
-    sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
-
+    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/${sub_page_file}
     wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Subscription-Page/background.jpg
+    sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
 }
 
 final_message_ru() {

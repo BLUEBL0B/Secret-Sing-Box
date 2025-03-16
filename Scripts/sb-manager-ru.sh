@@ -34,16 +34,16 @@ replace_template() {
 templates() {
     if [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "ws" ]]
     then
-        wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-WS.json
-        replace_template
+        template_file="Client-Trojan-WS.json"
     elif [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "httpupgrade" ]]
     then
-        wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HTTPUpgrade.json
-        replace_template
+        template_file="Client-Trojan-HTTPUpgrade.json"
     else
-        wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan-HAProxy.json
-        replace_template
+        template_file="Client-Trojan-HAProxy.json"
     fi
+
+    wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/${template_file}
+    replace_template
 
     if [ ! -f /var/www/${subspath}/template-loc.json ]
     then
@@ -397,12 +397,12 @@ get_pass() {
     fi
 }
 
-sync_client_configs_github() {
+edit_configs_sync() {
     for file in /var/www/${subspath}/*-CLIENT.json
     do
         get_pass
         rm ${file}
-        cp /var/www/${subspath}/template.json ${file}
+        cp /var/www/${subspath}/${sync_template_file} ${file}
         inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
         outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
 
@@ -416,7 +416,12 @@ sync_client_configs_github() {
             echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
         fi
 
-        sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" -e "s/$temprulesetpath/$rulesetpath/g" ${file}
+        if [[ "$sync_template_file" == "template.json" ]]
+        then
+            sed -i -e "s/$tempdomain/$domain/g" -e "s/$tempip/$serverip/g" -e "s/$temprulesetpath/$rulesetpath/g" ${file}
+        else
+            sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" ${file}
+        fi
 
         if [[ ! -z $cfip ]]
         then
@@ -428,6 +433,11 @@ sync_client_configs_github() {
         inboundnum=""
         outboundnum=""
     done
+}
+
+sync_client_configs_github() {
+    sync_template_file="template.json"
+    edit_configs_sync
 
     for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /var/www/${subspath}/template.json) - 1))
     do
@@ -440,8 +450,7 @@ sync_client_configs_github() {
     done
 
     chmod -R 755 /var/www/${rulesetpath}
-
-    echo "Синхронизация настроек завершена"
+    echo "Синхронизация настроек с GitHub завершена"
     echo ""
 }
 
@@ -468,36 +477,8 @@ sync_client_configs_local() {
     loctemprulesetpath=${loctemprulesetpath#*"https://${loctempdomain}/"}
     loctemprulesetpath=${loctemprulesetpath%"/"*}
 
-    for file in /var/www/${subspath}/*-CLIENT.json
-    do
-        get_pass
-        rm ${file}
-        cp /var/www/${subspath}/template-loc.json ${file}
-        inboundnum=$(jq '[.inbounds[].tag] | index("tun-in")' ${file})
-        outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' ${file})
-
-        if [[ "$protocol" == "trojan" ]] && [ -f /etc/haproxy/auth.lua ]
-        then
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\"" ${file})" > ${file}
-        elif [[ "$protocol" == "trojan" ]] && [ ! -f /etc/haproxy/auth.lua ]
-        then
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${trojanpath}\"" ${file})" > ${file}
-        else
-            echo "$(jq ".inbounds[${inboundnum}].stack = \"${stack}\" | .outbounds[${outboundnum}].password = \"${cred}\" | .outbounds[${outboundnum}].transport.path = \"/${vlesspath}\" | .outbounds[${outboundnum}].type = \"vless\" | .outbounds[${outboundnum}] |= with_entries(.key |= if . == \"password\" then \"uuid\" else . end)" ${file})" > ${file}
-        fi
-
-        sed -i -e "s/$loctempdomain/$domain/g" -e "s/$loctempip/$serverip/g" -e "s/$loctemprulesetpath/$rulesetpath/g" ${file}
-
-        if [[ ! -z $cfip ]]
-        then
-            echo "$(jq ".outbounds[${outboundnum}].server = \"${cfip}\" | .outbounds[${outboundnum}].transport.headers |= {\"Host\":\"${domain}\"} | .route.rule_set[].download_detour = \"proxy\"" ${file})" > ${file}
-        fi
-
-        cfip=""
-        cred=""
-        inboundnum=""
-        outboundnum=""
-    done
+    sync_template_file="template-loc.json"
+    edit_configs_sync
 
     if [[ $(jq ".route.rule_set | length" /var/www/${subspath}/template-loc.json) =~ ^[0-9]+$ ]] && [[ $(jq ".route.rule_set | length" /var/www/${subspath}/template-loc.json) != "0" ]]
     then
@@ -513,8 +494,7 @@ sync_client_configs_local() {
     fi
 
     chmod -R 755 /var/www/${rulesetpath}
-
-    echo "Синхронизация настроек завершена"
+    echo "Синхронизация настроек с локальным шаблоном завершена"
     echo ""
 }
 
@@ -1162,57 +1142,11 @@ get_test_response() {
     fi
 }
 
-check_cf_token() {
-    echo "Проверка домена, API токена/ключа и почты..."
-    get_test_response
-
-    while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
-    do
-        domain=""
-        email=""
-        cftoken=""
-        echo ""
-        echo -e "${red}Ошибка: неправильно введён домен, API токен/ключ или почта${clear}"
-        echo ""
-        while [[ -z $domain ]]
-        do
-            echo -e "${textcolor}[?]${clear} Введите новый домен или введите ${textcolor}x${clear}, чтобы выйти:"
-            read domain
-            echo ""
-        done
-        exit_change_domain
-        crop_domain
-        while [[ -z $email ]]
-        do
-            echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
-            read email
-            echo ""
-        done
-        while [[ -z $cftoken ]]
-        do
-            echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
-            read cftoken
-            echo ""
-        done
-        echo "Проверка домена, API токена/ключа и почты..."
-        get_test_response
-    done
-
-    echo "Успешно!"
-    echo ""
-}
-
-change_domain() {
-    old_domain="${domain}"
+enter_domain_data() {
     domain=""
     email=""
     cftoken=""
-    echo -e "${red}ВНИМАНИЕ!${clear}"
-    echo "Не забудьте создать А запись для нового домена и заменить домен в ссылках для клиентов"
     echo ""
-    echo -e "Текущий домен: ${textcolor}${old_domain}${clear}"
-    echo ""
-
     while [[ -z $domain ]]
     do
         echo -e "${textcolor}[?]${clear} Введите новый домен или введите ${textcolor}x${clear}, чтобы выйти:"
@@ -1233,6 +1167,32 @@ change_domain() {
         read cftoken
         echo ""
     done
+}
+
+check_cf_token() {
+    echo "Проверка домена, API токена/ключа и почты..."
+    get_test_response
+
+    while [[ -z $(echo $test_response | grep "\"${testdomain}\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:edit\"") ]] || [[ -z $(echo $test_response | grep "\"#dns_records:read\"") ]] || [[ -z $(echo $test_response | grep "\"#zone:read\"") ]]
+    do
+        echo ""
+        echo -e "${red}Ошибка: неправильно введён домен, API токен/ключ или почта${clear}"
+        enter_domain_data
+        echo "Проверка домена, API токена/ключа и почты..."
+        get_test_response
+    done
+
+    echo "Успешно!"
+    echo ""
+}
+
+change_domain() {
+    old_domain="${domain}"
+    echo -e "${red}ВНИМАНИЕ!${clear}"
+    echo "Не забудьте создать А запись для нового домена и заменить домен в ссылках для клиентов"
+    echo ""
+    echo -e "Текущий домен: ${textcolor}${old_domain}${clear}"
+    enter_domain_data
     check_cf_token
 
     if [[ "$cftoken" =~ [A-Z] ]]
@@ -1394,7 +1354,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.1.2"
+    export version="1.1.3"
     export language="1"
     export -f get_ip
     export -f replace_template
@@ -1403,6 +1363,7 @@ update_ssb() {
     export -f check_users
     export -f validate_template
     export -f get_pass
+    export -f edit_configs_sync
     export -f sync_client_configs_github
 
     if [ $(wget -q -O /dev/null https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/update-server.sh; echo $?) -eq 0 ]

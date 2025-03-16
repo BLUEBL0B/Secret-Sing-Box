@@ -188,7 +188,6 @@ add_proxies() {
 		do
 		    read run
 		done
-		run=""
 		echo ""
 		systemctl stop sing-box.service
 		EOF
