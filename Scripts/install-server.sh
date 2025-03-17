@@ -2640,26 +2640,8 @@ add_sbmanager() {
         sbmanager_file="sb-manager-en.sh"
     fi
 
-    if [[ "${variant}" == "1" ]] && [[ "${transport}" != "2" ]]
-    then
-        template_file="Client-Trojan-WS.json"
-    elif [[ "${variant}" == "1" ]] && [[ "${transport}" == "2" ]]
-    then
-        template_file="Client-Trojan-HTTPUpgrade.json"
-    else
-        template_file="Client-Trojan-HAProxy.json"
-    fi
-
     wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/${sbmanager_file}
     chmod +x /usr/local/bin/sbmanager
-    wget -O /var/www/${subspath}/template.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/${template_file}
-
-    if [ -f /var/www/${subspath}/template.json ] && [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
-    then
-        cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
-    else
-        cp /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json /var/www/${subspath}/template-loc.json
-    fi
 }
 
 add_sub_page() {

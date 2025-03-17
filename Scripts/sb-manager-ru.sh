@@ -24,28 +24,29 @@ banner() {
     echo "╚══╝ ╚══╝ ╩══╝"
 }
 
-replace_template() {
+templates() {
+    wget -q -O /var/www/${subspath}/template-1.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan.json
+
     if [ $? -eq 0 ]
     then
-        mv -f /var/www/${subspath}/template.json.1 /var/www/${subspath}/template.json
+        outboundnum=$(jq '[.outbounds[].tag] | index("proxy")' /var/www/${subspath}/template-1.json)
+
+        if [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "ws" ]]
+        then
+            mv -f /var/www/${subspath}/template-1.json /var/www/${subspath}/template.json
+        elif [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "httpupgrade" ]]
+        then
+            echo "$(jq ".outbounds[${outboundnum}].transport.type = \"httpupgrade\"" /var/www/${subspath}/template-1.json)" > /var/www/${subspath}/template.json
+            rm /var/www/${subspath}/template-1.json
+        else
+            echo "$(jq "del(.outbounds[${outboundnum}].transport.type) | del(.outbounds[${outboundnum}].transport.path)" /var/www/${subspath}/template-1.json)" > /var/www/${subspath}/template.json
+            rm /var/www/${subspath}/template-1.json
+        fi
+
+        outboundnum=""
     fi
-}
 
-templates() {
-    if [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "ws" ]]
-    then
-        template_file="Client-Trojan-WS.json"
-    elif [ ! -f /etc/haproxy/auth.lua ] && [[ $(jq -r '.inbounds[] | select(.tag=="trojan-in") | .transport.type' /etc/sing-box/config.json) == "httpupgrade" ]]
-    then
-        template_file="Client-Trojan-HTTPUpgrade.json"
-    else
-        template_file="Client-Trojan-HAProxy.json"
-    fi
-
-    wget -q -O /var/www/${subspath}/template.json.1 https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/${template_file}
-    replace_template
-
-    if [ ! -f /var/www/${subspath}/template-loc.json ]
+    if [ ! -f /var/www/${subspath}/template-loc.json ] && [ -f /var/www/${subspath}/template.json ] && [ $(jq -e . < /var/www/${subspath}/template.json &>/dev/null; echo $?) -eq 0 ] && [ -s /var/www/${subspath}/template.json ]
     then
         cp /var/www/${subspath}/template.json /var/www/${subspath}/template-loc.json
     fi
@@ -1361,7 +1362,6 @@ update_ssb() {
     export version="1.1.3"
     export language="1"
     export -f get_ip
-    export -f replace_template
     export -f templates
     export -f get_data
     export -f check_users
