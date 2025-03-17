@@ -2517,7 +2517,7 @@ placeholderhash=$(echo -n "${placeholder}" | openssl dgst -sha224 | sed 's/.* //
 cat > /etc/haproxy/auth.lua <<EOF
 local passwords = {
     ["${passhash}"] = true,
-    ["${placeholderhash}"] = false		-- Placeholder
+    ["${placeholderhash}"] = false        -- Placeholder (do not remove)
 }
 
 function trojan_auth(txn)
