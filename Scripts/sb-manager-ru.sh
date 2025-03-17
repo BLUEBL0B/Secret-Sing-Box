@@ -25,7 +25,7 @@ banner() {
 }
 
 templates() {
-    wget -q -O /var/www/${subspath}/template-1.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/Client-Trojan.json
+    wget -q -O /var/www/${subspath}/template-1.json https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Config-Templates/client.json
 
     if [ $? -eq 0 ]
     then
