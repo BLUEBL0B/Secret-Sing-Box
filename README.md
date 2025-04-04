@@ -89,14 +89,5 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-pc-linux-ru.sh)
 ```
 
-### Вы можете поддержать проект, если он полезен для вас:
-- USDT (BEP20): 0xe2FeA540a9F1f85C2bfA3e6949c722393B5d636A
-- USDT (TRC20): TPceeuLTAYZ1wFHiRSK2A3YRHnzyQDNnx6
-- USDT (ERC20): 0x398846E32D56B0996dD6C06e4F5C62AEd3801c23
-- Litecoin (BIP84): ltc1q7quvcq3gtlwf2yuk370vhf2syad8ee4we9huj4
-- Toncoin (TON): UQCWmIBsU-EZJSH3rhghbtSOtKQBmb5y74mkjbohpDWZ6l-H
-
-Или можете поставить звезду :star:
-
 ### Звёзды по времени:
 [![Stargazers over time](https://starchart.cc/BLUEBL0B/Secret-Sing-Box.svg?variant=adaptive)](https://starchart.cc/BLUEBL0B/Secret-Sing-Box)
