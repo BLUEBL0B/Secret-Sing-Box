@@ -1,4 +1,4 @@
-# Setting Up a Cloudflare Account
+# Setting Up a Domain
 
 > [!NOTE]
 > This guideline shows how to set up a domain using Cloudflare as an example, but you can also use other services.
