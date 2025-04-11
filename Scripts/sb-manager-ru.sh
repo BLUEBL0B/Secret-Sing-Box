@@ -689,7 +689,7 @@ cf_text() {
 cf_ip_settings() {
     if [ -f /etc/haproxy/auth.lua ]
     then
-        echo -e "${red}Ошибка: этот пункт поддерживается только для вариантов настройки с транспортом WebSocket или HTTPUpgrade${clear}"
+        echo -e "${red}Ошибка: этот пункт только для вариантов настройки с транспортом WebSocket или HTTPUpgrade${clear}"
         echo ""
         main_menu
     fi
@@ -1033,11 +1033,27 @@ exit_renew_cert() {
     fi
 }
 
+cert_final_text() {
+    if [ $? -eq 0 ]
+    then
+        echo ""
+        echo "Сертификат успешно выпущен"
+    else
+        echo ""
+        echo -e "${red}Ошибка: сертификат не выпущен${clear}"
+    fi
+}
+
 reissue_cert() {
     email=""
     while [[ -z $email ]]
     do
-        echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
+        if [ -f /etc/letsencrypt/cloudflare.credentials ]
+        then
+            echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
+        else
+            echo -e "${textcolor}[?]${clear} Введите вашу почту для выпуска сертификата:"
+        fi
         read email
         echo ""
     done
@@ -1047,24 +1063,26 @@ reissue_cert() {
     rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
 
     echo -e "${textcolor}Получение сертификата...${clear}"
-    certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
-
-    if [ $? -eq 0 ]
+    if [ -f /etc/letsencrypt/cloudflare.credentials ]
     then
-        echo ""
-        echo "Сертификат успешно выпущен"
+        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+        cert_final_text
+        ufw_close_80=""
     else
-        echo ""
-        echo -e "${red}Ошибка: сертификат не выпущен${clear}"
+        ufw allow 80 &> /dev/null
+        certbot certonly --standalone --preferred-challenges http --agree-tos --email ${email} -d ${domain} --no-eff-email --non-interactive
+        cert_final_text
+        ufw delete allow 80 &> /dev/null
+        ufw_close_80=" && ufw delete allow 80"
     fi
 
     if [ ! -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ]
     then
-        echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo "renew_hook = systemctl reload nginx${ufw_close_80}" >> /etc/letsencrypt/renewal/${domain}.conf
         systemctl start nginx.service
     elif [ -f /etc/haproxy/auth.lua ] && [ -f /etc/letsencrypt/renewal/${domain}.conf ]
     then
-        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy${ufw_close_80}" >> /etc/letsencrypt/renewal/${domain}.conf
         cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
         systemctl start haproxy.service
     fi
@@ -1087,15 +1105,14 @@ renew_cert() {
         reissue_cert
     fi
 
-    certbot renew --force-renewal
-
-    if [ $? -eq 0 ]
+    echo -e "${textcolor}Обновление сертификата...${clear}"
+    if [ -f /etc/letsencrypt/cloudflare.credentials ]
     then
-        echo ""
-        echo "Сертификат успешно обновлён"
+        certbot renew --force-renewal
+        cert_final_text
     else
-        echo ""
-        echo -e "${red}Ошибка: сертификат не обновлён${clear}"
+        ufw allow 80 &> /dev/null && certbot renew --force-renewal
+        cert_final_text
     fi
 
     echo ""
@@ -1158,16 +1175,19 @@ enter_domain_data() {
     crop_domain
     while [[ -z $email ]]
     do
-        echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
+        echo -e "${textcolor}[?]${clear} Введите вашу почту${email_text}:"
         read email
         echo ""
     done
-    while [[ -z $cftoken ]]
-    do
-        echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
-        read cftoken
-        echo ""
-    done
+    if [[ "${validation_type}" == "1" ]]
+    then
+        while [[ -z $cftoken ]]
+        do
+            echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+            read cftoken
+            echo ""
+        done
+    fi
 }
 
 check_cf_token() {
@@ -1187,15 +1207,7 @@ check_cf_token() {
     echo ""
 }
 
-change_domain() {
-    old_domain="${domain}"
-    echo -e "${red}ВНИМАНИЕ!${clear}"
-    echo "Не забудьте создать А запись для нового домена и заменить домен в ссылках для клиентов"
-    echo ""
-    echo -e "Текущий домен: ${textcolor}${old_domain}${clear}"
-    enter_domain_data
-    check_cf_token
-
+issue_cert_dns_cf() {
     if [[ "$cftoken" =~ [A-Z] ]]
     then
         echo "dns_cloudflare_api_token = ${cftoken}" > /etc/letsencrypt/cloudflare.credentials
@@ -1204,31 +1216,106 @@ change_domain() {
         echo "dns_cloudflare_api_key = ${cftoken}" >> /etc/letsencrypt/cloudflare.credentials
     fi
 
-    if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
-    then
-        echo -e "${textcolor}Получение сертификата...${clear}"
-        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+    chown root:root /etc/letsencrypt/cloudflare.credentials
+    chmod 600 /etc/letsencrypt/cloudflare.credentials
 
-        if [ $? -ne 0 ]
-        then
-            sleep 3
-            echo ""
-            rm -rf /etc/letsencrypt/live/${domain} &> /dev/null
-            rm -rf /etc/letsencrypt/archive/${domain} &> /dev/null
-            rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
-            echo -e "${textcolor}Получение сертификата: 2-я попытка...${clear}"
-            certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
-        fi
+    echo -e "${textcolor}Получение сертификата...${clear}"
+    certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+
+    if [ $? -ne 0 ]
+    then
+        sleep 3
+        echo ""
+        rm -rf /etc/letsencrypt/live/${domain} &> /dev/null
+        rm -rf /etc/letsencrypt/archive/${domain} &> /dev/null
+        rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
+        echo -e "${textcolor}Получение сертификата: 2-я попытка...${clear}"
+        certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
+    fi
+
+    ufw_close_80=""
+    crontab -l | sed 's/ufw allow 80 && //g' | crontab -
+}
+
+issue_cert_standalone() {
+    rm /etc/letsencrypt/cloudflare.credentials &> /dev/null
+    ufw allow 80 &> /dev/null
+
+    echo -e "${textcolor}Получение сертификата...${clear}"
+    certbot certonly --standalone --preferred-challenges http --agree-tos --email ${email} -d ${domain} --no-eff-email --non-interactive
+
+    if [ $? -ne 0 ]
+    then
+        sleep 3
+        echo ""
+        rm -rf /etc/letsencrypt/live/${domain} &> /dev/null
+        rm -rf /etc/letsencrypt/archive/${domain} &> /dev/null
+        rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
+        echo -e "${textcolor}Получение сертификата: 2-я попытка...${clear}"
+        certbot certonly --standalone --preferred-challenges http --agree-tos --email ${email} -d ${domain} --no-eff-email --non-interactive
+    fi
+
+    ufw delete allow 80 &> /dev/null
+    ufw_close_80=" && ufw delete allow 80"
+
+    if [[ -z $(crontab -l | grep "ufw allow 80") ]]
+    then
+        crontab -l | sed 's/certbot -q renew --force-renewal/ufw allow 80 \&\& certbot -q renew --force-renewal/' | crontab -
+    fi
+}
+
+change_domain() {
+    old_domain="${domain}"
+    echo -e "${red}ВНИМАНИЕ!${clear}"
+    echo "Не забудьте создать А запись для нового домена и заменить домен в ссылках для клиентов"
+    echo ""
+    echo -e "Текущий домен: ${textcolor}${old_domain}${clear}"
+    if [ -f /etc/letsencrypt/cloudflare.credentials ]
+    then
+        echo -e "Метод валидации сертификатов: ${textcolor}DNS Cloudflare${clear}"
     else
-        echo -e "Сертификат на домен ${textcolor}${domain}${clear} уже имеется"
+        echo -e "Метод валидации сертификатов: ${textcolor}Standalone${clear}"
+    fi
+    echo ""
+    echo -e "${textcolor}[?]${clear} Выберите метод валидации сертификатов для нового домена:"
+    echo "0 - Выйти"
+    echo "1 - DNS Cloudflare (если ваш домен прикреплён к Cloudflare)"
+    echo "2 - Standalone (если ваш домен прикреплён к другому сервису)"
+    read validation_type
+
+    case $validation_type in
+        1)
+        email_text=", зарегистрированную на Cloudflare"
+        enter_domain_data
+        check_cf_token
+        ;;
+        2)
+        email_text=" для выпуска сертификата"
+        echo ""
+        echo -e "${red}ВНИМАНИЕ!${clear}"
+        echo "Обязательно проверьте правильность написания домена"
+        enter_domain_data
+        ;;
+        *)
+        echo ""
+        domain="${old_domain}"
+        main_menu
+    esac
+
+    rm -rf /etc/letsencrypt/live/${old_domain} &> /dev/null
+    rm -rf /etc/letsencrypt/archive/${old_domain} &> /dev/null
+    rm /etc/letsencrypt/renewal/${old_domain}.conf &> /dev/null
+
+    if [[ "${validation_type}" == "1" ]]
+    then
+        issue_cert_dns_cf
+    else
+        issue_cert_standalone
     fi
 
     if [ ! -f /etc/haproxy/auth.lua ]
     then
-        if ! grep -q "systemctl reload nginx" /etc/letsencrypt/renewal/${domain}.conf
-        then
-            echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
-        fi
+        echo "renew_hook = systemctl reload nginx${ufw_close_80}" >> /etc/letsencrypt/renewal/${domain}.conf
         sed -i -e "s/$old_domain/$domain/g" /etc/nginx/nginx.conf
         systemctl reload nginx.service
         if [ $? -ne 0 ]
@@ -1236,10 +1323,7 @@ change_domain() {
             systemctl start nginx.service
         fi
     else
-        if ! grep -q "systemctl reload haproxy" /etc/letsencrypt/renewal/${domain}.conf
-        then
-            echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
-        fi
+        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy${ufw_close_80}" >> /etc/letsencrypt/renewal/${domain}.conf
         cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem
         sed -i -e "s/$old_domain/$domain/g" /etc/haproxy/haproxy.cfg
         systemctl reload haproxy.service
@@ -1347,7 +1431,10 @@ show_paths() {
         echo "Объединённый файл с сертификатами      /etc/haproxy/certs/${domain}.pem"
     fi
     echo "Конфиг обновления сертификатов         /etc/letsencrypt/renewal/${domain}.conf"
-    echo "Файл с API токеном/ключом Cloudflare   /etc/letsencrypt/cloudflare.credentials"
+    if [ -f /etc/letsencrypt/cloudflare.credentials ]
+    then
+        echo "Файл с API токеном/ключом Cloudflare   /etc/letsencrypt/cloudflare.credentials"
+    fi
     echo ""
 
     echo -e "${textcolor}Скрипты:${clear}"
@@ -1359,7 +1446,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.1.3"
+    export version="1.2.0"
     export language="1"
     export -f get_ip
     export -f templates

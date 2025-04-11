@@ -16,7 +16,7 @@ check_parent() {
 }
 
 check_update() {
-    new_version="1.1.3"
+    new_version="1.2.0"
 
     if [[ "${version}" == "${new_version}" ]]
     then

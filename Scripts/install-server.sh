@@ -800,16 +800,19 @@ enter_domain_data_ru() {
     crop_domain
     while [[ -z $email ]]
     do
-        echo -e "${textcolor}[?]${clear} Введите вашу почту, зарегистрированную на Cloudflare:"
+        echo -e "${textcolor}[?]${clear} Введите вашу почту${email_text}:"
         read email
         echo ""
     done
-    while [[ -z $cftoken ]]
-    do
-        echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
-        read cftoken
-        echo ""
-    done
+    if [[ "${validation_type}" == "1" ]]
+    then
+        while [[ -z $cftoken ]]
+        do
+            echo -e "${textcolor}[?]${clear} Введите ваш API токен Cloudflare (Edit zone DNS) или Cloudflare global API key:"
+            read cftoken
+            echo ""
+        done
+    fi
 }
 
 enter_domain_data_en() {
@@ -826,21 +829,38 @@ enter_domain_data_en() {
     crop_domain
     while [[ -z $email ]]
     do
-        echo -e "${textcolor}[?]${clear} Enter your email registered on Cloudflare:"
+        echo -e "${textcolor}[?]${clear} Enter your email${email_text}:"
         read email
         echo ""
     done
-    while [[ -z $cftoken ]]
-    do
-        echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
-        read cftoken
-        echo ""
-    done
+    if [[ "${validation_type}" == "1" ]]
+    then
+        while [[ -z $cftoken ]]
+        do
+            echo -e "${textcolor}[?]${clear} Enter your Cloudflare API token (Edit zone DNS) or Cloudflare global API key:"
+            read cftoken
+            echo ""
+        done
+    fi
 }
 
 enter_data_ru() {
-    enter_domain_data_ru
-    check_cf_token_ru
+    echo -e "${textcolor}[?]${clear} Выберите метод валидации сертификатов:"
+    echo "1 - DNS Cloudflare (если ваш домен прикреплён к Cloudflare)"
+    echo "2 - Standalone (если ваш домен прикреплён к другому сервису)"
+    read validation_type
+    if [[ "${validation_type}" == "1" ]]
+    then
+        email_text=", зарегистрированную на Cloudflare"
+        enter_domain_data_ru
+        check_cf_token_ru
+    else
+        email_text=" для выпуска сертификата"
+        echo ""
+        echo -e "${red}ВНИМАНИЕ!${clear}"
+        echo "Обязательно проверьте правильность написания домена"
+        enter_domain_data_ru
+    fi
     echo -e "${textcolor}[?]${clear} Выберите вариант настройки прокси:"
     echo "1 - Терминирование TLS на NGINX, протоколы Trojan и VLESS, транспорт WebSocket или HTTPUpgrade"
     echo "2 - Терминирование TLS на HAProxy, протокол Trojan, выбор бэкенда Sing-Box или NGINX по паролю Trojan"
@@ -902,8 +922,22 @@ enter_data_ru() {
 }
 
 enter_data_en() {
-    enter_domain_data_en
-    check_cf_token_en
+    echo -e "${textcolor}[?]${clear} Select a certificate validation method:"
+    echo "1 - DNS Cloudflare (if your domain is linked to Cloudflare)"
+    echo "2 - Standalone (if your domain is linked to another service)"
+    read validation_type
+    if [[ "${validation_type}" == "1" ]]
+    then
+        email_text=" registered on Cloudflare"
+        enter_domain_data_en
+        check_cf_token_en
+    else
+        email_text=" to issue a certificate"
+        echo ""
+        echo -e "${red}ATTENTION!${clear}"
+        echo "Be sure to check the spelling of the domain name"
+        enter_domain_data_en
+    fi
     echo -e "${textcolor}[?]${clear} Select a proxy setup option:"
     echo "1 - TLS termination on NGINX, Trojan and VLESS protocols, WebSocket or HTTPUpgrade transport"
     echo "2 - TLS termination on HAProxy, Trojan protocol, Sing-Box or NGINX backend selection based on Trojan passwords"
@@ -965,6 +999,7 @@ enter_data_en() {
 }
 
 enter_data() {
+    echo ""
     if [[ "${language}" == "1" ]]
     then
         enter_data_ru
@@ -993,7 +1028,7 @@ enable_bbr() {
 
 install_packages() {
     echo -e "${textcolor_light}Installing packages...${clear}"
-    apt install sudo coreutils wget certbot python3-certbot-dns-cloudflare cron gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
+    apt install sudo coreutils nano wget ufw certbot python3-certbot-dns-cloudflare cron gnupg2 ca-certificates lsb-release openssl sed jq net-tools htop -y
 
     if grep -q "bullseye" /etc/os-release || grep -q "bookworm" /etc/os-release
     then
@@ -1004,7 +1039,7 @@ install_packages() {
 
     if [[ "${sshufw}" != "2" ]]
     then
-        apt install ufw unattended-upgrades -y
+        apt install unattended-upgrades -y
     fi
 
     if [ ! -d /usr/share/keyrings ]
@@ -1132,12 +1167,7 @@ setup_security() {
     fi
 }
 
-certificates() {
-    echo -e "${textcolor_light}Requesting a certificate...${clear}"
-    touch /etc/letsencrypt/cloudflare.credentials
-    chown root:root /etc/letsencrypt/cloudflare.credentials
-    chmod 600 /etc/letsencrypt/cloudflare.credentials
-
+cert_dns_cf() {
     if [[ "$cftoken" =~ [A-Z] ]]
     then
         echo "dns_cloudflare_api_token = ${cftoken}" >> /etc/letsencrypt/cloudflare.credentials
@@ -1146,6 +1176,8 @@ certificates() {
         echo "dns_cloudflare_api_key = ${cftoken}" >> /etc/letsencrypt/cloudflare.credentials
     fi
 
+    chown root:root /etc/letsencrypt/cloudflare.credentials
+    chmod 600 /etc/letsencrypt/cloudflare.credentials
     certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.credentials --dns-cloudflare-propagation-seconds 35 -d ${domain},*.${domain} --agree-tos -m ${email} --no-eff-email --non-interactive
 
     if [ $? -ne 0 ]
@@ -1160,14 +1192,46 @@ certificates() {
     fi
 
     { crontab -l; echo "0 2 1 */2 * certbot -q renew --force-renewal"; } | crontab -
+    ufw_close_80=""
+}
+
+cert_standalone() {
+    ufw allow 80 &> /dev/null
+    certbot certonly --standalone --preferred-challenges http --agree-tos --email ${email} -d ${domain} --no-eff-email --non-interactive
+
+    if [ $? -ne 0 ]
+    then
+        sleep 3
+        echo ""
+        rm -rf /etc/letsencrypt/live/${domain} &> /dev/null
+        rm -rf /etc/letsencrypt/archive/${domain} &> /dev/null
+        rm /etc/letsencrypt/renewal/${domain}.conf &> /dev/null
+        echo -e "${textcolor_light}Requesting a certificate: 2nd attempt...${clear}"
+        certbot certonly --standalone --preferred-challenges http --agree-tos --email ${email} -d ${domain} --no-eff-email --non-interactive
+    fi
+
+    ufw delete allow 80 &> /dev/null
+    { crontab -l; echo "0 2 1 */2 * ufw allow 80 && certbot -q renew --force-renewal"; } | crontab -
+    ufw_close_80=" && ufw delete allow 80"
+}
+
+certificates() {
+    echo -e "${textcolor_light}Requesting a certificate...${clear}"
+
+    if [[ "${validation_type}" == "1" ]]
+    then
+        cert_dns_cf
+    else
+        cert_standalone
+    fi
 
     if [[ "${variant}" == "1" ]]
     then
-        echo "renew_hook = systemctl reload nginx" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo "renew_hook = systemctl reload nginx${ufw_close_80}" >> /etc/letsencrypt/renewal/${domain}.conf
         echo ""
         openssl dhparam -out /etc/nginx/dhparam.pem 2048
     else
-        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy" >> /etc/letsencrypt/renewal/${domain}.conf
+        echo "renew_hook = cat /etc/letsencrypt/live/${domain}/fullchain.pem /etc/letsencrypt/live/${domain}/privkey.pem > /etc/haproxy/certs/${domain}.pem && systemctl reload haproxy${ufw_close_80}" >> /etc/letsencrypt/renewal/${domain}.conf
         echo ""
         openssl dhparam -out /etc/haproxy/dhparam.pem 2048
     fi
@@ -1234,6 +1298,10 @@ download_rule_sets() {
     do
         ruleset_link=$(jq -r ".route.rule_set[${i}].url" /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json)
         ruleset=${ruleset_link#"https://${domain}/${rulesetpath}/"}
+        if [[ "${ruleset}" == "geoip-ru.srs" ]] || [[ "${ruleset}" == "torrent-clients.json" ]]
+        then
+            continue
+        fi
         wget -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geosite/raw/rule-set/${ruleset}
     done
 
@@ -2700,7 +2768,7 @@ final_message_ru() {
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Ваше имя пользователя - ${textcolor}1${userkey}${clear}"
     else
-        echo "Чтобы этот вариант настройки работал, в DNS записях Cloudflare должно стоять \"DNS only\", а не \"Proxied\""
+        echo "Чтобы этот вариант настройки работал, проксирование через CDN должно быть отключено"
         echo ""
         echo -e "${textcolor}Конфиг для клиента доступен по ссылке:${clear}"
         echo "https://${domain}/${subspath}/1${userkey}-TRJ-CLIENT.json"
@@ -2753,7 +2821,7 @@ final_message_en() {
         echo "https://${domain}/${subspath}/sub.html"
         echo -e "Your username is ${textcolor}1${userkey}${clear}"
     else
-        echo "For this setup method to work, your DNS records in Cloudflare must be set to \"DNS only\", not \"Proxied\""
+        echo "For this setup method to work, the traffic should not be proxied through CDN"
         echo ""
         echo -e "${textcolor}Client config is available here:${clear}"
         echo "https://${domain}/${subspath}/1${userkey}-TRJ-CLIENT.json"
