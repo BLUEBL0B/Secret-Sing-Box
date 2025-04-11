@@ -1,5 +1,8 @@
 # Setting Up a Cloudflare Account
 
+> [!NOTE]
+> This guideline shows how to set up a domain using Cloudflare as an example, but you can also use other services.
+
 ### General settings
 First, you need to add your domain to your Cloudflare account and specify Cloudflare NS servers at your domain registrar.
 
