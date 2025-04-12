@@ -47,7 +47,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Then just enter the necessary information:
 
-![pic-1-en](https://github.com/user-attachments/assets/7dc408a9-6357-49c3-a58a-d3da90c4ced4)
+![pic-1-en](https://github.com/user-attachments/assets/8d78bb20-eb5c-4074-865e-a858869a6103)
 
 > [!CAUTION]
 > Passwords, UUIDs, paths and other data in the image above are for example purposes only. Do not use them on your server.
