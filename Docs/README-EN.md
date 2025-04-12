@@ -1,6 +1,6 @@
 # Secret Sing-Box
 
-![logo](https://github.com/user-attachments/assets/0b5babb9-c698-4c27-bb1d-758806c5f073)
+![logo](https://github.com/user-attachments/assets/08d1c66d-d105-45cd-a5a0-9f449b2c6eef)
 
 [**Russian version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README.md)
 
