@@ -47,7 +47,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/maste
 
 Затем просто введите необходимую информацию:
 
-![pic-1-ru](https://github.com/user-attachments/assets/f1248d11-a930-4acc-9f66-40851ecf380e)
+![pic-1-ru](https://github.com/user-attachments/assets/180e66d2-6b48-405b-b926-fd969ddafe28)
 
 > [!CAUTION]
 > Пароли, UUID, пути и другие данные на изображении выше даны для примера. Не используйте их на своём сервере.
