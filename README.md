@@ -1,4 +1,6 @@
-# Secret Sing-Box (SSB)
+# Secret Sing-Box
+
+![logo](https://github.com/user-attachments/assets/0b5babb9-c698-4c27-bb1d-758806c5f073)
 
 [**English version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/README-EN.md)
 
