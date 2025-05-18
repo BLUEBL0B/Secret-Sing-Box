@@ -1446,6 +1446,7 @@ cat > /etc/sing-box/config.json <<EOF
           ".ru.com",
           ".ru.net",
           "rutracker.org",
+          "rutracker.cc",
           "habr.com",
           "ntc.party",
           "gemini.google.com",
