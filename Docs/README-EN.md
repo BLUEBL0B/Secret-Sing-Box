@@ -2,7 +2,7 @@
 
 ![logo](https://github.com/user-attachments/assets/33ab0dac-ed6a-4254-8386-c4b09bf9a312)
 
-[**Russian version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/README.md)
+[**Russian version**](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/README.md)
 
 ### Easy setup of Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
 This script is designed to fully and quickly configure a secure proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. Two setup methods:
@@ -18,7 +18,7 @@ This script is designed to fully and quickly configure a secure proxy server wit
 Both setup methods make it impossible to detect Sing-Box from the outside, which improves security.
 
 > [!IMPORTANT]
-> Recommended OS for the server: Debian 11/12 or Ubuntu 22.04/24.04. Just 512 MB of RAM, 5 GB of disk space and 1 processor core are sufficient. You will also need an IPv4 on the server and your own domain ([How to set it up?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/cf-settings-en.md)). Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
+> Recommended OS for the server: Debian 11/12 or Ubuntu 22.04/24.04. Just 512 MB of RAM, 5 GB of disk space and 1 processor core are sufficient. You will also need an IPv4 on the server and your own domain ([How to set it up?](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/cf-settings-en.md)). Run as root on a newly installed system. It's recommended to update and reboot the system before running this script.
 
 > [!NOTE]
 > With routing rules for Russia. Open ports on the server: 443 and SSH.
@@ -44,7 +44,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 To setup the server, run this command on it:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/install-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/install-server.sh)
 ```
 
 Then just enter the necessary information:
@@ -82,14 +82,14 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 > [!IMPORTANT]
 > On some devices, "stack": "system" in tun interface settings in client configs might not work. In such cases, it is recommended to replace it with "gvisor" by using option 4 in sbmanager.
 
-[Android and iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/Sing-Box-Android-iOS-en.md). The guide is given for Android, the app interface is different on iOS, but it has similar settings.
+[Android and iOS](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/Sing-Box-Android-iOS-en.md). The guide is given for Android, the app interface is different on iOS, but it has similar settings.
 
-[Windows](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/Sing-Box-Windows-en.md). This method is recommended due to more complete routing settings, but you can also import the link to [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest) client app. If some apps are not proxied when using Hiddify, change the config options > service mode > VPN.
+[Windows](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/Sing-Box-Windows-en.md). This method is recommended due to more complete routing settings, but you can also import the link to [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest) client app. If some apps are not proxied when using Hiddify, change the config options > service mode > VPN.
 
-[Linux](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/README-EN.md#client-setup). Run the command below and follow the instructions or use [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest) client app.
+[Linux](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/README-EN.md#client-setup). Run the command below and follow the instructions or use [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest) client app.
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-pc-linux-en.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/sb-pc-linux-en.sh)
 ```
 
 ### Stargazers over time:
-[![Stargazers over time](https://starchart.cc/BLUEBL0B/Secret-Sing-Box.svg?variant=adaptive)](https://starchart.cc/BLUEBL0B/Secret-Sing-Box)
+[![Stargazers over time](https://starchart.cc/A-Zuro/Secret-Sing-Box.svg?variant=adaptive)](https://starchart.cc/A-Zuro/Secret-Sing-Box)

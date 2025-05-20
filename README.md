@@ -2,7 +2,7 @@
 
 ![logo](https://github.com/user-attachments/assets/33ab0dac-ed6a-4254-8386-c4b09bf9a312)
 
-[**English version**](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/README-EN.md)
+[**English version**](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/README-EN.md)
 
 ### Простая настройка прокси с использованием протоколов Trojan и VLESS и терминированием TLS на NGINX или HAProxy
 Данный скрипт предназначен для полной и быстрой настройки защищённого прокси-сервера с ядром [Sing-Box](https://sing-box.sagernet.org) и маскировкой при помощи [NGINX](https://nginx.org/ru/) или [HAProxy](https://www.haproxy.org). Два варианта настройки на выбор:
@@ -18,7 +18,7 @@
 Оба варианта настройки делают невозможным обнаружение Sing-Box снаружи, что повышает уровень безопасности.
 
 > [!IMPORTANT]
-> Рекомендуемая ОС для сервера: Debian 11/12 или Ubuntu 22.04/24.04. Достаточно 512 Мб оперативной памяти, 5 Гб на диске и 1 ядра процессора. Для настройки понадобится IPv4 на сервере и свой домен ([Как настроить?](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/cf-settings-ru.md)). Запускайте от имени root на чистой системе. Рекомендуется обновить систему и перезагрузить сервер перед запуском скрипта.
+> Рекомендуемая ОС для сервера: Debian 11/12 или Ubuntu 22.04/24.04. Достаточно 512 Мб оперативной памяти, 5 Гб на диске и 1 ядра процессора. Для настройки понадобится IPv4 на сервере и свой домен ([Как настроить?](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/cf-settings-ru.md)). Запускайте от имени root на чистой системе. Рекомендуется обновить систему и перезагрузить сервер перед запуском скрипта.
 
 > [!NOTE]
 > С правилами маршрутизации для России. Открытые порты на сервере: 443 и SSH.
@@ -44,7 +44,7 @@
 Для настройки сервера запустите на нём эту команду:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/install-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/install-server.sh)
 ```
 
 Затем просто введите необходимую информацию:
@@ -82,14 +82,14 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 > [!IMPORTANT]
 > На некоторых устройствах может не работать "stack": "system" в настройках tun-интерфейса в клиентских конфигах. В таких случаях рекомендуется заменить его на "gvisor" с помощью пункта 4 в sbmanager.
 
-[Android и iOS](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/Sing-Box-Android-iOS-ru.md). Инструкция дана для Android, на iOS интерфейс приложения отличается, но настройки аналогичны.
+[Android и iOS](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/Sing-Box-Android-iOS-ru.md). Инструкция дана для Android, на iOS интерфейс приложения отличается, но настройки аналогичны.
 
-[Windows](https://github.com/BLUEBL0B/Secret-Sing-Box/blob/main/Docs/Sing-Box-Windows-ru.md). Рекомендован данный способ, так как он обеспечивает более полные настройки маршрутизации, но можно также вставить ссылку в клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest). Если при использовании Hiddify не проксируются некоторые приложения, то измените параметры конфигурации > режим работы > VPN.
+[Windows](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/Sing-Box-Windows-ru.md). Рекомендован данный способ, так как он обеспечивает более полные настройки маршрутизации, но можно также вставить ссылку в клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest). Если при использовании Hiddify не проксируются некоторые приложения, то измените параметры конфигурации > режим работы > VPN.
 
-[Linux](https://github.com/BLUEBL0B/Secret-Sing-Box#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2). Запустите команду ниже и следуйте инструкциям или используйте клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest).
+[Linux](https://github.com/A-Zuro/Secret-Sing-Box#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2). Запустите команду ниже и следуйте инструкциям или используйте клиент [Hiddify](https://github.com/hiddify/hiddify-app/releases/latest).
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/BLUEBL0B/Secret-Sing-Box/master/Scripts/sb-pc-linux-ru.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/sb-pc-linux-ru.sh)
 ```
 
 ### Звёзды по времени:
-[![Stargazers over time](https://starchart.cc/BLUEBL0B/Secret-Sing-Box.svg?variant=adaptive)](https://starchart.cc/BLUEBL0B/Secret-Sing-Box)
+[![Stargazers over time](https://starchart.cc/A-Zuro/Secret-Sing-Box.svg?variant=adaptive)](https://starchart.cc/A-Zuro/Secret-Sing-Box)
