@@ -2709,6 +2709,7 @@ add_sbmanager() {
 
     wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/${sbmanager_file}
     chmod +x /usr/local/bin/sbmanager
+    echo "alias ssb='/usr/local/bin/sbmanager'" >> /etc/bash.bashrc
 }
 
 add_sub_page() {

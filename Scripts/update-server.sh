@@ -259,6 +259,12 @@ update_scripts() {
     wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/${sbmanager_file}
     wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/ruleset-update.sh
     chmod +x /usr/local/bin/sbmanager /usr/local/bin/rsupdate
+
+    if ! grep -q "alias ssb=" /etc/bash.bashrc
+    then
+        echo "alias ssb='/usr/local/bin/sbmanager'" >> /etc/bash.bashrc
+    fi
+
     echo ""
 }
 
