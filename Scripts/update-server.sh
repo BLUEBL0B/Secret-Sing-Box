@@ -9,14 +9,14 @@ check_parent() {
     if [[ -z $version ]]
     then
         echo ""
-        echo -e "${red}Error: this script should be run from sbmanager, not manually${clear}"
+        echo -e "${red}Error: this script should be run from the settings menu, not manually${clear}"
         echo ""
         exit 1
     fi
 }
 
 check_update() {
-    new_version="1.2.1"
+    new_version="1.2.2"
 
     if [[ "${version}" == "${new_version}" ]]
     then

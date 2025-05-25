@@ -1438,7 +1438,7 @@ show_paths() {
     echo ""
 
     echo -e "${textcolor}Скрипты:${clear}"
-    echo "Этот скрипт (sbmanager)                /usr/local/bin/sbmanager"
+    echo "Этот скрипт (меню настроек)            /usr/local/bin/sbmanager"
     echo "Скрипт, обновляющий наборы правил      /usr/local/bin/rsupdate"
     echo ""
     echo ""
@@ -1446,7 +1446,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.2.1"
+    export version="1.2.2"
     export language="1"
     export -f get_ip
     export -f templates

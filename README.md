@@ -41,10 +41,10 @@
 
 ### Настройка сервера:
 
-Для настройки сервера запустите на нём эту команду:
+Для настройки сервера введите на нём эту команду:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/install-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/install-server.sh); source /etc/bash.bashrc
 ```
 
 Затем просто введите необходимую информацию:
@@ -58,10 +58,10 @@ bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/
 
 -----
 
-Чтобы вывести дополнительные настройки, введите команду:
+Чтобы вывести меню настроек, введите команду:
 
 ```
-sbmanager
+ssb
 ```
 
 Далее следуйте инструкциям:
@@ -80,7 +80,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 
 ### Настройка клиентов:
 > [!IMPORTANT]
-> На некоторых устройствах может не работать "stack": "system" в настройках tun-интерфейса в клиентских конфигах. В таких случаях рекомендуется заменить его на "gvisor" с помощью пункта 4 в sbmanager.
+> На некоторых устройствах может не работать "stack": "system" в настройках tun-интерфейса в клиентских конфигах. В таких случаях рекомендуется заменить его на "gvisor" с помощью пункта 4 в меню настроек (см. выше).
 
 [Android и iOS](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/Sing-Box-Android-iOS-ru.md). Инструкция дана для Android, на iOS интерфейс приложения отличается, но настройки аналогичны.
 

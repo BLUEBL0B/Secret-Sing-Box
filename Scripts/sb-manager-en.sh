@@ -1438,7 +1438,7 @@ show_paths() {
     echo ""
 
     echo -e "${textcolor}Scripts:${clear}"
-    echo "This script (sbmanager)              /usr/local/bin/sbmanager"
+    echo "This script (settings menu)          /usr/local/bin/sbmanager"
     echo "Rule set renewal script              /usr/local/bin/rsupdate"
     echo ""
     echo ""
@@ -1446,7 +1446,7 @@ show_paths() {
 }
 
 update_ssb() {
-    export version="1.2.1"
+    export version="1.2.2"
     export language="2"
     export -f get_ip
     export -f templates

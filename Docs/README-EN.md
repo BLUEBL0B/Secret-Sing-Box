@@ -44,7 +44,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 To setup the server, run this command on it:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/install-server.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/install-server.sh); source /etc/bash.bashrc
 ```
 
 Then just enter the necessary information:
@@ -58,10 +58,10 @@ In the end, the script will show your links to client configs and to subscriptio
 
 -----
 
-To display additional settings, run this command:
+To display the settings menu, run this command:
 
 ```
-sbmanager
+ssb
 ```
 
 Then follow the instructions:
@@ -80,7 +80,7 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 
 ### Client setup:
 > [!IMPORTANT]
-> On some devices, "stack": "system" in tun interface settings in client configs might not work. In such cases, it is recommended to replace it with "gvisor" by using option 4 in sbmanager.
+> On some devices, "stack": "system" in tun interface settings in client configs might not work. In such cases, it is recommended to replace it with "gvisor" by using option 4 in the settings menu (see above).
 
 [Android and iOS](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/Sing-Box-Android-iOS-en.md). The guide is given for Android, the app interface is different on iOS, but it has similar settings.
 

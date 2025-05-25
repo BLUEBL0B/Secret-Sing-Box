@@ -2315,12 +2315,6 @@ http {
     ssl_protocols             TLSv1.2 TLSv1.3;
     ssl_ciphers               TLS13_AES_128_GCM_SHA256:TLS13_AES_256_GCM_SHA384:TLS13_CHACHA20_POLY1305_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
 
-    # OCSP Stapling
-    ssl_stapling              on;
-    ssl_stapling_verify       on;
-    resolver                  1.1.1.1 1.0.0.1 8.8.8.8 8.8.4.4 208.67.222.222 208.67.220.220 valid=60s;
-    resolver_timeout          2s;
-
     # Connection header for WebSocket reverse proxy
     map \$http_upgrade \$connection_upgrade {
         default upgrade;
@@ -2360,7 +2354,6 @@ http {
         # SSL
         ssl_certificate                      /etc/letsencrypt/live/${domain}/fullchain.pem;
         ssl_certificate_key                  /etc/letsencrypt/live/${domain}/privkey.pem;
-        ssl_trusted_certificate              /etc/letsencrypt/live/${domain}/chain.pem;
 
         # Diffie-Hellman parameter for DHE ciphersuites
         ssl_dhparam                          /etc/nginx/dhparam.pem;
@@ -2698,7 +2691,7 @@ setup_haproxy() {
 }
 
 add_sbmanager() {
-    echo -e "${textcolor_light}Adding sbmanager...${clear}"
+    echo -e "${textcolor_light}Adding settings menu...${clear}"
 
     if [[ "${language}" == "1" ]]
     then
@@ -2778,11 +2771,11 @@ final_message_ru() {
         echo -e "Ваше имя пользователя - ${textcolor}1${userkey}${clear}"
     fi
     echo ""
-    echo -e "Для вывода дополнительных настроек используйте команду ${textcolor}sbmanager${clear}"
+    echo -e "Для вывода меню настроек используйте команду ${textcolor}ssb${clear}"
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
         echo ""
-        echo -e "${red}Ошибка: сертификат не выпущен, введите команду \"sbmanager\" и выберите пункт 11${clear}"
+        echo -e "${red}Ошибка: сертификат не выпущен, введите команду \"ssb\" и выберите пункт 11${clear}"
     fi
 }
 
@@ -2831,11 +2824,11 @@ final_message_en() {
         echo -e "Your username is ${textcolor}1${userkey}${clear}"
     fi
     echo ""
-    echo -e "To display additional settings, run ${textcolor}sbmanager${clear} command"
+    echo -e "To display the settings menu, run ${textcolor}ssb${clear} command"
     if [ ! -f /etc/letsencrypt/live/${domain}/fullchain.pem ]
     then
         echo ""
-        echo -e "${red}Error: certificate has not been issued, enter \"sbmanager\" command and select option 11${clear}"
+        echo -e "${red}Error: certificate has not been issued, enter \"ssb\" command and select option 11${clear}"
     fi
 }
 
