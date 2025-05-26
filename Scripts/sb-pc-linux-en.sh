@@ -25,12 +25,12 @@ check_sbmanager() {
 }
 
 banner() {
-    echo ""
-    echo "╔══╗ ╔══╗ ╦══╗"
-    echo "║    ║    ║  ║"
-    echo "╚══╗ ╚══╗ ╠══╣"
-    echo "   ║    ║ ║  ║"
-    echo "╚══╝ ╚══╝ ╩══╝"
+	echo ""
+	echo "╔══╗ ╔══╗ ╦══╗"
+	echo "║    ║    ║  ║"
+	echo "╚══╗ ╚══╗ ╠══╣"
+	echo "   ║    ║ ║  ║"
+	echo "╚══╝ ╚══╝ ╩══╝"
 }
 
 install_sing_box() {
