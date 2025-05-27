@@ -63,7 +63,7 @@ check_if_updated() {
 }
 
 get_ip() {
-    serverip=$(curl -s https://cloudflare.com/cdn-cgi/trace | grep "ip" | cut -d "=" -f 2)
+    serverip=$(curl -s -4 https://cloudflare.com/cdn-cgi/trace | grep "ip" | cut -d "=" -f 2)
 
     if [[ ! $serverip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
     then
