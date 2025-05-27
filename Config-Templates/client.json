@@ -117,8 +117,6 @@
           "duckduckgo",
           "yahoo",
           "mozilla",
-          "category-android-app-download",
-          "aptoide",
           "samsung",
           "huawei",
           "apple",
@@ -308,8 +306,6 @@
           "duckduckgo",
           "yahoo",
           "mozilla",
-          "category-android-app-download",
-          "aptoide",
           "samsung",
           "huawei",
           "apple",
@@ -463,18 +459,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://DOMAIN/RULESETPATH/geosite-mozilla.srs"
-      },
-      {
-        "tag": "category-android-app-download",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-category-android-app-download.srs"
-      },
-      {
-        "tag": "aptoide",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-aptoide.srs"
       },
       {
         "tag": "samsung",

@@ -1670,8 +1670,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "duckduckgo",
           "yahoo",
           "mozilla",
-          "category-android-app-download",
-          "aptoide",
           "samsung",
           "huawei",
           "apple",
@@ -1861,8 +1859,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "duckduckgo",
           "yahoo",
           "mozilla",
-          "category-android-app-download",
-          "aptoide",
           "samsung",
           "huawei",
           "apple",
@@ -2016,18 +2012,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "type": "remote",
         "format": "binary",
         "url": "https://${domain}/${rulesetpath}/geosite-mozilla.srs"
-      },
-      {
-        "tag": "category-android-app-download",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-category-android-app-download.srs"
-      },
-      {
-        "tag": "aptoide",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-aptoide.srs"
       },
       {
         "tag": "samsung",
