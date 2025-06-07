@@ -68,7 +68,11 @@ Then follow the instructions:
 
 ![pic-2-en](https://github.com/user-attachments/assets/3a40dea9-2b7c-4480-b2f2-fae986376502)
 
-Option 5 synchronizes the settings in client configs of all users, which eliminates the need to edit the config of each user separately. If new rule sets are added to the configs by using option 5.2, they will be automatically downloaded on the server if they are from [SagerNet](https://github.com/SagerNet/sing-geosite/tree/rule-set).
+Option 5 synchronizes the settings in client configs of all users, which eliminates the need to edit the config of each user separately:
+
+5.1. Synchronizes settings with the [template from GitHub](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Config-Templates/client.json).
+
+5.2. Synchronizes settings with the local template, allows to set custom rules in client configs. If new rule sets are added to the configs by using this option, they will be automatically downloaded on the server if they are from [SagerNet](https://github.com/SagerNet/sing-geosite/tree/rule-set).
 
 ### WARP+ keys:
 

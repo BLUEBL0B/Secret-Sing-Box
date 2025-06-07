@@ -2326,10 +2326,24 @@ http {
         default "\$proxy_forwarded_elem";
     }
 
+    # Disable access via IP or wrong domain name
+    server {
+        listen                443 ssl default_server;
+        listen                [::]:443 ssl default_server;
+        http2                 on;
+        server_name           _;
+
+        ssl_certificate       /etc/letsencrypt/live/${domain}/fullchain.pem;
+        ssl_certificate_key   /etc/letsencrypt/live/${domain}/privkey.pem;
+        ssl_dhparam           /etc/nginx/dhparam.pem;
+
+        return                403;
+    }
+
     # Site
     server {
-        listen                               443 ssl default_server;
-        listen                               [::]:443 ssl default_server;
+        listen                               443 ssl;
+        listen                               [::]:443 ssl;
         http2                                on;
         server_name                          ${domain} *.${domain};
         ${comment1}${comment2}root                                 /var/www/${sitedir};
@@ -2351,11 +2365,6 @@ http {
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
         add_header X-Frame-Options           "SAMEORIGIN";
         proxy_hide_header X-Powered-By;
-
-        # Disable direct IP access
-        if (\$host = ${serverip}) {
-            return 444;
-        }
 
         # . files
         location ~ /\.(?!well-known) {
@@ -2615,7 +2624,7 @@ global
         ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
         ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
 
-        # You must first generate DH parameters - [ openssl dhparam -out /etc/haproxy/dhparam.pem 2048 ]
+        # DH parameters
         ssl-dh-param-file /etc/haproxy/dhparam.pem
 
 defaults
@@ -2631,10 +2640,11 @@ frontend haproxy-tls
         mode tcp
         timeout client 1h
         bind :::443 v4v6 ssl crt /etc/haproxy/certs/${domain}.pem alpn h2,http/1.1
-        acl host_ip hdr(host) -i ${serverip}
-        tcp-request content reject if host_ip
         tcp-request inspect-delay 5s
         tcp-request content accept if { req_ssl_hello_type 1 }
+
+        # Backend rules
+        use_backend reject if !{ ssl_fc_sni -i ${domain} } !{ ssl_fc_sni -m end .${domain} }
         ${comment3}use_backend http-sub if { path /${subspath} } || { path_beg /${subspath}/ } || { path /${rulesetpath} } || { path_beg /${rulesetpath}/ }
         use_backend %[lua.trojan_auth]
         default_backend http
@@ -2655,6 +2665,11 @@ ${comment3}backend http-sub
         ${comment3}mode http
         ${comment3}timeout server 1h
         ${comment3}server nginx 127.0.0.1:11443
+
+backend reject
+        mode http
+        timeout server 1h
+        http-request deny
 
 ${comment2}${comment3}userlist mycredentials
 EOF
