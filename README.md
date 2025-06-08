@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/user-attachments/assets/46161210-cc0a-4ec0-97b4-f6876d293f2f" alt="SSB Logo" width="415" height="193">
+    <img src="https://github.com/user-attachments/assets/46161210-cc0a-4ec0-97b4-f6876d293f2f" alt="SSB Logo" width="325" height="auto">
     <h1>SECRET SING-BOX</h1>
 </div>
 
