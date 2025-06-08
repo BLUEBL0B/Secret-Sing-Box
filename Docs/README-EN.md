@@ -1,6 +1,7 @@
-# Secret Sing-Box
-
-![logo](https://github.com/user-attachments/assets/33ab0dac-ed6a-4254-8386-c4b09bf9a312)
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/46161210-cc0a-4ec0-97b4-f6876d293f2f" alt="SSB Logo">
+    <h1>SECRET SING-BOX</h1>
+</div>
 
 [**Russian version**](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/README.md)
 
