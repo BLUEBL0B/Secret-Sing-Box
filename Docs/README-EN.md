@@ -1,12 +1,11 @@
 <div align="center">
     <img src="https://github.com/user-attachments/assets/46161210-cc0a-4ec0-97b4-f6876d293f2f" alt="SSB Logo" width="325" height="auto">
     <h1>SECRET SING-BOX</h1>
+    <a href="https://github.com/A-Zuro/Secret-Sing-Box/blob/main/README.md">Russian</a> | English<br><br>
 </div>
 
-[**Russian version**](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/README.md)
-
-### Easy setup of Trojan and VLESS proxy with TLS termination on NGINX or HAProxy
-This script is designed to fully and quickly configure a secure proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. Two setup methods:
+### Easy setup of a proxy with TLS termination on NGINX or HAProxy
+This script is designed to fully and quickly configure a secure proxy server with [Sing-Box](https://sing-box.sagernet.org) core and [NGINX](https://nginx.org/en/) or [HAProxy](https://www.haproxy.org) camouflage. To proxy traffic, **Trojan** and **VLESS** protocols are used. Two server setup options:
 
 - All requests to the proxy are received by NGINX, the requests are passed to Sing-Box only if they contain the correct path (WebSocket or HTTPUpgrade transport)
 
